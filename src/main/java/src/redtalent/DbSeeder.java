@@ -90,6 +90,7 @@ public class DbSeeder implements CommandLineRunner{
         companyAuthority.add(authority2);
 
         //Creación de Academic Profiles
+        AcademicProfile academicProfile1 = new AcademicProfile();
     }
 }
 

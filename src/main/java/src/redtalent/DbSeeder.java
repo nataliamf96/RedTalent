@@ -4,15 +4,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
 import org.springframework.stereotype.Component;
-import src.redtalent.domain.*;
 import src.redtalent.repositories.*;
 import src.redtalent.security.Authority;
-import src.redtalent.security.UserAccount;
-import src.redtalent.security.UserAccountRepository;
-
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
+
 
 @Component
 public class DbSeeder implements CommandLineRunner{
@@ -85,46 +80,6 @@ public class DbSeeder implements CommandLineRunner{
         companyAuthority.add(authority2);
 
         //Creación de Academic Profiles
-        AcademicProfile ap1 = new AcademicProfile("Bachillerato","Ciencias Sociales");
-        AcademicProfile ap2 = new AcademicProfile("Formación Profesional","Técnico Informático");
-
-        List<AcademicProfile> academicProfiles = Arrays.asList(ap1, ap2);
-        academicProfileRepository.save(academicProfiles);
-
-        //Creación de Applications
-        Date moment = new Date();
-        Date dateFuture = new Date(moment.getTime() + TimeUnit.DAYS.toMillis( 20 ));
-        Date dateFuture2 = new Date(moment.getTime() + TimeUnit.DAYS.toMillis( 100 ));
-        Application a1 = new Application(moment,"PENDING");
-        Application a2 = new Application(moment,"PENDING");
-
-        List<Application> applications = Arrays.asList(a1,a2);
-        applicationRepository.save(applications);
-
-
-        //Creación de Grades
-        Grade grade1 = new Grade("Ingeniería del Software", "Universidad de Sevilla");
-        Grade grade2 = new Grade("Ingeniería de Computadores", "Universidad de Sevilla");
-        Grade grade3 = new Grade("Doble Grado en Administración y Dirección de Empresas y en Derecho", "Universidad de Sevilla");
-        Grade grade4 = new Grade("Doble Grado en Geografía y Gestión del Territorio e Historia", "Universidad de Sevilla");
-
-        List<Grade> grades = Arrays.asList(grade1,grade2,grade3,grade4);
-        gradeRepository.save(grades);
-
-        //Creación de ADMIN
-        Administrator admin = new Administrator("admin@admin.com","Natalia","Morato Fernández",false,new UserAccount("admin",encoder.encodePassword("admin",null),adminAuthority,false),grades);
-
-        //Creación de COMPANIES
-        Company company1 = new Company("everis@everis.es","Everis","Center",false,new UserAccount("company1",encoder.encodePassword("company1",null), companyAuthority,false));
-        Company company2 = new Company("everisSolutions@everis.es","Everis","Solutions",false,new UserAccount("company2",encoder.encodePassword("company2",null), companyAuthority,false));
-        Company company3 = new Company("ayesa@ayesa.es","Ayesa","Ayesa",false,new UserAccount("company3",encoder.encodePassword("company3",null), companyAuthority,false));
-
-        List<Administrator> administrators = Arrays.asList(admin);
-        administratorRepository.save(administrators);
-
-        List<Company> companies = Arrays.asList(company1,company2,company3);
-        companyRepository.save(companies);
-
     }
 }
 

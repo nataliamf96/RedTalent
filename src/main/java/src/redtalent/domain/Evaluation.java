@@ -1,7 +1,9 @@
 package src.redtalent.domain;
 
 import org.hibernate.validator.constraints.Range;
+import org.springframework.data.mongodb.core.mapping.Document;
 
+@Document(collection = "Evaluations")
 public class Evaluation extends DomainEntity {
 
     // Attributes ---------------------------------------------------

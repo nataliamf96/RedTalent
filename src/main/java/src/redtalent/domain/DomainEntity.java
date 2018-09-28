@@ -15,12 +15,9 @@ public abstract class DomainEntity {
         super();
     }
 
-
     // Identification ---------------------------------------------------------
 
     private String	id;
-    private int	version;
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.TABLE)
@@ -32,38 +29,20 @@ public abstract class DomainEntity {
         this.id = id;
     }
 
-    @Version
-    public int getVersion() {
-        return this.version;
-    }
-
-    public void setVersion(final int version) {
-        this.version = version;
-    }
-
     // Object interface -------------------------------------------------------
-
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof DomainEntity)) return false;
         DomainEntity that = (DomainEntity) o;
-        return getVersion() == that.getVersion() &&
-                Objects.equals(getId(), that.getId());
+        return Objects.equals(getId(), that.getId());
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getId(), getVersion());
+        return Objects.hash(getId());
     }
 
-    @Override
-    public String toString() {
-        return "DomainEntity{" +
-                "id='" + id + '\'' +
-                ", version=" + version +
-                '}';
-    }
 }
 

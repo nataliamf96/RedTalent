@@ -14,6 +14,7 @@ import javax.validation.constraints.Size;
 import java.util.ArrayList;
 import java.util.Collection;
 
+@Document(collection = "UserAccounts")
 public class UserAccount extends DomainEntity implements UserDetails {
 
     // Constructors -----------------------------------------------------------

@@ -1,5 +1,8 @@
 package src.redtalent.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "Alerts")
 public class Alert extends DomainEntity {
 
     // Attributes ---------------------------------------------------

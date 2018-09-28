@@ -1,13 +1,12 @@
 package src.redtalent.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotNull;
-import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.List;
 
+@Document(collection = "Comments")
 public class Comment extends DomainEntity {
 
     // Attributes ---------------------------------------------------
@@ -18,14 +17,12 @@ public class Comment extends DomainEntity {
     // Constructors ---------------------------------------------------
     public Comment(){
         super();
-        comments = new ArrayList<>();
     }
 
-    public Comment(String title, String text, Date moment, List<Comment> comments){
+    public Comment(String title, String text, Date moment){
         this.title = title;
         this.text = text;
         this.moment = moment;
-        this.comments = comments;
     }
 
     // Getters and setters ---------------------------------------------------
@@ -54,16 +51,5 @@ public class Comment extends DomainEntity {
 
     public void setMoment(Date moment) {
         this.moment = moment;
-    }
-
-    // Relationships ---------------------------------------------------
-    private List<Comment> comments;
-
-    public List<Comment> getComments() {
-        return comments;
-    }
-
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
     }
 }

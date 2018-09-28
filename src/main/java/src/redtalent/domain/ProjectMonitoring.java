@@ -1,7 +1,10 @@
 package src.redtalent.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
 import java.util.Date;
 
+@Document(collection = "ProjectMonitorings")
 public class ProjectMonitoring extends DomainEntity {
 
     // Attributes ---------------------------------------------------

@@ -9,6 +9,7 @@ import src.redtalent.domain.*;
 import src.redtalent.repositories.*;
 import src.redtalent.security.Authority;
 import src.redtalent.security.UserAccount;
+import src.redtalent.security.UserAccountRepository;
 
 import java.lang.reflect.Array;
 import java.util.*;
@@ -47,11 +48,14 @@ public class DbSeeder implements CommandLineRunner{
     private TeamRepository teamRepository;
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private UserAccountRepository userAccountRepository;
 
     // Constructor -------------------------------------------------
     public DbSeeder(AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
                     CommentRepository commentRepository, CompanyRepository companyRepository, EvaluationRepository evaluationRepository, GradeRepository gradeRepository, PhaseRepository phaseRepository,
-                    ProjectRepository projectRepository, ProjectMonitoringRepository projectMonitoringRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository){
+                    ProjectRepository projectRepository, ProjectMonitoringRepository projectMonitoringRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository,
+                    UserAccountRepository userAccountRepository){
         this.academicProfileRepository = academicProfileRepository;
         this.administratorRepository = administratorRepository;
         this.alertRepository = alertRepository;
@@ -65,6 +69,7 @@ public class DbSeeder implements CommandLineRunner{
         this.tagRepository = tagRepository;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
+        this.userAccountRepository = userAccountRepository;
     }
 
     @Override
@@ -90,6 +95,7 @@ public class DbSeeder implements CommandLineRunner{
         tagRepository.deleteAll();
         teamRepository.deleteAll();
         userRepository.deleteAll();
+        userAccountRepository.deleteAll();
 
         //UserAccount -----------------------------------------
 
@@ -122,6 +128,9 @@ public class DbSeeder implements CommandLineRunner{
                 encoder.encodePassword("company1", null),
                 Arrays.asList(new Authority(Authority.COMPANY)),
                 false);
+
+        List<UserAccount> userAccounts = Arrays.asList(userAccount1, userAccount2, userAccount3, userAccount4, userAccount5);
+        userAccountRepository.save(userAccounts);
 
         //Academic Profiles -----------------------------------------
 
@@ -177,7 +186,10 @@ public class DbSeeder implements CommandLineRunner{
         Alert alert2 = new Alert(
                 "El plazo máximo de entrega será el 19/12");
 
-        List<Alert> alerts = Arrays.asList(alert1, alert2);
+        Alert alert3 = new Alert(
+                "El plazo máximo de entrega será el 20/10");
+
+        List<Alert> alerts = Arrays.asList(alert1, alert2, alert3);
         alertRepository.save(alerts);
 
         // Applications -----------------------------------------
@@ -217,20 +229,17 @@ public class DbSeeder implements CommandLineRunner{
         Comment comment1 = new Comment(
                 "Buena idea",
                 "Opino lo mismo, el proyecto está muy currado",
-                moment2,
-                null);
+                moment2);
 
         Comment comment2 = new Comment(
                 "¡Me encanta!",
                 "Este proyecto es increíble",
-                moment,
-                Arrays.asList(comment1));
+                moment);
 
         Comment comment3 = new Comment(
                 "¡Increíble!",
                 "Es muy buena idea, me parece increíble",
-                moment,
-                null);
+                moment);
 
         List<Comment> comments = Arrays.asList(comment1, comment2, comment3);
         commentRepository.save(comments);
@@ -385,10 +394,10 @@ public class DbSeeder implements CommandLineRunner{
                 moment2,
                 "Document1",
                 Arrays.asList(tag1, tag2),
-                Arrays.asList(comment1, comment2),
+                Arrays.asList(comment1),
                 Arrays.asList(alert1),
                 Arrays.asList(projectMonitoring1, projectMonitoring2),
-                Arrays.asList(user1, user2));
+                Arrays.asList(user1));
 
         Project project2 = new Project(
                 "Tetrix",
@@ -400,10 +409,10 @@ public class DbSeeder implements CommandLineRunner{
                 moment2,
                 "Document1",
                 Arrays.asList(tag3, tag4),
-                Arrays.asList(comment3),
+                Arrays.asList(comment2),
                 Arrays.asList(alert2),
                 Arrays.asList(projectMonitoring3, projectMonitoring4),
-                Arrays.asList(user3));
+                Arrays.asList(user2));
 
         Project project3 = new Project(
                 "Proyecto de arduinos",
@@ -414,11 +423,11 @@ public class DbSeeder implements CommandLineRunner{
                 moment,
                 moment2,
                 "Document1",
-                Arrays.asList(tag3, tag4, tag5),
-                null,
-                null,
+                Arrays.asList(tag5),
+                Arrays.asList(comment3),
+                Arrays.asList(alert3),
                 Arrays.asList(projectMonitoring5),
-                Arrays.asList(user1, user2, user3));
+                Arrays.asList(user3));
 
         List<Project> projects = Arrays.asList(project1, project2, project3);
         projectRepository.save(projects);

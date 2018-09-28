@@ -1,5 +1,8 @@
 package src.redtalent.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+
+@Document(collection = "Tags")
 public class Tag extends DomainEntity {
 
     // Attributes ---------------------------------------------------

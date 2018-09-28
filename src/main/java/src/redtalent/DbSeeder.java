@@ -242,7 +242,7 @@ public class DbSeeder implements CommandLineRunner{
                 "Juan",
                 "Perez García",
                 false,
-                userAccount2);
+                userAccount5);
 
         companyRepository.save(company);
 
@@ -334,6 +334,155 @@ public class DbSeeder implements CommandLineRunner{
 
         List<Tag> tags = Arrays.asList(tag1, tag2, tag3, tag4, tag5);
         tagRepository.save(tags);
+
+        // Users -----------------------------------------
+
+        User user1 =  new User("nicolasluna@gmail.com",
+                "Nicolás",
+                "Luna",
+                false,
+                userAccount2,
+                "STUDENT",
+                academicProfile1,
+                Arrays.asList(application1, application2, application3),
+                Arrays.asList(evaluation1, evaluation2, evaluation3),
+                Arrays.asList(comment1));
+
+        User user2 =  new User("jmgpradas@gmail.com",
+                "Jose Manuel",
+                "Pradas",
+                false,
+                userAccount3,
+                "GRADUATE",
+                academicProfile2,
+                Arrays.asList(application4, application5),
+                Arrays.asList(evaluation4),
+                Arrays.asList(comment2));
+
+        User user3 =  new User("angelizaga@gmail.com",
+                "Ángel",
+                "Izaga",
+                false,
+                userAccount4,
+                "PROFESSOR",
+                academicProfile3,
+                Arrays.asList(application6),
+                Arrays.asList(evaluation5),
+                Arrays.asList(comment3));
+
+        List<User> users = Arrays.asList(user1, user2, user3);
+        userRepository.save(users);
+
+        // Projects -----------------------------------------
+
+        Project project1 = new Project(
+                "El Cubo",
+                "Este proyecto consiste en hacer un robot en El Cubo",
+                "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
+                4,
+                "HIGH",
+                moment,
+                moment2,
+                "Document1",
+                Arrays.asList(tag1, tag2),
+                Arrays.asList(comment1, comment2),
+                Arrays.asList(alert1),
+                Arrays.asList(projectMonitoring1, projectMonitoring2),
+                Arrays.asList(user1, user2));
+
+        Project project2 = new Project(
+                "Tetrix",
+                "Este proyecto consiste en hacer el juego del Tetrix mediante programación",
+                "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
+                5,
+                "LOW",
+                moment,
+                moment2,
+                "Document1",
+                Arrays.asList(tag3, tag4),
+                Arrays.asList(comment3),
+                Arrays.asList(alert2),
+                Arrays.asList(projectMonitoring3, projectMonitoring4),
+                Arrays.asList(user3));
+
+        Project project3 = new Project(
+                "Proyecto de arduinos",
+                "Se basa en detectar los sentimientos del ser humano trabajando con arduinos",
+                "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
+                6,
+                "MEDIUM",
+                moment,
+                moment2,
+                "Document1",
+                Arrays.asList(tag3, tag4, tag5),
+                null,
+                null,
+                Arrays.asList(projectMonitoring5),
+                Arrays.asList(user1, user2, user3));
+
+        List<Project> projects = Arrays.asList(project1, project2, project3);
+        projectRepository.save(projects);
+
+        // Team -----------------------------------------
+
+        Team team1 = new Team(
+                "Los Comadrejas",
+                "Equipo cualificado para los proyectos de ámbito informático",
+                moment2,
+                4,
+                Arrays.asList(application1, application2, application3),
+                Arrays.asList(evaluation1, evaluation2),
+                user1,
+                Arrays.asList(tag1, tag2),
+                Arrays.asList(comment1),
+                Arrays.asList(project1));
+
+        Team team2 = new Team(
+                "SuperTeam",
+                "Necesitamos gente aplicada. ¡Nos encanta conocer gente nueva!",
+                moment2,
+                5,
+                Arrays.asList(application4, application5),
+                Arrays.asList(evaluation3, evaluation4),
+                user2,
+                Arrays.asList(tag3, tag4),
+                Arrays.asList(comment2),
+                Arrays.asList(project2));
+
+        Team team3 = new Team(
+                "Los Winners",
+                "Queremos ganar el concurso de idea. Necesitamos gente competente.",
+                moment2,
+                6,
+                Arrays.asList(application6),
+                Arrays.asList(evaluation5),
+                user3,
+                Arrays.asList(tag4, tag5),
+                Arrays.asList(comment3),
+                Arrays.asList(project3));
+
+        List<Team> teams = Arrays.asList(team1, team2, team3);
+        teamRepository.save(teams);
+
+        // Phase ---------------------------------------------------
+
+        Phase phase1 = new Phase(
+                "Fase 1",
+                Arrays.asList(team1)
+        );
+
+        Phase phase2 = new Phase(
+                "Fase 2",
+                Arrays.asList(team2)
+        );
+
+        Phase phase3 = new Phase(
+                "Fase 3",
+                Arrays.asList(team3)
+        );
+
+        List<Phase> phases = Arrays.asList(phase1, phase2, phase3);
+        phaseRepository.save(phases);
     }
 }
 

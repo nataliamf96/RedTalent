@@ -18,9 +18,6 @@ public class User extends Actor{
     //Constructors ---------------------------------------------
     public User(){
         super();
-        this.applications = new ArrayList<>();
-        this.evaluations = new ArrayList<>();
-        this.comments = new ArrayList<>();
     }
 
     public User(String email, String name,String surname, boolean isSuspicious, UserAccount userAccount, String role,AcademicProfile academicProfile,

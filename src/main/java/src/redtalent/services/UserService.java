@@ -4,10 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import src.redtalent.domain.Application;
+import src.redtalent.domain.Comment;
+import src.redtalent.domain.Evaluation;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Service
 @Transactional
@@ -31,10 +36,22 @@ public class UserService {
         return result;
     }
 
-    public User saveUser(User user){
+    public User create(){
+        User result = new User();
+        List<Application> applications = new ArrayList<Application>();
+        List<Evaluation> evaluations = new ArrayList<Evaluation>();
+        List<Comment> comments = new ArrayList<Comment>();
+        result.setApplications(applications);
+        result.setEvaluations(evaluations);
+        result.setComments(comments);
+        result.setAcademicProfile(null);
+        return result;
+    }
+
+    public User save(User user){
         Assert.notNull(user);
         user.setSuspicious(false);
-        user.setRole("USER");
+
         userRepository.save(user);
         return user;
     }

@@ -12,6 +12,7 @@
         <tr>
             <th scope="col">Rol en el Sistema</th>
             <th scope="col">Usuario</th>
+            <th scope="col">Nombre</th>
             <th scope="col">Apellidos</th>
             <th scope="col">Email</th>
             <th scope="col">ID</th>
@@ -21,9 +22,9 @@
         <tr th:each="actor: ${actors}">
             <td th:text="${actor.getUserAccount().getAuthorities().toArray()[0]}" />
             <td th:text="${actor.getUserAccount().getUsername()}" />
-            <td th:text="${actor.getFullName()}" />
+            <td th:text="${actor.getName()}" />
+            <td th:text="${actor.getSurname()}" />
             <td th:text="${actor.getEmail()}" />
-            <a th:href="@{/actor/dataActor.html(id=${actor.getId()})}">HHH</a>
             <td th:text="${actor.getId()}" />
         </tr>
         </tbody>

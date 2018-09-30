@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Solicitudes</title>
+        <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+        <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    <div th:replace="masterpage/header :: nav"></div>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">Fecha de la solicitud</th>
+            <th scope="col">Estado</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="application: ${applications}">
+            <td th:text="${application.getMoment()}" />
+            <td th:text="${application.getStatus()}" />
+        </tr>
+        </tbody>
+    </table>
+    <div th:replace="masterpage/footer :: footer"></div>
+    </body>
+</html>

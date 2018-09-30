@@ -6,6 +6,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.UserRepository;
+import src.redtalent.security.LoginService;
+import src.redtalent.security.UserAccount;
 
 import java.util.Collection;
 
@@ -39,9 +41,29 @@ public class UserService {
         return user;
     }
 
-    public void remove(User user){
+    public void delete(User user){
         Assert.notNull(user);
         userRepository.delete(user);
+    }
+
+
+    //Methods
+
+    public User findByPrincipal() {
+        User a;
+        UserAccount userAccount;
+        userAccount = LoginService.getPrincipal();
+        Assert.notNull(userAccount);
+        a = findByUserAccount(userAccount);
+        Assert.notNull(a);
+        return a;
+    }
+
+    public User findByUserAccount(UserAccount userAccount) {
+        Assert.notNull(userAccount);
+        User a;
+        a = userRepository.findByUserAccountId(userAccount.getId());
+        return a;
     }
 
 }

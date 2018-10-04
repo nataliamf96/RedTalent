@@ -46,7 +46,7 @@ public class ProjectController {
         Project project = projectService.findOne(projectId.toString());
         User user = project.getUsers().get(0);
         Team team = teamService.teamByProjectId(project);
-        
+
         result.addObject("requestURI", "project/projectData.html");
         result.addObject("project",project);
         result.addObject("team",team);

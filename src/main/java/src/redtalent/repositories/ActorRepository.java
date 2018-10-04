@@ -1,9 +1,10 @@
 package src.redtalent.repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import org.springframework.data.mongodb.repository.Query;
 import src.redtalent.domain.Actor;
 
-public interface ActorRepository extends MongoRepository<Actor, String> {
+import java.util.Collection;
 
+public interface ActorRepository extends MongoRepository<Actor, String> {
+    Boolean findByEmailExists(String email);
 }

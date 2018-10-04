@@ -8,7 +8,6 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.util.Assert;
-import src.redtalent.repositories.ActorRepository;
 
 public class LoginService implements UserDetailsService {
 
@@ -56,7 +55,7 @@ public class LoginService implements UserDetailsService {
         Assert.isTrue(principal instanceof UserAccount,"principal isTrue");
         result = (UserAccount) principal;
         Assert.notNull(result,"principal null");
-        Assert.notNull(result.getId(),"Username null");
+        Assert.isTrue(!result.getId().equals(""));
 
         return result;
     }

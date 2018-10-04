@@ -61,4 +61,8 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public User findUserByEmail(String email) {
+        return userRepository.findByEmail(email);
+    }
+
 }

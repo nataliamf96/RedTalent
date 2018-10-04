@@ -50,9 +50,13 @@ public class RegistrationController {
     public ModelAndView save(@Valid UserForm userForm, BindingResult binding) {
         ModelAndView result;
 
-        if (binding.hasErrors())
-            result = createModelAndViewStudent(userForm);
-        else
+        if (binding.hasErrors()) result = createModelAndViewStudent(userForm);
+        else if(actorService.allEmails().contains(userForm.getEmail())){
+            result = createModelAndViewStudent(userForm,"Email Existente.");
+        }else if(actorService.usernameExist(userForm.getUsername())){
+            result = createModelAndViewStudent(userForm,"Usuario Existente.");
+        }
+        else{
             try {
                 User u =  userService.create();
                 u.setName(userForm.getName());
@@ -74,7 +78,7 @@ public class RegistrationController {
 
             } catch (Throwable oops) {
                 result = createModelAndViewStudent(userForm, "Existe un error al crear el usuario estudiante.");
-            }
+            }}
         return result;
     }
 

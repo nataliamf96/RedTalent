@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Bienvenido/a</title>
+    <title>Datos del Equipo</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
@@ -9,29 +9,33 @@
 <div th:replace="masterpage/header :: nav"></div>
 
 <div class="container-fluid">
-    <h4>Proyectos</h4>
+    <h3 th:text="${team.getName()}"></h3>
+    <p th:text="${team.getDescription()}" />
+</div>
+
+<div class="container-fluid">
+    <h4>Comentarios</h4>
     <div class="row">
         <div class="col-lg-6 col-md-6">
             <table class="table">
                 <thead>
                 <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Ver más</th>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Texto</th>
+                    <th scope="col">Momento</th>
                 </tr>
                 </thead>
                 <tbody>
-                <tr th:each="project: ${projects}">
-                    <td th:text="${project.getName()}" />
-                    <td th:text="${project.getDescription()}" />
-                    <td><a th:href="@{/project/projectData(projectId=${project.getId()})}">Click</a></td>
+                <tr th:each="comment: ${comments}">
+                    <td th:text="${comment.getTitle()}" />
+                    <td th:text="${comment.getText()}" />
+                    <td th:text="${#dates.format(comment.getMoment(), 'dd/MM/yyyy')}"></td>
                 </tr>
                 </tbody>
             </table>
         </div>
     </div>
 </div>
-
 
 <div th:replace="masterpage/footer :: footer"></div>
 </body>

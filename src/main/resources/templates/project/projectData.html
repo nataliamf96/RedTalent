@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Datos del Proyecto</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body>
+<div th:replace="masterpage/header :: nav"></div>
+
+<div class="container-fluid">
+    <h3 th:text="${project.getName()}"></h3>
+    <div class="row">
+        <div class="col-lg-4 col-md-6 col-sm-12">
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Creador</th>
+                    <th scope="col">Equipo</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td th:text="${user.getName() +' '+user.getSurname()}" />
+                    <td><a th:href="@{/team/teamData(teamId=${team.getId()})}"><i th:text="${team.getName()}" /></a></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Nombre</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Máximo de Participantes</th>
+                    <th scope="col">Fecha de Inicio</th>
+                    <th scope="col">Fecha de Fín</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td th:text="${project.getName()}" />
+                    <td th:text="${project.getDescription()}" />
+                    <td th:text="${project.getMaxParticipants()}" />
+                    <td th:text="${#dates.format(project.getStartDate(), 'dd/MM/yyyy')}"></td>
+                    <td th:text="${#dates.format(project.getFinishDate(), 'dd/MM/yyyy')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+        </div>
+</div>
+<div class="container-fluid">
+    <h4>Comentarios</h4>
+    <div class="row">
+        <div class="col-lg-6 col-md-6">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">Titulo</th>
+                    <th scope="col">Texto</th>
+                    <th scope="col">Momento</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="comment: ${comments}">
+                    <td th:text="${comment.getTitle()}" />
+                    <td th:text="${comment.getText()}" />
+                    <td th:text="${#dates.format(comment.getMoment(), 'dd/MM/yyyy')}"></td>
+                </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

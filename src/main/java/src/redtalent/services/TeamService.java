@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
+import src.redtalent.domain.Project;
 import src.redtalent.domain.Team;
 import src.redtalent.repositories.TeamRepository;
 
@@ -42,5 +43,12 @@ public class TeamService {
     public void remove(Team team){
         Assert.notNull(team);
         teamRepository.delete(team);
+    }
+
+    public Team teamByProjectId(Project project){
+        Assert.notNull(project);
+        Team result = teamRepository.findTeamByProjectsContaining(project);
+        Assert.notNull(result);
+        return result;
     }
 }

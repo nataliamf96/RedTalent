@@ -11,6 +11,7 @@ import src.redtalent.domain.User;
 import src.redtalent.forms.UserForm;
 import src.redtalent.security.Authority;
 import src.redtalent.security.UserAccount;
+import src.redtalent.security.UserAccountRepository;
 import src.redtalent.services.ActorService;
 import src.redtalent.services.CompanyService;
 import src.redtalent.services.UserService;
@@ -29,6 +30,9 @@ public class RegistrationController {
 
     @Autowired
     private CompanyService companyService;
+
+    @Autowired
+    private UserAccountRepository userAccountRepository;
 
     public RegistrationController(){
         super();
@@ -71,7 +75,8 @@ public class RegistrationController {
                 Md5PasswordEncoder encoder = new Md5PasswordEncoder();
                 userAccount.setPassword(encoder.encodePassword(userForm.getPassword(), null));
                 userAccount.getAuthorities().add(auth);
-                u.setUserAccount(userAccount);
+                UserAccount res = userAccountRepository.save(userAccount);
+                u.setUserAccount(res);
                 userService.save(u);
 
                 result = new ModelAndView("redirect:/security/login.html");

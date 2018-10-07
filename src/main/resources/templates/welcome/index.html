@@ -6,33 +6,10 @@
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:replace="masterpage/header :: nav"></div>
+<div th:replace="masterpage/header :: nav" />
+<div class="bg container-fluid">
 
-<div class="container-fluid">
-    <h4>Proyectos</h4>
-    <div class="row">
-        <div class="col-lg-6 col-md-6">
-            <table class="table">
-                <thead>
-                <tr>
-                    <th scope="col">Nombre</th>
-                    <th scope="col">Descripción</th>
-                    <th scope="col">Ver más</th>
-                </tr>
-                </thead>
-                <tbody>
-                <tr th:each="project: ${projects}">
-                    <td th:text="${project.getName()}" />
-                    <td th:text="${project.getDescription()}" />
-                    <td><a th:href="@{/project/projectData(projectId=${project.getId()})}">Click</a></td>
-                </tr>
-                </tbody>
-            </table>
-        </div>
-    </div>
 </div>
-
-
 <div th:replace="masterpage/footer :: footer"></div>
 </body>
 </html>

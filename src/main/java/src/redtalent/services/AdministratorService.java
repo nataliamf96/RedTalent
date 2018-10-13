@@ -1,13 +1,14 @@
 package src.redtalent.services;
 
+import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.util.Assert;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Administrator;
 import src.redtalent.repositories.AdministratorRepository;
 
 import java.util.Collection;
+import java.util.Optional;
 
 @Service
 @Transactional
@@ -21,25 +22,25 @@ public class AdministratorService {
     }
 
     public Administrator findOne(String adminId){
-        Assert.notNull(adminId);
-        return administratorRepository.findOne(adminId);
+        Assert.notNull(adminId,"Administrator Service : id null");
+        Optional<Administrator> result = administratorRepository.findById(adminId);
+        return result.get();
     }
 
     public Collection<Administrator> findAll(){
         Collection<Administrator> result = administratorRepository.findAll();
-        Assert.notNull(result);
+        Assert.notNull(result,"Administrator Service : list null");
         return result;
     }
 
     public Administrator saveUser(Administrator administrator){
-        Assert.notNull(administrator);
-        administrator.setSuspicious(false);
+        Assert.notNull(administrator,"Administrator Service : Objeto null");
         administratorRepository.save(administrator);
         return administrator;
     }
 
     public void remove(Administrator administrator){
-        Assert.notNull(administrator);
+        Assert.notNull(administrator,"Administrator Service : Objeto null");
         administratorRepository.delete(administrator);
     }
 

@@ -1,85 +1,74 @@
 package src.redtalent.domain;
 
-import org.hibernate.validator.constraints.NotBlank;
+import org.springframework.data.mongodb.core.index.IndexDirection;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
-import src.redtalent.security.UserAccount;
+import src.redtalent.security.Role;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Pattern;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Set;
 
-@Document(collection = "Users")
-public class User extends Actor{
+@Document(collection = "User")
+public class User extends DomainEntity{
 
-    //Attributes -----------------------------------------------
-    private String role;
+    @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
+    private String email;
+    private String password;
+    private String fullname;
+    private boolean enabled;
+    @DBRef
+    private Set<Role> roles;
 
-    //Constructors ---------------------------------------------
     public User(){
         super();
     }
 
-    public User(String email, String name,String surname, boolean isSuspicious, UserAccount userAccount, String role,AcademicProfile academicProfile,
-                List<Application> applications, List<Evaluation> evaluations, List<Comment> comments) {
-        super(email, name,surname, isSuspicious, userAccount);
-        this.role = role;
-        this.academicProfile = academicProfile;
-        this.applications = applications;
-        this.evaluations = evaluations;
-        this.comments = comments;
+    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles){
+        this.email = email;
+        this.password = password;
+        this.fullname = fullname;
+        this.enabled = enabled;
+        this.roles = roles;
     }
 
-   //Getters and setters -----------------------------------------
-    @NotBlank
-    @Pattern(regexp = "^STUDENT|GRADUATE|PROFESSOR$")
-    public String getRole(){
-        return role;
+    public String getEmail() {
+        return email;
     }
 
-    public void setRole(String role) {
-        this.role = role;
+    public void setEmail(String email) {
+        this.email = email;
     }
 
-    //Relationships ---------------------------------------------
-    private AcademicProfile academicProfile;
-    private List<Application> applications;
-    private List<Evaluation> evaluations;
-    private List<Comment> comments;
-
-    @Valid
-    public AcademicProfile getAcademicProfile() {
-        return academicProfile;
+    public String getPassword() {
+        return password;
     }
 
-    public void setAcademicProfile(AcademicProfile academicProfile) {
-        this.academicProfile = academicProfile;
+    public void setPassword(String password) {
+        this.password = password;
     }
 
-    @Valid
-    public List<Application> getApplications() {
-        return applications;
+    public String getFullname() {
+        return fullname;
     }
 
-    public void setApplications(List<Application> applications) {
-        this.applications = applications;
+    public void setFullname(String fullname) {
+        this.fullname = fullname;
     }
 
-    @Valid
-    public List<Evaluation> getEvaluations() {
-        return evaluations;
+    public boolean isEnabled() {
+        return enabled;
     }
 
-    public void setEvaluations(List<Evaluation> evaluations) {
-        this.evaluations = evaluations;
+    public void setEnabled(boolean enabled) {
+        this.enabled = enabled;
     }
 
-    @Valid
-    public List<Comment> getComments() {
-        return comments;
+    public Set<Role> getRoles() {
+        return roles;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setRoles(Set<Role> roles) {
+        this.roles = roles;
     }
+
 }

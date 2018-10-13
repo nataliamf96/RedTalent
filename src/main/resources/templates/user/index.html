@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Bienvenido/a</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
 <body>
-<div th:replace="masterpage/header :: nav" />
+<div th:replace="masterpage/headerUser :: nav" />
 <div class="bg container-fluid">
-
+    Hola <span sec:authentication="name" />!!
 </div>
 <div th:replace="masterpage/footer :: footer"></div>
 </body>

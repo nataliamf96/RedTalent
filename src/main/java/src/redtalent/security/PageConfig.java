@@ -61,6 +61,8 @@ public class PageConfig implements WebMvcConfigurer {
         registry.addViewController("/dashboard").setViewName("dashboard");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/user/index").setViewName("user/index");
+        registry.addViewController("/admin/index").setViewName("admin/index");
+        registry.addViewController("/registro/registerUser").setViewName("registro/registerUser");
     }
 
     public void configureViewResolvers(ViewResolverRegistry viewResolverRegistry) {

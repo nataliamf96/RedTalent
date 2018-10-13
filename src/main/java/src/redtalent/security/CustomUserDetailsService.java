@@ -9,6 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.*;
+import src.redtalent.repositories.AdministratorRepository;
 import src.redtalent.repositories.RoleRepository;
 import src.redtalent.repositories.UserRepository;
 
@@ -23,6 +24,8 @@ public class CustomUserDetailsService implements UserDetailsService {
     private RoleRepository roleRepository;
     @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private AdministratorRepository administratorRepository;
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
@@ -31,7 +34,7 @@ public class CustomUserDetailsService implements UserDetailsService {
     public void saveUser(User user) {
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         user.setEnabled(true);
-        Role userRole = roleRepository.findByRole("ESTUDIANTE");
+        Role userRole = roleRepository.findByRole(user.getRoles().toArray()[0].toString());
         user.setRoles(new HashSet(Arrays.asList(userRole)));
         userRepository.save(user);
     }
@@ -40,10 +43,14 @@ public class CustomUserDetailsService implements UserDetailsService {
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
         User user = userRepository.findByEmail(email);
+        Administrator admin = administratorRepository.findByEmail(email);
         if(user != null) {
             List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
             return buildUserForAuthentication(user, authorities);
-        } else {
+        } else if(admin != null){
+            List<GrantedAuthority> authorities = getUserAuthority(admin.getRoles());
+            return buildAdminForAuthentication(admin, authorities);
+        }else{
             throw new UsernameNotFoundException("username not found");
         }
     }
@@ -60,6 +67,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+    }
+
+    private UserDetails buildAdminForAuthentication(Administrator admin, List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(admin.getEmail(), admin.getPassword(), authorities);
     }
 
 }

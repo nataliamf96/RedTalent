@@ -14,7 +14,6 @@ import src.redtalent.services.ProjectService;
 
 import javax.validation.Valid;
 import java.util.Collection;
-import java.util.List;
 
 @Controller
 public class LoginController {

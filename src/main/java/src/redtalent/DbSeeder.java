@@ -1,18 +1,14 @@
 package src.redtalent;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Component;
 import src.redtalent.domain.*;
 import src.redtalent.repositories.*;
 import src.redtalent.security.Role;
 
 import java.util.*;
 
-
-@Component
-public class DbSeeder implements CommandLineRunner {
+public class DbSeeder {
 
     @Autowired
     private AdministratorRepository administratorRepository;
@@ -66,7 +62,6 @@ public class DbSeeder implements CommandLineRunner {
         this.projectMonitoringRepository = projectMonitoringRepository;
     }
 
-    @Override
     public void run(String... strings) throws Exception {
 
         roleRepository.deleteAll();

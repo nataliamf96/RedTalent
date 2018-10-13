@@ -26,6 +26,7 @@ public class UserForm {
         this.terms = terms;
     }
 
+    @NotBlank
     @Email
     public String getEmail() {
         return email;

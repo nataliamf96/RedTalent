@@ -8,7 +8,7 @@ import src.redtalent.security.Role;
 
 import java.util.Set;
 
-@Document(collection = "User")
+@Document(collection = "Usuarios")
 public class User extends DomainEntity{
 
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)

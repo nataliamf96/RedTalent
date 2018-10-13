@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.*;
 import src.redtalent.repositories.AdministratorRepository;
+import src.redtalent.repositories.DirectivoRepository;
 import src.redtalent.repositories.RoleRepository;
 import src.redtalent.repositories.UserRepository;
 
@@ -26,17 +27,11 @@ public class CustomUserDetailsService implements UserDetailsService {
     private BCryptPasswordEncoder bCryptPasswordEncoder;
     @Autowired
     private AdministratorRepository administratorRepository;
+    @Autowired
+    private DirectivoRepository directivoRepository;
 
     public User findUserByEmail(String email) {
         return userRepository.findByEmail(email);
-    }
-
-    public void saveUser(User user) {
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
-        user.setEnabled(true);
-        Role userRole = roleRepository.findByRole(user.getRoles().toArray()[0].toString());
-        user.setRoles(new HashSet(Arrays.asList(userRole)));
-        userRepository.save(user);
     }
 
     @Override
@@ -44,14 +39,19 @@ public class CustomUserDetailsService implements UserDetailsService {
 
         User user = userRepository.findByEmail(email);
         Administrator admin = administratorRepository.findByEmail(email);
+        Directivo directivo = directivoRepository.findByEmail(email);
+
         if(user != null) {
             List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
             return buildUserForAuthentication(user, authorities);
         } else if(admin != null){
             List<GrantedAuthority> authorities = getUserAuthority(admin.getRoles());
             return buildAdminForAuthentication(admin, authorities);
+        }else if(directivo != null){
+            List<GrantedAuthority> authorities = getUserAuthority(directivo.getRoles());
+            return buildDirectivoForAuthentication(directivo, authorities);
         }else{
-            throw new UsernameNotFoundException("username not found");
+            throw new UsernameNotFoundException("Email not found");
         }
     }
 
@@ -71,6 +71,10 @@ public class CustomUserDetailsService implements UserDetailsService {
 
     private UserDetails buildAdminForAuthentication(Administrator admin, List<GrantedAuthority> authorities) {
         return new org.springframework.security.core.userdetails.User(admin.getEmail(), admin.getPassword(), authorities);
+    }
+
+    private UserDetails buildDirectivoForAuthentication(Directivo directivo, List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(directivo.getEmail(), directivo.getPassword(), authorities);
     }
 
 }

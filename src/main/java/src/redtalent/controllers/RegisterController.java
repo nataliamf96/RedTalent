@@ -12,6 +12,7 @@ import src.redtalent.forms.UserForm;
 import src.redtalent.repositories.RoleRepository;
 import src.redtalent.security.Role;
 import src.redtalent.services.UserService;
+import src.redtalent.services.UtilidadesService;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -29,6 +30,9 @@ public class RegisterController {
 
     @Autowired
     private RoleRepository roleRepository;
+
+    @Autowired
+    private UtilidadesService utilidadesService;
 
     public RegisterController(){
         super();
@@ -56,8 +60,10 @@ public class RegisterController {
             result = createEditModelAndViewUser(userForm);
         else if (!userForm.getTerms())
             result = createEditModelAndViewUser(userForm, "Debe de Aceptar los Términos");
-        else if(userForm.getRole().equals("ADMIN")){
+        else if(userForm.getRole().equals("ADMIN") || userForm.getRole().equals("DIRECTIVO")){
             result = createEditModelAndViewUser(userForm, "Acción denegada");
+        }else if(utilidadesService.allEmails().contains(userForm.getEmail())){
+            result = createEditModelAndViewUser(userForm, "Email Existente");
         }
         else
             try {

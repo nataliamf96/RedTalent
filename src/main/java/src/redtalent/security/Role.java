@@ -5,6 +5,9 @@ import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import src.redtalent.domain.DomainEntity;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.Pattern;
+
 @Document(collection = "Role")
 public class Role extends DomainEntity {
 
@@ -15,6 +18,8 @@ public class Role extends DomainEntity {
         this.role = role;
     }
 
+    @NotBlank
+    @Pattern(regexp = "^ESTUDIANTE|PROFESOR|EGRESADO|ADMIN|DIRECTIVO$")
     public String getRole() {
         return role;
     }

@@ -3,12 +3,33 @@
 <head>
     <title>Bienvenido/a</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <link rel="stylesheet" type="text/css" href="/css/tablas.css" media="screen" />
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/js/tablas.js"></script>
 </head>
 <body>
 <div th:replace="masterpage/header :: nav" />
 <div class="bg container-fluid">
+    <div class="container-fluid" th:each="project: ${projects}">
+        <div class="row">
+            <div style="margin-top: 20px" class="col-md-8 col-sm-12">
+                <div style="max-width: 480px" class="card text-center">
+                    <div class="card-header" th:text="${project.getName()}" />
+                    <div class="card-body">
+                        <div class="embed-responsive embed-responsive-1by1">
+                            <iframe class="embed-responsive-item" width="260" height="115" src="https://www.youtube.com/embed/1X_MNGKww-M" frameborder="0" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+                        </div>
+                        <h5 class="card-title" th:text="${project.getName()}" />
+                        <p class="card-text" th:text="${project.getDescription()}" />
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 col-sm-12">
 
+            </div>
+
+        </div>
+    </div>
 </div>
 <div th:replace="masterpage/footer :: footer"></div>
 </body>

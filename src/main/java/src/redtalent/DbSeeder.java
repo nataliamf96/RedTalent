@@ -319,6 +319,7 @@ public class DbSeeder implements CommandLineRunner {
 
         Project project1 = new Project(
                 "El Cubo",
+                "https://www.zachpoff.com/site/wp-content/uploads/CTW-2016-logo-1.jpg",
                 "Este proyecto consiste en hacer un robot en El Cubo",
                 "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
                 4,
@@ -334,6 +335,7 @@ public class DbSeeder implements CommandLineRunner {
 
         Project project2 = new Project(
                 "Tetrix",
+                "http://openspace.orieldavies.org/images/The-Kitchen1.jpg",
                 "Este proyecto consiste en hacer el juego del Tetrix mediante programación",
                 "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
                 5,
@@ -349,6 +351,7 @@ public class DbSeeder implements CommandLineRunner {
 
         Project project3 = new Project(
                 "Proyecto de arduinos",
+                "https://justimagine.azureedge.net/wp-media/2016/10/Why-throwing-tech-700x400-LinkedIn.jpg",
                 "Se basa en detectar los sentimientos del ser humano trabajando con arduinos",
                 "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
                 6,

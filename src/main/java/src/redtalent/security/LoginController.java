@@ -11,6 +11,7 @@ import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Project;
 import src.redtalent.domain.User;
 import src.redtalent.services.ProjectService;
+import src.redtalent.services.UtilidadesService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -24,11 +25,15 @@ public class LoginController {
     @Autowired
     private ProjectService projectService;
 
+    @Autowired
+    private UtilidadesService utilidadesService;
+
     @RequestMapping(value = "/login", method = RequestMethod.GET)
     public ModelAndView login() {
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("login");
+        modelAndView.addObject("auth",utilidadesService.actorConectado());
         return modelAndView;
     }
 
@@ -40,6 +45,7 @@ public class LoginController {
         modelAndView.addObject("currentUser", user);
         modelAndView.addObject("fullName", "Welcome " + user.getFullname());
         modelAndView.addObject("adminMessage", "Content Available Only for Users with Admin Role");
+        modelAndView.addObject("auth",utilidadesService.actorConectado());
         modelAndView.setViewName("dashboard");
         return modelAndView;
     }
@@ -51,6 +57,7 @@ public class LoginController {
         Collection<Project> projects = projectService.findAll();
         modelAndView.setViewName("home");
         modelAndView.addObject("projects",projects);
+        modelAndView.addObject("auth",utilidadesService.actorConectado());
         return modelAndView;
     }
 

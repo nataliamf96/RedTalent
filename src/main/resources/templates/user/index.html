@@ -6,7 +6,18 @@
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-<div th:replace="masterpage/headerUser :: nav" />
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
 <div class="container py-4">
     <h4 class="text-center">Hola <span sec:authentication="name" /></h4>
     <h1 class="my-4">RedTalent
@@ -15,10 +26,10 @@
     <div class="row">
         <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
             <div class="card h-100">
-                <a th:href="@{project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a th:href="@{project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                     </h4>
                     <p class="card-text" th:text="${project.getDescription()}"></p>
                 </div>

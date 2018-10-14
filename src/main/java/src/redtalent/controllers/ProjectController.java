@@ -15,7 +15,7 @@ import src.redtalent.services.TeamService;
 import src.redtalent.services.UtilidadesService;
 
 @Controller
-@RequestMapping("/user/project")
+@RequestMapping("/project")
 public class ProjectController {
 
     @Autowired
@@ -34,7 +34,7 @@ public class ProjectController {
     public ModelAndView index() {
         ModelAndView result;
 
-        result = new ModelAndView("user/projects");
+        result = new ModelAndView("project/index");
         result.addObject("auth",utilidadesService.actorConectado());
         return result;
     }

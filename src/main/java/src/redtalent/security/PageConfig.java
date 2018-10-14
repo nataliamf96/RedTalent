@@ -4,8 +4,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.format.FormatterRegistry;
 import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.MessageCodesResolver;
 import org.springframework.validation.Validator;
@@ -58,13 +56,14 @@ public class PageConfig implements WebMvcConfigurer {
     }
 
     public void addViewControllers(ViewControllerRegistry registry) {
-
         registry.addViewController("/home").setViewName("home");
         registry.addViewController("/").setViewName("home");
         registry.addViewController("/dashboard").setViewName("dashboard");
         registry.addViewController("/login").setViewName("login");
         registry.addViewController("/user/index").setViewName("user/index");
-
+        registry.addViewController("/admin/index").setViewName("admin/index");
+        registry.addViewController("/registro/registerUser").setViewName("registro/registerUser");
+        registry.addViewController("/project/projectData").setViewName("/project/projectData");
     }
 
     public void configureViewResolvers(ViewResolverRegistry viewResolverRegistry) {

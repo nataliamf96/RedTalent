@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Application;
-import src.redtalent.domain.Project;
 import src.redtalent.repositories.ApplicationRepository;
 
 import java.util.Collection;
@@ -22,26 +21,26 @@ public class ApplicationService {
         super();
     }
 
-    public Application findById(String applicationId){
-        Assert.notNull(applicationId, "La id de la solicitud es nula");
+    public Application findOne(String applicationId){
+        Assert.notNull(applicationId,"Application Service : id null");
         Optional<Application> result = applicationRepository.findById(applicationId);
         return result.get();
     }
 
     public Collection<Application> findAll(){
         Collection<Application> result = applicationRepository.findAll();
-        Assert.notNull(result, "La lista de aplicaciones es nula");
+        Assert.notNull(result,"Application Service : list null");
         return result;
     }
 
     public Application save(Application application){
-        Assert.notNull(application, "No se encuentra la aplicación");
+        Assert.notNull(application,"Application Service : Objeto null");
         Application result = applicationRepository.save(application);
         return result;
     }
 
     public void remove(Application application){
-        Assert.notNull(application, "No se encuentra la aplicación");
+        Assert.notNull(application,"Application Service : Objeto null");
         applicationRepository.delete(application);
     }
 

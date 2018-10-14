@@ -22,7 +22,7 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
 
         for (GrantedAuthority auth : authentication.getAuthorities()) {
             if ("ADMIN".equals(auth.getAuthority())) {
-                response.sendRedirect("/dashboard");
+                response.sendRedirect("/admin/index");
             }
             if ("ESTUDIANTE".equals(auth.getAuthority())) {
                 response.sendRedirect("/user/index");
@@ -32,6 +32,9 @@ public class CustomizeAuthenticationSuccessHandler implements AuthenticationSucc
             }
             if ("EGRESADO".equals(auth.getAuthority())) {
                 response.sendRedirect("/user/index");
+            }
+            if ("DIRECTIVO".equals(auth.getAuthority())) {
+                response.sendRedirect("/directivo/index");
             }
         }
     }

@@ -18,6 +18,7 @@ public class Project extends DomainEntity{
     //Attributes -----------------------------------------------
 
     private String name;
+    private String image;
     private  String description;
     private String requiredProfiles;
     private Integer maxParticipants;
@@ -37,9 +38,10 @@ public class Project extends DomainEntity{
         this.users = new ArrayList<>();
     }
 
-    public Project(String name, String description, String requiredProfiles, Integer maxParticipants, String complexity, Date startDate, Date finishDate, String attachedFiles,
+    public Project(String name, String image, String description, String requiredProfiles, Integer maxParticipants, String complexity, Date startDate, Date finishDate, String attachedFiles,
                    List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, List<User> users){
         this.name = name;
+        this.image = image;
         this.description = description;
         this.requiredProfiles = requiredProfiles;
         this.maxParticipants = maxParticipants;
@@ -55,6 +57,15 @@ public class Project extends DomainEntity{
     }
 
     //Getters and setters -----------------------------------------------
+
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
 
     @NotBlank
     public String getName() {

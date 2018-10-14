@@ -6,9 +6,14 @@
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
 </head>
-<body class="text-center">
+<body class="bg-light">
 <div th:replace="masterpage/header :: nav" />
-<div layout:fragment="content">
+<br />
+<br />
+<div class="container">
+    <h3 class="my-4">
+        Login
+    </h3>
     <form class="form-signin" th:action="@{/login}" method="post">
         <h1 class="h3 mb-3 font-weight-normal">Porfavor, Inicie sesión</h1>
         <div th:if="${param.error}">
@@ -22,9 +27,6 @@
         <label for="inputPassword" class="sr-only">Password</label>
         <input type="password" name="password" id="inputPassword" placeholder="Password" required="" />
         <button type="submit">Inicie Sesión</button>
-    </form>
-    <form class="form-signin" th:action="@{/signup}" method="get">
-        <button type="Submit">Regístrese</button>
     </form>
 </div>
 </body>

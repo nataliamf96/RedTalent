@@ -6,15 +6,10 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import src.redtalent.security.Role;
 
-import javax.validation.constraints.NotNull;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
-@Document(collection = "Administradores")
-public class Administrator extends DomainEntity{
-
-    //Attributes -----------------------------------------------
+@Document(collection = "Directivos")
+public class Directivo {
 
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
     private String email;
@@ -24,13 +19,11 @@ public class Administrator extends DomainEntity{
     @DBRef
     private Set<Role> roles;
 
-    //Constructors -----------------------------------------------
-    public Administrator(){
+    public Directivo(){
         super();
-        this.grades = new ArrayList<>();
     }
 
-    public Administrator(String email, String password, String fullname, Boolean enabled, Set<Role> roles){
+    public Directivo(String email, String password, String fullname, Boolean enabled, Set<Role> roles){
         this.email = email;
         this.password = password;
         this.fullname = fullname;
@@ -78,15 +71,4 @@ public class Administrator extends DomainEntity{
         this.roles = roles;
     }
 
-    //Relationships -----------------------------------------------
-    private List<Grade> grades;
-
-    @NotNull
-    public List<Grade> getGrades() {
-        return grades;
-    }
-
-    public void setGrades(List<Grade> grades) {
-        this.grades = grades;
-    }
 }

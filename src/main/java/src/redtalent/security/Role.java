@@ -1,11 +1,11 @@
 package src.redtalent.security;
 
-import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.IndexDirection;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import src.redtalent.domain.DomainEntity;
 
+import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Pattern;
 
 @Document(collection = "Role")
@@ -18,7 +18,8 @@ public class Role extends DomainEntity {
         this.role = role;
     }
 
-    @Pattern(regexp = "\\AADMIN\\z|\\AESTUDIANTE\\z|\\AEGRESADO\\z|\\APROFESOR\\z|\\ADIRECTIVO\\z")
+    @NotBlank
+    @Pattern(regexp = "^ESTUDIANTE|PROFESOR|EGRESADO|ADMIN|DIRECTIVO$")
     public String getRole() {
         return role;
     }

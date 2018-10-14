@@ -1,15 +1,72 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Bienvenido/a</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
 </head>
-<body>
-<div th:replace="masterpage/header :: nav" />
-<div class="bg container-fluid">
-
+<body class="bg-light">
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
-<div th:replace="masterpage/footer :: footer"></div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div class="container py-4">
+    <h4 class="text-center">Encuentra al equipo para construir tus ideas</h4>
+    <h1 class="my-4">RedTalent
+        <small>Haz realidad tus ideas</small>
+    </h1>
+    <div class="row">
+        <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+                <a th:href="@{project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}" alt=""></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                    </h4>
+                    <p class="card-text" th:text="${project.getDescription()}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#">3</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer" />
 </body>
 </html>

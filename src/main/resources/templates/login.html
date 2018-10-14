@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+    <title>Login</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body class="text-center">
+<div th:replace="masterpage/header :: nav" />
+<div layout:fragment="content">
+    <form class="form-signin" th:action="@{/login}" method="post">
+        <h1 class="h3 mb-3 font-weight-normal">Porfavor, Inicie sesión</h1>
+        <div th:if="${param.error}">
+            Correo Electrónico o Contraseña Inválidos
+        </div>
+        <div th:if="${param.logout}">
+            Usted ha sido desconectado.
+        </div>
+        <label for="inputEmail" class="sr-only">Correo Electrónico</label>
+        <input type="email" name="email" id="inputEmail" placeholder="Email" required="" />
+        <label for="inputPassword" class="sr-only">Password</label>
+        <input type="password" name="password" id="inputPassword" placeholder="Password" required="" />
+        <button type="submit">Inicie Sesión</button>
+    </form>
+    <form class="form-signin" th:action="@{/signup}" method="get">
+        <button type="Submit">Regístrese</button>
+    </form>
+</div>
+</body>
+</html>

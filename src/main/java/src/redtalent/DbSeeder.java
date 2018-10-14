@@ -1,37 +1,35 @@
 package src.redtalent;
 
-import groovy.util.Eval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
-import org.springframework.security.authentication.encoding.Md5PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 import src.redtalent.domain.*;
 import src.redtalent.repositories.*;
-import src.redtalent.security.Authority;
-import src.redtalent.security.UserAccount;
-import src.redtalent.security.UserAccountRepository;
+import src.redtalent.security.Role;
 
-import java.lang.reflect.Array;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 
 
 @Component
-public class DbSeeder implements CommandLineRunner{
+public class DbSeeder implements CommandLineRunner {
 
-    //Repositories -------------------------------------------------
-    @Autowired
-    private AcademicProfileRepository academicProfileRepository;
     @Autowired
     private AdministratorRepository administratorRepository;
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private RoleRepository roleRepository;
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+    @Autowired
+    private AcademicProfileRepository academicProfileRepository;
     @Autowired
     private AlertRepository alertRepository;
     @Autowired
     private ApplicationRepository applicationRepository;
     @Autowired
     private CommentRepository commentRepository;
-    @Autowired
-    private CompanyRepository companyRepository;
     @Autowired
     private EvaluationRepository evaluationRepository;
     @Autowired
@@ -46,22 +44,18 @@ public class DbSeeder implements CommandLineRunner{
     private TagRepository tagRepository;
     @Autowired
     private TeamRepository teamRepository;
-    @Autowired
-    private UserRepository userRepository;
-    @Autowired
-    private UserAccountRepository userAccountRepository;
 
     // Constructor -------------------------------------------------
     public DbSeeder(AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
-                    CommentRepository commentRepository, CompanyRepository companyRepository, EvaluationRepository evaluationRepository, GradeRepository gradeRepository, PhaseRepository phaseRepository,
+                    CommentRepository commentRepository, EvaluationRepository evaluationRepository, GradeRepository gradeRepository, PhaseRepository phaseRepository,
                     ProjectRepository projectRepository, ProjectMonitoringRepository projectMonitoringRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository,
-                    UserAccountRepository userAccountRepository){
+                    RoleRepository roleRepository){
         this.academicProfileRepository = academicProfileRepository;
         this.administratorRepository = administratorRepository;
         this.alertRepository = alertRepository;
         this.applicationRepository = applicationRepository;
         this.commentRepository = commentRepository;
-        this.companyRepository = companyRepository;
+        this.roleRepository = roleRepository;
         this.evaluationRepository  = evaluationRepository;
         this.gradeRepository = gradeRepository;
         this.phaseRepository = phaseRepository;
@@ -69,24 +63,18 @@ public class DbSeeder implements CommandLineRunner{
         this.tagRepository = tagRepository;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
-        this.userAccountRepository = userAccountRepository;
+        this.projectMonitoringRepository = projectMonitoringRepository;
     }
 
     @Override
     public void run(String... strings) throws Exception {
 
-        //Codificación para contraseñas
-
-        Md5PasswordEncoder encoder = new Md5PasswordEncoder();
-
-        //Borro los documentos de la BBDD
-
+        roleRepository.deleteAll();
         academicProfileRepository.deleteAll();
         administratorRepository.deleteAll();
         alertRepository.deleteAll();
         applicationRepository.deleteAll();
         commentRepository.deleteAll();
-        companyRepository.deleteAll();
         evaluationRepository.deleteAll();
         gradeRepository.deleteAll();
         phaseRepository.deleteAll();
@@ -95,44 +83,37 @@ public class DbSeeder implements CommandLineRunner{
         tagRepository.deleteAll();
         teamRepository.deleteAll();
         userRepository.deleteAll();
-        userAccountRepository.deleteAll();
 
-        //UserAccount -----------------------------------------
+        Role estudiante = new Role("ESTUDIANTE");
+        Role profesor = new Role("PROFESOR");
+        Role egresado = new Role("EGRESADO");
+        Role administrador = new Role("ADMIN");
+        List<Role> roles = Arrays.asList(estudiante,profesor,egresado,administrador);
+        roleRepository.saveAll(roles);
 
-        UserAccount userAccount1 = new UserAccount(
-                "admin",
-                encoder.encodePassword("admin", null),
-                Arrays.asList(new Authority(Authority.ADMIN)),
-                false);
+        Set<Role> roleEstudiante = new HashSet<Role>();
+        roleEstudiante.add(estudiante);
+        Set<Role> roleProfesor = new HashSet<Role>();
+        roleProfesor.add(profesor);
+        Set<Role> roleEgresado = new HashSet<Role>();
+        roleEgresado.add(egresado);
+        Set<Role> roleAdministrador = new HashSet<Role>();
+        roleAdministrador.add(administrador);
 
-        UserAccount userAccount2 =  new UserAccount(
-                "user1",
-                encoder.encodePassword("user1", null),
-                Arrays.asList(new Authority(Authority.USER)),
-                false);
+        User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante);
+        User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante);
+        User est3 = new User("user3@user.com",bCryptPasswordEncoder.encode("user3"),"Usuario 3",true,roleEstudiante);
+        User pro1 = new User("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),"Profesor 1",true,roleProfesor);
+        User pro2 = new User("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),"Profesor 2",true,roleProfesor);
+        User pro3 = new User("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),"Profesor 3",true,roleProfesor);
+        User egr1 = new User("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),"Egresado 1",true,roleEgresado);
+        User egr2 = new User("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),"Egresado 2",true,roleEgresado);
+        User egr3 = new User("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),"Egresado 3",true,roleEgresado);
+        List<User> users = Arrays.asList(est1,est2,est3,pro1,pro2,pro3,egr1,egr2,egr3);
+        userRepository.saveAll(users);
 
-        UserAccount userAccount3 = new UserAccount(
-                "user2",
-                encoder.encodePassword("user2", null),
-                Arrays.asList(new Authority(Authority.USER)),
-                false);
-
-        UserAccount userAccount4 = new UserAccount(
-                "user3",
-                encoder.encodePassword("user3", null),
-                Arrays.asList(new Authority(Authority.USER)),
-                false);
-
-        UserAccount userAccount5 =  new UserAccount(
-                "company1",
-                encoder.encodePassword("company1", null),
-                Arrays.asList(new Authority(Authority.COMPANY)),
-                false);
-
-        List<UserAccount> userAccounts = Arrays.asList(userAccount1, userAccount2, userAccount3, userAccount4, userAccount5);
-        userAccountRepository.save(userAccounts);
-
-        //Academic Profiles -----------------------------------------
+        Administrator adm1 = new Administrator("admin@admin.com",bCryptPasswordEncoder.encode("admin"),"admin",true,roleAdministrador);
+        administratorRepository.save(adm1);
 
         AcademicProfile academicProfile1 = new AcademicProfile(
                 "Ingeniería del Software",
@@ -151,7 +132,7 @@ public class DbSeeder implements CommandLineRunner{
                 "Estudiante de 3º curso");
 
         List<AcademicProfile> academicProfiles = Arrays.asList(academicProfile1, academicProfile2, academicProfile3, academicProfile4);
-        academicProfileRepository.save(academicProfiles);
+        academicProfileRepository.saveAll(academicProfiles);
 
         //Grades -----------------------------------------
 
@@ -164,19 +145,7 @@ public class DbSeeder implements CommandLineRunner{
                 "Universidad de Sevilla");
 
         List<Grade> grades = Arrays.asList(grade1, grade2);
-        gradeRepository.save(grades);
-
-        //Administrators -----------------------------------------
-
-        Administrator admin = new Administrator(
-                "nataliamf96@gmail.com",
-                "Natalia",
-                "Morato Fernández",
-                false,
-                userAccount1,
-                Arrays.asList(grade1, grade2));
-
-        administratorRepository.save(admin);
+        gradeRepository.saveAll(grades);
 
         //Alerts -----------------------------------------
 
@@ -190,7 +159,7 @@ public class DbSeeder implements CommandLineRunner{
                 "El plazo máximo de entrega será el 20/10");
 
         List<Alert> alerts = Arrays.asList(alert1, alert2, alert3);
-        alertRepository.save(alerts);
+        alertRepository.saveAll(alerts);
 
         // Applications -----------------------------------------
 
@@ -222,7 +191,7 @@ public class DbSeeder implements CommandLineRunner{
                 "DENIED");
 
         List<Application> applications = Arrays.asList(application1, application2, application3, application4, application5, application6);
-        applicationRepository.save(applications);
+        applicationRepository.saveAll(applications);
 
         // Comments -----------------------------------------
 
@@ -242,18 +211,7 @@ public class DbSeeder implements CommandLineRunner{
                 moment);
 
         List<Comment> comments = Arrays.asList(comment1, comment2, comment3);
-        commentRepository.save(comments);
-
-        // Companies -----------------------------------------
-
-        Company company = new Company(
-                "everis@gmail.com",
-                "Juan",
-                "Perez García",
-                false,
-                userAccount5);
-
-        companyRepository.save(company);
+        commentRepository.saveAll(comments);
 
         // Evaluations -----------------------------------------
 
@@ -278,7 +236,7 @@ public class DbSeeder implements CommandLineRunner{
                 "Se puede mejorar");
 
         List<Evaluation> evaluations = Arrays.asList(evaluation1, evaluation2, evaluation3, evaluation4, evaluation5);
-        evaluationRepository.save(evaluations);
+        evaluationRepository.saveAll(evaluations);
 
         // Project Monitorings -----------------------------------------
 
@@ -317,7 +275,7 @@ public class DbSeeder implements CommandLineRunner{
         );
 
         List<ProjectMonitoring> projectMonitorings = Arrays.asList(projectMonitoring1, projectMonitoring2, projectMonitoring3, projectMonitoring4, projectMonitoring5);
-        projectMonitoringRepository.save(projectMonitorings);
+        projectMonitoringRepository.saveAll(projectMonitorings);
 
         // Tag -----------------------------------------
 
@@ -342,45 +300,7 @@ public class DbSeeder implements CommandLineRunner{
         );
 
         List<Tag> tags = Arrays.asList(tag1, tag2, tag3, tag4, tag5);
-        tagRepository.save(tags);
-
-        // Users -----------------------------------------
-
-        User user1 =  new User("nicolasluna@gmail.com",
-                "Nicolás",
-                "Luna",
-                false,
-                userAccount2,
-                "STUDENT",
-                academicProfile1,
-                Arrays.asList(application1, application2, application3),
-                Arrays.asList(evaluation1, evaluation2, evaluation3),
-                Arrays.asList(comment1));
-
-        User user2 =  new User("jmgpradas@gmail.com",
-                "Jose Manuel",
-                "Pradas",
-                false,
-                userAccount3,
-                "GRADUATE",
-                academicProfile2,
-                Arrays.asList(application4, application5),
-                Arrays.asList(evaluation4),
-                Arrays.asList(comment2));
-
-        User user3 =  new User("angelizaga@gmail.com",
-                "Ángel",
-                "Izaga",
-                false,
-                userAccount4,
-                "PROFESSOR",
-                academicProfile3,
-                Arrays.asList(application6),
-                Arrays.asList(evaluation5),
-                Arrays.asList(comment3));
-
-        List<User> users = Arrays.asList(user1, user2, user3);
-        userRepository.save(users);
+        tagRepository.saveAll(tags);
 
         // Projects -----------------------------------------
 
@@ -397,7 +317,7 @@ public class DbSeeder implements CommandLineRunner{
                 Arrays.asList(comment1),
                 Arrays.asList(alert1),
                 Arrays.asList(projectMonitoring1, projectMonitoring2),
-                Arrays.asList(user1));
+                Arrays.asList(est2,pro2,egr2));
 
         Project project2 = new Project(
                 "Tetrix",
@@ -412,7 +332,7 @@ public class DbSeeder implements CommandLineRunner{
                 Arrays.asList(comment2),
                 Arrays.asList(alert2),
                 Arrays.asList(projectMonitoring3, projectMonitoring4),
-                Arrays.asList(user2));
+                Arrays.asList(est1,pro1,egr1));
 
         Project project3 = new Project(
                 "Proyecto de arduinos",
@@ -427,10 +347,10 @@ public class DbSeeder implements CommandLineRunner{
                 Arrays.asList(comment3),
                 Arrays.asList(alert3),
                 Arrays.asList(projectMonitoring5),
-                Arrays.asList(user3));
+                Arrays.asList(est3,pro3,egr3));
 
         List<Project> projects = Arrays.asList(project1, project2, project3);
-        projectRepository.save(projects);
+        projectRepository.saveAll(projects);
 
         // Team -----------------------------------------
 
@@ -441,7 +361,7 @@ public class DbSeeder implements CommandLineRunner{
                 4,
                 Arrays.asList(application1, application2, application3),
                 Arrays.asList(evaluation1, evaluation2),
-                user1,
+                est1,
                 Arrays.asList(tag1, tag2),
                 Arrays.asList(comment1),
                 Arrays.asList(project1));
@@ -453,7 +373,7 @@ public class DbSeeder implements CommandLineRunner{
                 5,
                 Arrays.asList(application4, application5),
                 Arrays.asList(evaluation3, evaluation4),
-                user2,
+                pro2,
                 Arrays.asList(tag3, tag4),
                 Arrays.asList(comment2),
                 Arrays.asList(project2));
@@ -465,13 +385,13 @@ public class DbSeeder implements CommandLineRunner{
                 6,
                 Arrays.asList(application6),
                 Arrays.asList(evaluation5),
-                user3,
+                egr3,
                 Arrays.asList(tag4, tag5),
                 Arrays.asList(comment3),
                 Arrays.asList(project3));
 
         List<Team> teams = Arrays.asList(team1, team2, team3);
-        teamRepository.save(teams);
+        teamRepository.saveAll(teams);
 
         // Phase ---------------------------------------------------
 
@@ -491,9 +411,8 @@ public class DbSeeder implements CommandLineRunner{
         );
 
         List<Phase> phases = Arrays.asList(phase1, phase2, phase3);
-        phaseRepository.save(phases);
+        phaseRepository.saveAll(phases);
+
+
     }
 }
-
-
-

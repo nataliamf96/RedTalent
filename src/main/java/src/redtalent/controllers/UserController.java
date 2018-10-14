@@ -3,17 +3,18 @@ package src.redtalent.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import src.redtalent.services.ProjectService;
+import src.redtalent.services.UserService;
 
 @Controller
-@RequestMapping("/user/project")
-public class ProjectController {
+@RequestMapping("/user")
+public class UserController {
 
     @Autowired
-    private ProjectService projectService;
+    private UserService userService;
 
-    public ProjectController(){
+    public UserController(){
         super();
     }
 
@@ -21,8 +22,9 @@ public class ProjectController {
     public ModelAndView index() {
         ModelAndView result;
 
-        result = new ModelAndView("user/projects");
+        result = new ModelAndView("user/index");
         return result;
     }
+
 
 }

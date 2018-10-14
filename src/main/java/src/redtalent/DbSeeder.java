@@ -44,6 +44,10 @@ public class DbSeeder implements CommandLineRunner {
     private TagRepository tagRepository;
     @Autowired
     private TeamRepository teamRepository;
+    @Autowired
+    private DepartmentRepository departmentRepository;
+    @Autowired
+    private AreaRepository areaRepository;
 
     // Constructor -------------------------------------------------
     public DbSeeder(AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
@@ -134,18 +138,436 @@ public class DbSeeder implements CommandLineRunner {
         List<AcademicProfile> academicProfiles = Arrays.asList(academicProfile1, academicProfile2, academicProfile3, academicProfile4);
         academicProfileRepository.saveAll(academicProfiles);
 
-        //Grades -----------------------------------------
-
+        //Grades ----------------------------------------
         Grade grade1 = new Grade(
-                "Medicina",
-                "Universidad de Sevilla");
+                "Doble Grado en Adminstración y Dirección de Empresas y en Derecho");
 
         Grade grade2 = new Grade(
-                "Ingeniería del Software",
-                "Universidad de Sevilla");
+                "Doble Grado en Derecho y Economía");
 
-        List<Grade> grades = Arrays.asList(grade1, grade2);
+        Grade grade3 = new Grade(
+                "Doble Grado en Derecho y en Finanzas y Contabilidad");
+
+        Grade grade4 = new Grade(
+                "Doble Grado en Derecho y Gestión y Administración Pública");
+
+        Grade grade5 = new Grade(
+                "Doble Grado en Educación Primaria y Estudios Franceses");
+
+        Grade grade6 = new Grade(
+                "Doble Grado en Farmacia y Óptica y Optometría");
+
+        Grade grade7 = new Grade(
+                "Doble Grado en Filología Clásica y Filolofía Hispánica");
+
+        Grade grade8 = new Grade(
+                "Doble Grado en Finanzas y Contabilidad y Relaciones Laborales y Recursos Humanos");
+
+        Grade grade9 = new Grade(
+                "Doble Grado en Física y en Ingeniería de Materiales");
+
+        Grade grade10 = new Grade(
+                "Doble Grado en Física y Matemáticas");
+
+        Grade grade11 = new Grade(
+                "Doble Grado en Fisioterapia y Ciencias de la Actividad Física y del Deporte");
+
+        Grade grade12 = new Grade(
+                "Doble Grado en Geografía y Gestión del Territorio e Historia");
+
+        Grade grade13 = new Grade(
+                "Doble Grado en Ing.en Diseño Ind.y Desarrollo del Producto e Ing. Mecánica");
+
+        Grade grade14 = new Grade(
+                "Doble Grado en Ingeniería Agrícola y Grado Ciencias Ambientales");
+
+        Grade grade15 = new Grade(
+                "Doble Grado en Ingeniería Eléctrica e Ingeniería Electrónica Industrial");
+
+        Grade grade16 = new Grade(
+                "Doble Grado en Ingeniería Eléctrica e Ingeniería Mecánica");
+
+        Grade grade17 = new Grade(
+                "Doble Grado en Ingeniería Informática - Tecnologías Informáticas y Matemáticas");
+
+        Grade grade18 = new Grade(
+                "Doble Grado en Lengua y Literatura Alemanas y en Educación Primaria");
+
+        Grade grade19 = new Grade(
+                "Doble Grado en Matemáticas y Estadística");
+
+        Grade grade20 = new Grade(
+                "Doble Grado en Periodismo y Comunicación Audiovisual");
+
+        Grade grade21 = new Grade(
+                "Doble Grado en Química y en Ingeniería de Materiales");
+
+        Grade grade22 = new Grade(
+                "Grado en Administración y Dirección de Empresas");
+
+        Grade grade23 = new Grade(
+                "Grado en Antropología Social y Cultural");
+
+        Grade grade24 = new Grade(
+                "Grado en Arqueología");
+
+        Grade grade25 = new Grade(
+                "Grado en Arquitectura");
+
+        Grade grade26 = new Grade(
+                "Grado en Bellas Artes");
+
+        Grade grade27 = new Grade(
+                "Grado en Biología");
+
+        Grade grade28 = new Grade(
+                "Grado en Biomedicina Básica y Experimental");
+
+        Grade grade29 = new Grade(
+                "Grado en Bioquímica");
+
+        Grade grade30 = new Grade(
+                "Grado en Ciencias de la Actividad Física y del Deporte");
+
+        Grade grade31 = new Grade(
+                "Grado en Comunicación Audiovisual");
+
+        Grade grade32 = new Grade(
+                "Grado en Conservación y Restauración de Bienes Culturales");
+
+        Grade grade33 = new Grade(
+                "Grado en Criminología");
+
+        Grade grade34 = new Grade(
+                "Grado en Derecho");
+
+        Grade grade35 = new Grade(
+                "Grado en Economía");
+
+        Grade grade36 = new Grade(
+                "Grado en Edificación");
+
+        Grade grade37 = new Grade(
+                "Grado en Educación Infantil");
+
+        Grade grade38 = new Grade(
+                "Grado en Educación Primaria");
+
+        Grade grade39 = new Grade(
+                "Grado en Enfermería");
+
+        Grade grade40 = new Grade(
+                "Grado en Estadística");
+
+        Grade grade41 = new Grade(
+                "Grado en Estudios Árabes e Islámicos");
+
+        Grade grade42 = new Grade(
+                "Grado en Estudios de Asia Oriental");
+
+        Grade grade43 = new Grade(
+                "Grado en Estudios Franceses");
+
+        Grade grade44 = new Grade(
+                "Grado en Estudios Ingleses");
+
+        Grade grade45 = new Grade(
+                "Grado en Farmacia");
+
+        Grade grade46 = new Grade(
+                "Grado en Filología Clásica");
+
+        Grade grade47 = new Grade(
+                "Grado en Filología Hispánica");
+
+        Grade grade48 = new Grade(
+                "Grado en Filosofía");
+
+        Grade grade49 = new Grade(
+                "Grado en Finanzas y Contabilidad");
+
+        Grade grade50 = new Grade(
+                "Grado en Física");
+
+        Grade grade51 = new Grade(
+                "Grado en Fisioterapia");
+
+        Grade grade52 = new Grade(
+                "Grado en Fundamentos de Arquitectura");
+
+        Grade grade53 = new Grade(
+                "Grado en Geografía y Gestión del Territorio");
+
+        Grade grade54 = new Grade(
+                "Grado en Gestión y Administración Pública");
+
+        Grade grade55 = new Grade(
+                "Grado en Historia");
+
+        Grade grade56 = new Grade(
+                "Grado en Historia del Arte");
+
+        Grade grade57 = new Grade(
+                "Grado en Ingeniería Aeroespacial");
+
+        Grade grade58 = new Grade(
+                "Grado en Ingeniería Agrícola");
+
+        Grade grade59 = new Grade(
+                "Grado en Ingeniería Civil");
+
+        Grade grade60 = new Grade(
+                "Grado en Ingeniería de la Energía");
+
+        Grade grade61 = new Grade(
+                "Grado en Ingeniería de la Salud");
+
+        Grade grade62 = new Grade(
+                "Grado en Ingeniería de las Tecnologías de Telecomuncicación");
+
+        Grade grade63 = new Grade(
+                "Grado en Ingeniería de Materiales");
+
+        Grade grade64 = new Grade(
+                "Grado en Ingeniería de Organización Industrial");
+
+        Grade grade65 = new Grade(
+                "Grado en Ingeniería de Tecnologías Industriales");
+
+        Grade grade66 = new Grade(
+                "Grado en Ingeniería Eléctrica");
+
+        Grade grade67 = new Grade(
+                "Grado en Ingeniería Electrónica Industrial");
+
+        Grade grade68 = new Grade(
+                "Grado en Ingeniería Electrónica, Robótica y Mecatrónica");
+
+        Grade grade69 = new Grade(
+                "Grado en Ingeniería en Diseño Industrial y Desarrollo del Producto");
+
+        Grade grade70 = new Grade(
+                "Grado en Ingeniería Informática-Ingeniería de Computadores");
+
+        Grade grade71 = new Grade(
+                "Grado en Ingeniería Informática-Ingeniería del Software");
+
+        Grade grade72 = new Grade(
+                "Grado en Ingeniería Informática-Tecnologías Informáticas");
+
+        Grade grade73 = new Grade(
+                "Grado en Ingeniería Mecánica");
+
+        Grade grade74 = new Grade(
+                "Grado en Ingeniería Química");
+
+        Grade grade75 = new Grade(
+                "Grado en Ingeniería Química Industrial");
+
+        Grade grade76 = new Grade(
+                "Grado en Lengua y Literatura Alemanas");
+
+        Grade grade77 = new Grade(
+                "Grado en Marketing e Investigación de Mercados");
+
+        Grade grade78 = new Grade(
+                "Grado en Matemáticas");
+
+        Grade grade79 = new Grade(
+                "Grado en Medicina");
+
+        Grade grade80 = new Grade(
+                "Grado en Odontología");
+
+        Grade grade81 = new Grade(
+                "Grado en Óptica y Optometría");
+
+        Grade grade82 = new Grade(
+                "Grado en Pedagogía");
+
+        Grade grade83 = new Grade(
+                "Grado en Periodismo");
+
+        Grade grade84 = new Grade(
+                "Grado en Podología");
+
+        Grade grade85 = new Grade(
+                "Grado en Psicología");
+
+        Grade grade86 = new Grade(
+                "Grado en Publicidad y Relaciones Públicas");
+
+        Grade grade87 = new Grade(
+                "Grado en Química");
+
+        Grade grade88 = new Grade(
+                "Grado en Relaciones Laborales y Recursos Humanos");
+
+        Grade grade89 = new Grade(
+                "Grado en Turismo");
+
+        List<Grade> grades = Arrays.asList(grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, grade11, grade12, grade13, grade14, grade15, grade16, grade17, grade18, grade19, grade20, grade21, grade22,
+                grade23, grade24, grade25, grade26, grade27, grade28, grade29, grade30, grade31, grade32, grade33, grade34, grade35, grade36, grade27, grade38, grade39, grade40, grade41, grade42, grade43, grade44, grade45, grade46, grade47, grade48, grade49,
+                grade50, grade51, grade52, grade53, grade54, grade55, grade56, grade57, grade58, grade59, grade60, grade61, grade62, grade63, grade64, grade65, grade66, grade67, grade68, grade69, grade70, grade71, grade72, grade73, grade74, grade75, grade76,
+                grade77, grade78, grade79, grade80, grade81, grade82, grade83, grade84, grade85, grade86, grade87, grade88, grade89);
         gradeRepository.saveAll(grades);
+
+        //Departments -----------------------------------
+
+        Department department1 = new Department(
+                "Escuela Politécnica Superior",
+                Arrays.asList(grade13, grade15, grade16, grade66, grade67, grade69, grade73, grade75)
+        );
+
+        Department department2 = new Department(
+                "Escuela Técnica Superior de Arquitectura",
+                Arrays.asList(grade25, grade52)
+        );
+
+        Department department3 = new Department(
+                "Escuela Técnica Superior de Ingeniería",
+                Arrays.asList(grade57, grade59, grade60, grade62, grade64, grade65, grade68, grade74)
+        );
+
+        Department department4 = new Department(
+                "Escuela Técnica Superior de Ingeniería Agronómica",
+                Arrays.asList(grade14, grade58)
+        );
+
+        Department department5 = new Department(
+                "Escueña Técnica Superior de Ingeniería de Edificación",
+                Arrays.asList(grade36)
+        );
+
+        Department department6 = new Department(
+                "Escuela Técnica Superior de Ingeniería Informática",
+                Arrays.asList(grade17, grade61, grade70, grade71, grade72)
+        );
+
+        Department department7 = new Department(
+                "Facultad de Bellas Artes",
+                Arrays.asList(grade26, grade32)
+        );
+
+        Department department8 = new Department(
+                "Facultad de Ciencias de la Educación",
+                Arrays.asList(grade5, grade11, grade18, grade30, grade37, grade38, grade82)
+        );
+
+        Department department9 = new Department(
+                "Facultad de Ciencias del Trabajo",
+                Arrays.asList(grade8, grade88)
+        );
+
+        Department department10 = new Department(
+                "Facultad de Derecho",
+                Arrays.asList(grade1, grade2, grade3, grade4, grade33, grade34, grade54)
+        );
+
+        Department department11 = new Department(
+                "Facultas de Filología",
+                Arrays.asList(grade5, grade7, grade18, grade41, grade43, grade44, grade46, grade47, grade76)
+        );
+
+        Department department12 = new Department(
+                "Facultad de Filosofía",
+                Arrays.asList(grade42, grade48)
+        );
+
+        Department department13 = new Department(
+                "Facultad de Geografía e Historia",
+                Arrays.asList(grade12, grade23, grade24, grade53, grade55, grade56)
+        );
+
+        Department department14 = new Department(
+                "Facultad de Psicología",
+                Arrays.asList(grade85)
+        );
+
+        Department department15 = new Department(
+                "Facultad de Biología",
+                Arrays.asList(grade27, grade29)
+        );
+
+        Department department16 = new Department(
+                "Facultad de Enfermería, Fisioterapia y Podología",
+                Arrays.asList(grade11, grade39, grade84)
+        );
+
+        Department department17 = new Department(
+                "Facultad de Farmacia",
+                Arrays.asList(grade6, grade45, grade81)
+        );
+
+        Department department18 = new Department(
+                "Facultad de Física",
+                Arrays.asList(grade9, grade10, grade21, grade50, grade63)
+        );
+
+        Department department19 = new Department(
+                "Facultad de Matemáticas",
+                Arrays.asList(grade10, grade17, grade19, grade40, grade78)
+        );
+
+        Department department20 = new Department(
+                "Facultad de Medicina",
+                Arrays.asList(grade28, grade79)
+        );
+
+        Department department21 = new Department(
+                "Facultad de Odontología",
+                Arrays.asList(grade80)
+        );
+
+        Department department22 = new Department(
+                "Facultad de Química",
+                Arrays.asList(grade21, grade87)
+        );
+
+        Department department23 = new Department(
+                "Facultad de Ciencias Económicas y Empresariales",
+                Arrays.asList(grade2, grade22, grade35, grade51, grade77)
+        );
+
+        Department department24 = new Department(
+                "Facultad de Comunicación",
+                Arrays.asList(grade20, grade31, grade83, grade86)
+        );
+
+        Department department25 = new Department(
+                "Facultad de Turismo y Finanzas",
+                Arrays.asList(grade3, grade8, grade49, grade89)
+        );
+
+        List<Department> departments = Arrays.asList(department1, department2, department3, department4, department5, department6, department7, department8, department9,
+                department10, department11, department12, department13, department14, department15, department16, department17, department18, department19, department20,
+                department21, department22, department23, department24, department25);
+        departmentRepository.saveAll(departments);
+
+        //Areas -----------------------------------------
+
+        Area area1 = new Area(
+                "Tecnología",
+                Arrays.asList(department1, department2, department3, department4, department5, department6)
+        );
+
+        Area area2 = new Area(
+                "Humanidades",
+                Arrays.asList(department7, department8, department9, department10, department11, department12, department13, department14)
+        );
+
+        Area area3 = new Area(
+                "Bio-Ciencias",
+                Arrays.asList(department15, department16, department17, department18, department19, department20, department21)
+        );
+
+        Area area4 = new Area(
+                "Transversales",
+                Arrays.asList(department23, department24, department25)
+        );
+
+        List<Area> areas = Arrays.asList(area1, area2, area3, area4);
+        areaRepository.saveAll(areas);
 
         //Alerts -----------------------------------------
 

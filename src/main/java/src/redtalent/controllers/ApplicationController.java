@@ -12,7 +12,7 @@ import java.util.Collection;
 
 @Controller
 @RequestMapping("/application")
-public class ApplicationController extends AbstractController{
+public class ApplicationController{
 
     @Autowired
     ApplicationService applicationService;

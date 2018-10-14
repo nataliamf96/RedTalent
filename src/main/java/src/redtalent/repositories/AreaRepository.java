@@ -1,4 +1,8 @@
 package src.redtalent.repositories;
 
-public interface AreaRepository {
+import org.springframework.data.mongodb.repository.MongoRepository;
+import src.redtalent.domain.Area;
+
+public interface AreaRepository extends MongoRepository<Area, String> {
+
 }

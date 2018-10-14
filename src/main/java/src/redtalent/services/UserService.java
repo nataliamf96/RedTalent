@@ -1,21 +1,15 @@
 package src.redtalent.services;
 
+import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.Assert;
-import src.redtalent.domain.Application;
-import src.redtalent.domain.Comment;
-import src.redtalent.domain.Evaluation;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.UserRepository;
 
-import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
+import java.util.Optional;
 
 @Service
-@Transactional
 public class UserService {
 
     @Autowired
@@ -26,38 +20,25 @@ public class UserService {
     }
 
     public User findOne(String userId){
-        Assert.notNull(userId);
-        return userRepository.findOne(userId);
+        Assert.notNull(userId,"La userId es null");
+        Optional<User> result = userRepository.findById(userId);
+        return result.get();
     }
 
     public Collection<User> findAll(){
         Collection<User> result = userRepository.findAll();
-        Assert.notNull(result);
+        Assert.notNull(result,"La lista de usuarios es NULL");
         return result;
     }
 
-    public User create(){
-        User result = new User();
-        List<Application> applications = new ArrayList<Application>();
-        List<Evaluation> evaluations = new ArrayList<Evaluation>();
-        List<Comment> comments = new ArrayList<Comment>();
-        result.setApplications(applications);
-        result.setEvaluations(evaluations);
-        result.setComments(comments);
-        result.setAcademicProfile(null);
-        return result;
-    }
-
-    public User save(User user){
-        Assert.notNull(user);
-        user.setSuspicious(false);
-
+    public User saveUser(User user){
+        Assert.notNull(user,"Ocurrió un error al guardar el usuario");
         userRepository.save(user);
         return user;
     }
 
     public void remove(User user){
-        Assert.notNull(user);
+        Assert.notNull(user,"Ocurrió un error al borrar el usuario");
         userRepository.delete(user);
     }
 

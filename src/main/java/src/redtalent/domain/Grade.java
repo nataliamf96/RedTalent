@@ -1,26 +1,26 @@
 package src.redtalent.domain;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.mongodb.core.mapping.Document;
+
+import javax.validation.constraints.NotBlank;
 
 @Document(collection = "Grades")
 public class Grade extends DomainEntity{
 
     //Attributes -----------------------------------------------
     private String name;
-    private String university;
 
     //Constructors -----------------------------------------------
     public Grade(){
         super();
     }
 
-    public Grade(String name, String university){
+    public Grade(String name){
         this.name = name;
-        this.university = university;
     }
 
     //Getters and setters -----------------------------------------------
+
     @NotBlank
     public String getName() {
         return name;
@@ -30,12 +30,4 @@ public class Grade extends DomainEntity{
         this.name = name;
     }
 
-    @NotBlank
-    public String getUniversity() {
-        return university;
-    }
-
-    public void setUniversity(String university) {
-        this.university = university;
-    }
 }

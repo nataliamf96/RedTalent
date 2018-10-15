@@ -4,10 +4,12 @@ import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import src.redtalent.domain.Area;
 import src.redtalent.domain.Department;
 import src.redtalent.repositories.DepartmentRepository;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -43,4 +45,8 @@ public class DepartmentService {
         Assert.notNull(department, "Department Service : Objeto null");
         departmentRepository.delete(department);
     }
+
+    //public List<Department> departmentsByAreaId(Area area){
+
+    //}
 }

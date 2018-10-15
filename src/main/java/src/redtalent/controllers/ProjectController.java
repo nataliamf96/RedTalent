@@ -10,6 +10,8 @@ import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Project;
 import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
+import src.redtalent.forms.ProjectForm;
+import src.redtalent.forms.UserForm;
 import src.redtalent.services.ProjectService;
 import src.redtalent.services.TeamService;
 import src.redtalent.services.UtilidadesService;
@@ -20,6 +22,7 @@ public class ProjectController {
 
     @Autowired
     private ProjectService projectService;
+
     @Autowired
     private UtilidadesService utilidadesService;
 
@@ -53,6 +56,35 @@ public class ProjectController {
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",user.getFullname());
         result.addObject("comments",project.getComments());
+
+        return result;
+    }
+
+    // RegisterUser ---------------------------------------------------------------
+    //GET--------------------------------------------------------------
+    @RequestMapping(value = "/createProject", method = RequestMethod.GET)
+    public ModelAndView register() {
+        ModelAndView result;
+        ProjectForm projectForm;
+
+        projectForm = new ProjectForm();
+        result = createEditModelAndViewProject(projectForm);
+
+        return result;
+    }
+
+    protected ModelAndView createEditModelAndViewProject(ProjectForm projectForm) {
+        ModelAndView result;
+        result = createEditModelAndViewProject(projectForm, null);
+        return result;
+    }
+
+    protected ModelAndView createEditModelAndViewProject(ProjectForm projectForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("project/createProject");
+        result.addObject("projectForm", projectForm);
+        result.addObject("message", message);
 
         return result;
     }

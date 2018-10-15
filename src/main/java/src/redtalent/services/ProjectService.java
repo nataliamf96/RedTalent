@@ -2,12 +2,17 @@ package src.redtalent.services;
 
 import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import src.redtalent.domain.Project;
+import src.redtalent.domain.*;
 import src.redtalent.repositories.ProjectRepository;
+import src.redtalent.repositories.UserRepository;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -17,13 +22,29 @@ public class ProjectService {
     @Autowired
     private ProjectRepository projectRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public ProjectService(){
         super();
     }
 
-    public Project create(Project project){
-        Assert.notNull(project,"Project Service : id null");
-        return project;
+    public Project create(){
+        Project result = new Project();
+        List<Tag> tags = new ArrayList<Tag>();
+        List<Comment> comments = new ArrayList<Comment>();
+        List<Alert> alerts = new ArrayList<Alert>();
+        List<ProjectMonitoring> projectMonitorings = new ArrayList<ProjectMonitoring>();
+        List<User> users = new ArrayList<User>();
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByEmail(authentication.getName());
+        users.add(user);
+        result.setAlerts(alerts);
+        result.setTags(tags);
+        result.setComments(comments);
+        result.setProjectMonitorings(projectMonitorings);
+        result.setUsers(users);
+        return result;
     }
 
     public Project save(Project project){

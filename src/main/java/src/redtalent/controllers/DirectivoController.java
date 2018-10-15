@@ -4,6 +4,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
+import src.redtalent.services.DirectivoService;
+import src.redtalent.services.ProjectService;
 import src.redtalent.services.UtilidadesService;
 
 @Controller
@@ -12,6 +14,12 @@ public class DirectivoController {
 
     @Autowired
     private UtilidadesService utilidadesService;
+
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private DirectivoService directivoService;
 
     public DirectivoController(){
         super();
@@ -22,6 +30,16 @@ public class DirectivoController {
         ModelAndView result;
 
         result = new ModelAndView("directivo/index");
+        result.addObject("projects",projectService.findAll());
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/dashboardDirectivo")
+    public ModelAndView dashboardDirectivo() {
+        ModelAndView result;
+
+        result = new ModelAndView("directivo/dashboardDirectivo");
         result.addObject("auth",utilidadesService.actorConectado());
         return result;
     }

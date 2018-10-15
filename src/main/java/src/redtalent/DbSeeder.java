@@ -48,12 +48,15 @@ public class DbSeeder implements CommandLineRunner {
     private DepartmentRepository departmentRepository;
     @Autowired
     private AreaRepository areaRepository;
+    @Autowired
+    private DirectivoRepository directivoRepository;
 
     // Constructor -------------------------------------------------
-    public DbSeeder(AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
+    public DbSeeder(DirectivoRepository directivoRepository, AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
                     CommentRepository commentRepository, EvaluationRepository evaluationRepository, GradeRepository gradeRepository, PhaseRepository phaseRepository,
                     ProjectRepository projectRepository, ProjectMonitoringRepository projectMonitoringRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository,
                     RoleRepository roleRepository){
+        this.directivoRepository = directivoRepository;
         this.academicProfileRepository = academicProfileRepository;
         this.administratorRepository = administratorRepository;
         this.alertRepository = alertRepository;
@@ -87,12 +90,14 @@ public class DbSeeder implements CommandLineRunner {
         tagRepository.deleteAll();
         teamRepository.deleteAll();
         userRepository.deleteAll();
+        directivoRepository.deleteAll();
 
         Role estudiante = new Role("ESTUDIANTE");
         Role profesor = new Role("PROFESOR");
         Role egresado = new Role("EGRESADO");
         Role administrador = new Role("ADMIN");
-        List<Role> roles = Arrays.asList(estudiante,profesor,egresado,administrador);
+        Role directivo = new Role("DIRECTIVO");
+        List<Role> roles = Arrays.asList(estudiante,profesor,egresado,administrador,directivo);
         roleRepository.saveAll(roles);
 
         Set<Role> roleEstudiante = new HashSet<Role>();
@@ -103,6 +108,8 @@ public class DbSeeder implements CommandLineRunner {
         roleEgresado.add(egresado);
         Set<Role> roleAdministrador = new HashSet<Role>();
         roleAdministrador.add(administrador);
+        Set<Role> roleDirectivo = new HashSet<Role>();
+        roleDirectivo.add(directivo);
 
         User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante);
         User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante);
@@ -118,6 +125,13 @@ public class DbSeeder implements CommandLineRunner {
 
         Administrator adm1 = new Administrator("admin@admin.com",bCryptPasswordEncoder.encode("admin"),"admin",true,roleAdministrador);
         administratorRepository.save(adm1);
+
+        Directivo dir1 = new Directivo("directivo1@directivo.com",bCryptPasswordEncoder.encode("directivo1"),"Directivo 1", true , roleDirectivo);
+        Directivo dir2 = new Directivo("directivo2@directivo.com",bCryptPasswordEncoder.encode("directivo2"),"Directivo 2", true , roleDirectivo);
+        Directivo dir3 = new Directivo("directivo3@directivo.com",bCryptPasswordEncoder.encode("directivo3"),"Directivo 3", true , roleDirectivo);
+        List<Directivo> directivos = Arrays.asList(dir1,dir2,dir3);
+        directivoRepository.saveAll(directivos);
+
 
         AcademicProfile academicProfile1 = new AcademicProfile(
                 "Ingeniería del Software",

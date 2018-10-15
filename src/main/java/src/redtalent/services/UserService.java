@@ -33,8 +33,8 @@ public class UserService {
 
     public User saveUser(User user){
         Assert.notNull(user,"Ocurrió un error al guardar el usuario");
-        userRepository.save(user);
-        return user;
+        User result = userRepository.save(user);
+        return result;
     }
 
     public void remove(User user){

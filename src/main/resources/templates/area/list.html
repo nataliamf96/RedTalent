@@ -9,8 +9,10 @@
 <div th:replace="masterpage/headerAdmin :: nav"></div>
 <div class="container">
     <h5>Áreas de la US</h5>
-    <div th:each="area : ${areas}" class="col-lg-4 col-sm-6 portfolio-item">
-        <span th:text="${area.getArea()}"></span>
+    <div class="row">
+        <div th:each="area : ${areas}" class="col-lg-3 col-sm-6 portfolio-item">
+            <span th:text="${area.getArea()}"></span>
+        </div>
     </div>
 </div>
 <div th:replace="masterpage/footer :: footer"></div>

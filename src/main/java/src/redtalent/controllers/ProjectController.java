@@ -3,6 +3,7 @@ package src.redtalent.controllers;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -12,9 +13,19 @@ import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
 import src.redtalent.forms.ProjectForm;
 import src.redtalent.forms.UserForm;
+import src.redtalent.security.Role;
 import src.redtalent.services.ProjectService;
 import src.redtalent.services.TeamService;
 import src.redtalent.services.UtilidadesService;
+import sun.misc.BASE64Decoder;
+
+import javax.imageio.ImageIO;
+import javax.validation.Valid;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayInputStream;
+import java.io.File;
+import java.util.HashSet;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/project")
@@ -69,6 +80,34 @@ public class ProjectController {
 
         projectForm = new ProjectForm();
         result = createEditModelAndViewProject(projectForm);
+
+        return result;
+    }
+
+    @RequestMapping(value = "/createProject", method = RequestMethod.POST, params = "saveProject")
+    public ModelAndView save(@Valid ProjectForm projectForm, BindingResult binding) {
+        ModelAndView result;
+
+        if (binding.hasErrors())
+            result = createEditModelAndViewProject(projectForm);
+        else
+            try {
+                Project project = projectService.create();
+                project.setComplexity(projectForm.getComplexity());
+                project.setDescription(projectForm.getDescription());
+                project.setName(projectForm.getName());
+                project.setImage(projectForm.getImage());
+                project.setMaxParticipants(projectForm.getMaxParticipants());
+                project.setFinishDate(projectForm.getFinishDate());
+                project.setStartDate(projectForm.getStartDate());
+                project.setAttachedFiles(projectForm.getAttachedFiles());
+                project.setRequiredProfiles(projectForm.getRequiredProfiles());
+                projectService.save(project);
+                result = new ModelAndView("redirect:/user/index");
+
+            } catch (Throwable oops) {
+                result = createEditModelAndViewProject(projectForm, "ERROR AL CREAR EL PROYECTO");
+            }
 
         return result;
     }

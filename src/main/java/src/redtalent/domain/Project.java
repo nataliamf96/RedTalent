@@ -111,7 +111,7 @@ public class Project extends DomainEntity{
 
     @NotNull
     @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     public Date getStartDate() {
         return startDate;
     }
@@ -122,7 +122,7 @@ public class Project extends DomainEntity{
 
     @NotNull
     @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     public Date getFinishDate() {
         return finishDate;
     }

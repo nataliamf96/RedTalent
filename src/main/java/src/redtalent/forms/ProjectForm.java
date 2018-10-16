@@ -32,7 +32,7 @@ public class ProjectForm {
         this.terms = terms;
     }
 
-    @javax.validation.constraints.NotBlank
+   @NotBlank
     public String getImage() {
         return image;
     }
@@ -78,7 +78,6 @@ public class ProjectForm {
         this.requiredProfiles = requiredProfiles;
     }
 
-    @Size(min = 1)
     public Integer getMaxParticipants() {
         return maxParticipants;
     }
@@ -89,7 +88,7 @@ public class ProjectForm {
 
     @NotNull
     @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     public Date getStartDate() {
         return startDate;
     }
@@ -100,7 +99,7 @@ public class ProjectForm {
 
     @NotNull
     @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     public Date getFinishDate() {
         return finishDate;
     }

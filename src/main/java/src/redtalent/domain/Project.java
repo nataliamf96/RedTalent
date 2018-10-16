@@ -1,13 +1,9 @@
 package src.redtalent.domain;
 
-import org.hibernate.validator.constraints.NotBlank;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Pattern;
-import javax.validation.constraints.Size;
+import javax.validation.constraints.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -19,7 +15,7 @@ public class Project extends DomainEntity{
 
     private String name;
     private String image;
-    private  String description;
+    private String description;
     private String requiredProfiles;
     private Integer maxParticipants;
     private String complexity;
@@ -58,7 +54,7 @@ public class Project extends DomainEntity{
 
     //Getters and setters -----------------------------------------------
 
-
+    @javax.validation.constraints.NotBlank
     public String getImage() {
         return image;
     }
@@ -95,6 +91,7 @@ public class Project extends DomainEntity{
         this.description = description;
     }
 
+    @NotBlank
     public String getRequiredProfiles() {
         return requiredProfiles;
     }
@@ -114,7 +111,7 @@ public class Project extends DomainEntity{
 
     @NotNull
     @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     public Date getStartDate() {
         return startDate;
     }
@@ -125,7 +122,7 @@ public class Project extends DomainEntity{
 
     @NotNull
     @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
+    @DateTimeFormat(pattern = "dd-MM-yyyy HH:mm")
     public Date getFinishDate() {
         return finishDate;
     }

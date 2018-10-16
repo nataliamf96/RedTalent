@@ -43,7 +43,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/").permitAll()
                 .antMatchers("/login").anonymous()
                 .antMatchers("/registro/registerUser").anonymous()
+                .antMatchers("/directivo/index").hasAuthority("DIRECTIVO")
+                .antMatchers("/user/index").hasAnyAuthority("ESTUDIANTE","PROFESOR","EGRESADO")
+                .antMatchers("/admin/index").hasAuthority("ADMIN")
                 .antMatchers("/project/projectData").permitAll()
+                .antMatchers("/directivo/dashboardDirectivo").hasAuthority("DIRECTIVO")
+                .antMatchers("/project/createProject").hasAnyAuthority("ESTUDIANTE","PROFESOR","EGRESADO")
                 .antMatchers("/dashboard/**").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable().formLogin().successHandler(customizeAuthenticationSuccessHandler)
                 .loginPage("/login").failureUrl("/login?error=true")
@@ -51,7 +56,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .passwordParameter("password")
                 .and().logout()
                 .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-                .logoutSuccessUrl("/").and().exceptionHandling();
+                .logoutSuccessUrl("/").and().exceptionHandling().accessDeniedPage("/403");
     }
 
     @Override

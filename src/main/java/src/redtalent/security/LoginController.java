@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
@@ -13,7 +12,6 @@ import src.redtalent.domain.User;
 import src.redtalent.services.ProjectService;
 import src.redtalent.services.UtilidadesService;
 
-import javax.validation.Valid;
 import java.util.Collection;
 
 @Controller
@@ -33,6 +31,15 @@ public class LoginController {
         ModelAndView modelAndView = new ModelAndView();
 
         modelAndView.setViewName("login");
+        modelAndView.addObject("auth",utilidadesService.actorConectado());
+        return modelAndView;
+    }
+
+    @RequestMapping(value = "/403", method = RequestMethod.GET)
+    public ModelAndView accesoDenegado() {
+        ModelAndView modelAndView = new ModelAndView();
+
+        modelAndView.setViewName("403");
         modelAndView.addObject("auth",utilidadesService.actorConectado());
         return modelAndView;
     }

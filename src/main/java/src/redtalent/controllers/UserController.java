@@ -1,6 +1,8 @@
 package src.redtalent.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -30,9 +32,12 @@ public class UserController {
     public ModelAndView index() {
         ModelAndView result;
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
         result = new ModelAndView("user/index");
         result.addObject("projects",projectService.findAll());
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("user",utilidadesService.userConectado(authentication.getName()));
         return result;
     }
 

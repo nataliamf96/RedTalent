@@ -4,6 +4,7 @@
     <title>Home</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
 </head>
 <body class="bg-light">
 <div th:if="${auth.equals('USER')}">
@@ -18,11 +19,25 @@
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
 </div>
-<div class="container py-4">
-    <h4 class="text-center">Hola <span sec:authentication="name" /></h4>
+<div style="margin-top: -25px" class="container py-4">
     <h1 class="my-4">RedTalent
         <small>Haz realidad tus ideas</small>
     </h1>
+    <div style="margin-top: -12px" class='card card-profile text-center'>
+        <img alt='' class='card-img-top' th:src="@{/images/color-img.jpg}">
+        <div class='card-block'>
+            <img alt='' class='card-img-profile' th:src="@{/images/profile.jpg}">
+            <h4 style="margin-top: -23px" class='card-title'>
+                <i th:text="${user.getFullname()}" />
+                <small th:text="${user.getEmail()}"></small>
+            </h4>
+            <div class='card-links'>
+                <a class='fa fa-dribbble' href='#'></a>
+                <a class='fa fa-twitter' href='#'></a>
+                <a class='fa fa-facebook' href='#'></a>
+            </div>
+        </div>
+    </div>
     <div class="row">
         <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
             <div class="card h-100">

@@ -81,6 +81,8 @@ public class DbSeeder implements CommandLineRunner {
         administratorRepository.deleteAll();
         alertRepository.deleteAll();
         applicationRepository.deleteAll();
+        areaRepository.deleteAll();
+        departmentRepository.deleteAll();
         commentRepository.deleteAll();
         evaluationRepository.deleteAll();
         gradeRepository.deleteAll();

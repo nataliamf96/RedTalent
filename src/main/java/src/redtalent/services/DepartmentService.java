@@ -1,6 +1,7 @@
 package src.redtalent.services;
 
 import com.mysema.commons.lang.Assert;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -21,6 +22,11 @@ public class DepartmentService {
 
     public DepartmentService() {
         super();
+    }
+
+    public Department create(){
+        Department department = new Department();
+        return department;
     }
 
     public Department findOne(String departmentId) {
@@ -46,7 +52,10 @@ public class DepartmentService {
         departmentRepository.delete(department);
     }
 
-    //public List<Department> departmentsByAreaId(Area area){
+    public List<Department> findDepartmentsBy(ObjectId areaId){
+        List<Department> result = departmentRepository.findDepartmentsBy(areaId);
+        return result;
+    }
 
     //}
 }

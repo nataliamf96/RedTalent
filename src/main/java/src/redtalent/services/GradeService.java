@@ -20,6 +20,11 @@ public class GradeService {
         super();
     }
 
+    public Grade create(){
+        Grade grade = new Grade();
+        return grade;
+    }
+
     public Grade findOne(String gradeId){
         Assert.notNull(gradeId,"Grade Service : id null");
         Optional<Grade> result = gradeRepository.findById(gradeId);

@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col-lg-6 col-sm-6 portfolio-item">
             <h5>Creador</h5>
-            <span th:text="${user}"></span>
+            <!--<span th:text="${user}"></span>-->
         </div>
     </div>
     <div class="row">
@@ -57,21 +57,6 @@
         </div>
         <div class="col-lg-6 col-sm-6 portfolio-item">
             <img class="card-img-top" th:src="${project.getImage()}">
-        </div>
-    </div>
-    <h4>Equipo</h4>
-    <div class="row">
-        <div class="col-lg-4 col-sm-4 portfolio-item">
-            <h5>Nombre</h5>
-            <span th:text="${team.getName()}"></span>
-        </div>
-        <div class="col-lg-4 col-sm-4 portfolio-item">
-            <h5>Descripción</h5>
-            <span th:text="${team.getDescription()}"></span>
-        </div>
-        <div class="col-lg-4 col-sm-4 portfolio-item">
-            <h5>Número de Participantes</h5>
-            <span th:text="${team.getParticipants()}"></span>
         </div>
     </div>
 </div>

@@ -82,7 +82,7 @@ public class PageConfig implements WebMvcConfigurer {
 
     }
 
-    public void extendMessageConverters(List<HttpMessageConverter<?>> list) {
+    public void extendMessazgeConverters(List<HttpMessageConverter<?>> list) {
 
     }
 

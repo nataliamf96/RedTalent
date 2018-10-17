@@ -2,6 +2,8 @@ package src.redtalent.controllers;
 
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,7 @@ import src.redtalent.forms.UserForm;
 import src.redtalent.security.Role;
 import src.redtalent.services.ProjectService;
 import src.redtalent.services.TeamService;
+import src.redtalent.services.UserService;
 import src.redtalent.services.UtilidadesService;
 import sun.misc.BASE64Decoder;
 
@@ -24,7 +27,9 @@ import javax.validation.Valid;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -36,6 +41,9 @@ public class ProjectController {
 
     @Autowired
     private UtilidadesService utilidadesService;
+
+    @Autowired
+    private UserService userService;
 
     @Autowired
     private TeamService teamService;
@@ -59,13 +67,11 @@ public class ProjectController {
         result = new ModelAndView("project/projectData");
 
         Project project = projectService.findOne(projectId.toString());
-        User user = project.getUsers().get(0);
-        Team team = teamService.teamByProjectId(project);
+        //Team team = teamService.teamByProjectId(project);
 
         result.addObject("project",project);
-        result.addObject("team",team);
+        //result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("user",user.getFullname());
         result.addObject("comments",project.getComments());
 
         return result;

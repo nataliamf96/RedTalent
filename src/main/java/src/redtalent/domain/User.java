@@ -6,10 +6,15 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import src.redtalent.security.Role;
 
+import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
-@Document(collection = "Usuarios")
+@Document(collection = "Users")
 public class User extends DomainEntity{
+
+    //Attributes -----------------------------------------------
 
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
     private String email;
@@ -19,6 +24,7 @@ public class User extends DomainEntity{
     @DBRef
     private Set<Role> roles;
 
+    //Constructors -----------------------------------------------
     public User(){
         super();
     }

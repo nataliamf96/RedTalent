@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Project;
 import src.redtalent.domain.Team;
+import src.redtalent.domain.User;
 import src.redtalent.repositories.TeamRepository;
 
 import java.util.Collection;
@@ -49,6 +50,12 @@ public class TeamService {
         Assert.notNull(project,"Team Service : Objeto null");
         Team result = teamRepository.findTeamByProjectsContaining(project);
         Assert.notNull(result,"Team Service : Objeto null");
+        return result;
+    }
+
+    public Team findByUserCreated(User user){
+        Assert.notNull(user,"user null");
+        Team result = teamRepository.findByUserCreated(user);
         return result;
     }
 }

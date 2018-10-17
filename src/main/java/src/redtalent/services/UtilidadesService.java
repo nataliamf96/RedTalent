@@ -21,6 +21,8 @@ public class UtilidadesService {
     private UserService userService;
     @Autowired
     private AdministratorService administratorService;
+    @Autowired
+    private DirectivoService directivoService;
 
     public UtilidadesService(){
         super();
@@ -30,6 +32,10 @@ public class UtilidadesService {
         List<String> result = new ArrayList<String>();
         List<String> a = userService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
         List<String> b = administratorService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
+        List<String> c = directivoService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
+        result.addAll(a);
+        result.addAll(b);
+        result.addAll(c);
         return result;
     }
 

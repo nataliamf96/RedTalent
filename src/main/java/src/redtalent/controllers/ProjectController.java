@@ -67,10 +67,10 @@ public class ProjectController {
         result = new ModelAndView("project/projectData");
 
         Project project = projectService.findOne(projectId.toString());
-        //Team team = teamService.teamByProjectId(project);
+        Team team = teamService.teamByProjectId(project);
 
         result.addObject("project",project);
-        //result.addObject("team",team);
+        result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("comments",project.getComments());
 
@@ -108,6 +108,11 @@ public class ProjectController {
                 project.setStartDate(projectForm.getStartDate());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                project.setUserCreated(user);
+
                 projectService.save(project);
                 result = new ModelAndView("redirect:/user/index");
 

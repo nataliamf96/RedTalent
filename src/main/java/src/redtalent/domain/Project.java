@@ -31,11 +31,10 @@ public class Project extends DomainEntity{
         this.comments = new ArrayList<>();
         this.alerts = new ArrayList<>();
         this.projectMonitorings = new ArrayList<>();
-        this.users = new ArrayList<>();
     }
 
     public Project(String name, String image, String description, String requiredProfiles, Integer maxParticipants, String complexity, Date startDate, Date finishDate, String attachedFiles,
-                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, List<User> users){
+                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated){
         this.name = name;
         this.image = image;
         this.description = description;
@@ -49,7 +48,7 @@ public class Project extends DomainEntity{
         this.comments = comments;
         this.alerts = alerts;
         this.projectMonitorings = projectMonitorings;
-        this.users = users;
+        this.userCreated = userCreated;
     }
 
     //Getters and setters -----------------------------------------------
@@ -145,7 +144,7 @@ public class Project extends DomainEntity{
     private List<Comment> comments;
     private List<Alert> alerts;
     private List<ProjectMonitoring> projectMonitorings;
-    private List<User> users;
+    private User userCreated;
 
     public List<Tag> getTags() {
         return tags;
@@ -179,11 +178,11 @@ public class Project extends DomainEntity{
         this.projectMonitorings = projectMonitorings;
     }
 
-    public List<User> getUsers() {
-        return users;
+    public User getUserCreated() {
+        return userCreated;
     }
 
-    public void setUsers(List<User> users) {
-        this.users = users;
+    public void setUserCreated(User userCreated) {
+        this.userCreated = userCreated;
     }
 }

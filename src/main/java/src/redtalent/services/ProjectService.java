@@ -37,7 +37,6 @@ public class ProjectService {
         result.setTags(tags);
         result.setComments(comments);
         result.setProjectMonitorings(projectMonitorings);
-        result.setUsers(users);
         return result;
     }
 

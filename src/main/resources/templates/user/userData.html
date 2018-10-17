@@ -11,6 +11,15 @@
             margin-top: -95px;
             margin-bottom: 35px;
         }
+        .card-profile2 {
+            width: 100%;
+            max-height: 350px;
+            margin: 50px auto;
+            background-color: gold;
+            border-radius: 0;
+            border: 0;
+            box-shadow: 1em 1em 2em rgba(0, 0, 0, 0.2);
+        }
     </style>
 </head>
 <body class="bg-light">
@@ -48,7 +57,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-lg-8 col-sm-6 portfolio-item">
+        <div th:if="${team != null}" class="col-lg-8 col-sm-6 portfolio-item">
             <div style="margin-top: -12px" class='card card-profile text-center'>
                 <img alt='' class='card-img-top' th:src="@{/images/color-img2.jpg}">
                 <div class='card-block'>
@@ -63,6 +72,12 @@
                         <a class='fa fa-facebook' href='#'></a>
                     </div>
                 </div>
+            </div>
+        </div>
+        <div th:if="${team == null}" class="col-lg-8 col-sm-6 portfolio-item">
+            <div style="margin-top: -12px" class='card card-profile2 text-center'>
+                <h1 style="background-color: gold; margin-top: 10px">NO EXISTE EQUIPO</h1>
+                <span style="margin-bottom: 10px">Crea tu equipo de trabajo <a href="#">aquí</a></span>
             </div>
         </div>
     </div>

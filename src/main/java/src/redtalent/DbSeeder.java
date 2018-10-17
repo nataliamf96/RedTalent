@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @Component
-public class DbSeeder implements CommandLineRunner {
+public class DbSeeder {
 
     @Autowired
     private AdministratorRepository administratorRepository;
@@ -73,7 +73,6 @@ public class DbSeeder implements CommandLineRunner {
         this.projectMonitoringRepository = projectMonitoringRepository;
     }
 
-    @Override
     public void run(String... strings) throws Exception {
 
         roleRepository.deleteAll();
@@ -88,9 +87,9 @@ public class DbSeeder implements CommandLineRunner {
         gradeRepository.deleteAll();
         phaseRepository.deleteAll();
         projectMonitoringRepository.deleteAll();
-        projectRepository.deleteAll();
         tagRepository.deleteAll();
         teamRepository.deleteAll();
+        projectRepository.deleteAll();
         userRepository.deleteAll();
         directivoRepository.deleteAll();
 
@@ -755,8 +754,8 @@ public class DbSeeder implements CommandLineRunner {
                 Arrays.asList(tag1, tag2),
                 Arrays.asList(comment1),
                 Arrays.asList(alert1),
-                Arrays.asList(projectMonitoring1, projectMonitoring2),
-                Arrays.asList(est2,pro2,egr2));
+                Arrays.asList(projectMonitoring1, projectMonitoring2)
+                ,egr1);
 
         Project project2 = new Project(
                 "Tetrix",
@@ -771,8 +770,8 @@ public class DbSeeder implements CommandLineRunner {
                 Arrays.asList(tag3, tag4),
                 Arrays.asList(comment2),
                 Arrays.asList(alert2),
-                Arrays.asList(projectMonitoring3, projectMonitoring4),
-                Arrays.asList(est1,pro1,egr1));
+                Arrays.asList(projectMonitoring3, projectMonitoring4)
+                ,pro1);
 
         Project project3 = new Project(
                 "Proyecto de arduinos",
@@ -787,8 +786,8 @@ public class DbSeeder implements CommandLineRunner {
                 Arrays.asList(tag5),
                 Arrays.asList(comment3),
                 Arrays.asList(alert3),
-                Arrays.asList(projectMonitoring5),
-                Arrays.asList(est3,pro3,egr3));
+                Arrays.asList(projectMonitoring5)
+                ,est1);
 
         List<Project> projects = Arrays.asList(project1, project2, project3);
         projectRepository.saveAll(projects);

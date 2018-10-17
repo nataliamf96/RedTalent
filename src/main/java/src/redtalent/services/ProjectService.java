@@ -36,9 +36,6 @@ public class ProjectService {
         List<Alert> alerts = new ArrayList<Alert>();
         List<ProjectMonitoring> projectMonitorings = new ArrayList<ProjectMonitoring>();
         List<User> users = new ArrayList<User>();
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByEmail(authentication.getName());
-        users.add(user);
         result.setAlerts(alerts);
         result.setTags(tags);
         result.setComments(comments);
@@ -49,7 +46,8 @@ public class ProjectService {
 
     public Project save(Project project){
         Assert.notNull(project,"Project Service : Objeto null");
-        return project;
+        Project result = projectRepository.save(project);
+        return result;
     }
 
     public Project findOne(String projectId){

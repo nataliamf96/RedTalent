@@ -12,8 +12,5 @@ public class RedtalentApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(RedtalentApplication.class, args);
-
-
-
     }
 }

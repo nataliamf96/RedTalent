@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.Administrator;
+import src.redtalent.domain.User;
 import src.redtalent.repositories.AdministratorRepository;
 import src.redtalent.repositories.UserRepository;
 
@@ -29,6 +30,11 @@ public class UtilidadesService {
         List<String> result = new ArrayList<String>();
         List<String> a = userService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
         List<String> b = administratorService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
+        return result;
+    }
+
+    public User userConectado(String email){
+        User result = userService.findByEmail(email);
         return result;
     }
 

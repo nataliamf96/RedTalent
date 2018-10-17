@@ -42,4 +42,10 @@ public class UserService {
         userRepository.delete(user);
     }
 
+    public User findByEmail(String email){
+        Assert.notNull("email","Email NULL");
+        User result = userRepository.findByEmail(email);
+        return result;
+    }
+
 }

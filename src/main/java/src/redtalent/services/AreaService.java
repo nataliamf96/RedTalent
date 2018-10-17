@@ -20,6 +20,11 @@ public class AreaService {
         super();
     }
 
+    public Area create(){
+        Area area = new Area();
+        return area;
+    }
+
     public Area findOne(String areaId) {
         Assert.notNull(areaId, "Area Service : id null");
         Optional<Area> result = areaRepository.findById(areaId);

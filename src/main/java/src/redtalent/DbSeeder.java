@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @Component
-public class DbSeeder {
+public class DbSeeder implements CommandLineRunner{
 
     @Autowired
     private AdministratorRepository administratorRepository;

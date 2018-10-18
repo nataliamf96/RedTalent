@@ -19,7 +19,10 @@ import src.redtalent.services.AreaService;
 import src.redtalent.services.DepartmentService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/department")
@@ -28,6 +31,9 @@ public class DepartmentController {
     // Services ---------------------------------------------------------------
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private AreaService areaService;
 
     @Autowired
     private AdministratorService adminService;
@@ -63,8 +69,9 @@ public class DepartmentController {
 
         ModelAndView result;
         Collection<Department> departments;
+        Area a = areaService.findOne(areaId.toString());
 
-        departments = departmentService.findDepartmentsBy(areaId);
+        departments = a.getDepartaments();
 
         result = new ModelAndView("department/list");
         result.addObject("requestURI", "department/byArea?areaId="+areaId);
@@ -82,9 +89,11 @@ public class DepartmentController {
         DepartmentForm departmentForm = new DepartmentForm();
 
         try {
+            Collection<Area> areas = areaService.findAll();
 
             result = new ModelAndView("department/create");
             result.addObject("departmentForm", departmentForm);
+            result.addObject("areas", areas);
             result.addObject("requestURI", "./department/create");
 
         } catch (Throwable oops) {
@@ -107,6 +116,14 @@ public class DepartmentController {
                 Department department = departmentService.create();
                 department.setDepartment(departmentForm.getDepartment());
                 Department saved = this.departmentService.save(department);
+
+                Area area = areaService.findOne(departmentForm.getArea().getId());
+                List<Department> departments = new ArrayList<Department>();
+                departments.addAll(area.getDepartaments());
+                departments.add(saved);
+                area.setDepartaments(departments);
+
+                areaService.save(area);
 
                 result = new ModelAndView("redirect:/department/list");
 
@@ -150,9 +167,12 @@ public class DepartmentController {
     protected ModelAndView createModelAndView(DepartmentForm departmentForm, String message) {
         ModelAndView result;
 
+        Collection<Area> areas = areaService.findAll();
+
         result = new ModelAndView("department/create");
         result.addObject("departmentForm", departmentForm);
         result.addObject("message", message);
+        result.addObject("areas", areas);
         return result;
     }
 

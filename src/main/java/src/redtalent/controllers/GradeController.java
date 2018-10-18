@@ -9,15 +9,19 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.Area;
+import src.redtalent.domain.Department;
 import src.redtalent.domain.Grade;
 import src.redtalent.forms.AreaForm;
 import src.redtalent.forms.GradeForm;
 import src.redtalent.services.AdministratorService;
 import src.redtalent.services.AreaService;
+import src.redtalent.services.DepartmentService;
 import src.redtalent.services.GradeService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/grade")
@@ -26,6 +30,9 @@ public class GradeController {
     // Services ---------------------------------------------------------------
     @Autowired
     private GradeService gradeService;
+
+    @Autowired
+    private DepartmentService departmentService;
 
     @Autowired
     private AdministratorService adminService;
@@ -64,8 +71,11 @@ public class GradeController {
 
         try {
 
+            Collection<Department> departments = departmentService.findAll();
+
             result = new ModelAndView("grade/create");
             result.addObject("gradeForm", gradeForm);
+            result.addObject("departments", departments);
             result.addObject("requestURI", "./grade/create");
 
         } catch (Throwable oops) {
@@ -88,6 +98,14 @@ public class GradeController {
                 Grade grade = gradeService.create();
                 grade.setName(gradeForm.getName());
                 Grade saved = this.gradeService.save(grade);
+
+                Department department = departmentService.findOne(gradeForm.getDepartment().getId());
+                List<Grade> grades = new ArrayList<Grade>();
+                grades.addAll(department.getGrades());
+                grades.add(saved);
+                department.setGrades(grades);
+
+                departmentService.save(department);
 
                 result = new ModelAndView("redirect:/grade/list");
 
@@ -131,9 +149,12 @@ public class GradeController {
     protected ModelAndView createModelAndView(GradeForm gradeForm, String message) {
         ModelAndView result;
 
-        result = new ModelAndView("area/create");
+        Collection<Department> departments = departmentService.findAll();
+
+        result = new ModelAndView("grade/create");
         result.addObject("gradeForm", gradeForm);
         result.addObject("message", message);
+        result.addObject("departments", departments);
         return result;
     }
 

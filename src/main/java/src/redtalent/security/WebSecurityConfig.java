@@ -51,6 +51,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/project/createProject").hasAnyAuthority("ESTUDIANTE","PROFESOR","EGRESADO")
                 .antMatchers("/area/**").hasAuthority("ADMIN")
                 .antMatchers("/department/**").hasAuthority("ADMIN")
+                .antMatchers("/grade/**").hasAuthority("ADMIN")
                 .antMatchers("/dashboard/**").hasAuthority("ADMIN").anyRequest()
                 .authenticated().and().csrf().disable().formLogin().successHandler(customizeAuthenticationSuccessHandler)
                 .loginPage("/login").failureUrl("/login?error=true")

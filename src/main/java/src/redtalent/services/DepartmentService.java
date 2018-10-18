@@ -52,10 +52,5 @@ public class DepartmentService {
         departmentRepository.delete(department);
     }
 
-    public List<Department> findDepartmentsBy(ObjectId areaId){
-        List<Department> result = departmentRepository.findDepartmentsBy(areaId);
-        return result;
-    }
-
     //}
 }

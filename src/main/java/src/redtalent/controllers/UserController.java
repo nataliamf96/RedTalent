@@ -44,7 +44,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         result = new ModelAndView("user/index");
-        result.addObject("projects",projectService.findAll());
+        result.addObject("projects",projectService.findAllByPrivadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",utilidadesService.userConectado(authentication.getName()));
         return result;

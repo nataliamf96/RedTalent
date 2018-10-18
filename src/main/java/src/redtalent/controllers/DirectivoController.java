@@ -30,7 +30,7 @@ public class DirectivoController {
         ModelAndView result;
 
         result = new ModelAndView("directivo/index");
-        result.addObject("projects",projectService.findAll());
+        result.addObject("projects",projectService.findAllByPrivadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         return result;
     }

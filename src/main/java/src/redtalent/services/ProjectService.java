@@ -61,4 +61,8 @@ public class ProjectService {
         projectRepository.delete(project);
     }
 
+    public Set<Project> findAllByPrivadoFalse(){
+        return projectRepository.findAllByPrivadoFalse();
+    }
+
 }

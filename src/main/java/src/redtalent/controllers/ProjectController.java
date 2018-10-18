@@ -109,6 +109,7 @@ public class ProjectController {
                 project.setStartDate(projectForm.getStartDate());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
+                project.setPrivado(projectForm.getPrivado());
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());

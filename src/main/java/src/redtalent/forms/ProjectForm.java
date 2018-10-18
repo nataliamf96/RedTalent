@@ -17,6 +17,7 @@ public class ProjectForm {
     private Date finishDate;
     private String attachedFiles;
     private Boolean terms;
+    private Boolean privado;
 
     public ProjectForm(){
         super();
@@ -116,6 +117,14 @@ public class ProjectForm {
         this.attachedFiles = attachedFiles;
     }
 
+    public Boolean getPrivado() {
+        return privado;
+    }
+
+    public void setPrivado(Boolean privado) {
+        this.privado = privado;
+    }
+
     @Override
     public String toString() {
         return "ProjectForm{" +
@@ -129,6 +138,7 @@ public class ProjectForm {
                 ", finishDate=" + finishDate +
                 ", attachedFiles='" + attachedFiles + '\'' +
                 ", terms=" + terms +
+                ", privado=" + privado +
                 '}';
     }
 }

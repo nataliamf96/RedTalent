@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Bienvenido/a</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="masterpage/headerAdmin :: nav"></div>
+<div class="container">
+    <h5>Grados de la Universidad de Sevilla</h5>
+    <div class="row">
+        <div th:each="grade : ${grades}" class="col-lg-3 col-sm-6 portfolio-item">
+            <span th:text="${grade.getName()}"></span>
+        </div>
+    </div>
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

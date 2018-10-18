@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Nueva área</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-light">
+<div th:replace="masterpage/headerUser :: nav"></div>
+<br />
+<br />
+<div class="container py-4">
+    <h3 class="my-4">
+        Nueva área
+    </h3>
+    <div class="container-fluid">
+        <form th:action="@{/area/create}" th:object="${areaForm}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="area">Área</label>:
+                <input type="text" class="form-control" id="area" name="area" style="max-width: 350px" th:field="*{area}"/>
+                <li th:each="err : ${#fields.errors('area')}" th:text="${err}" />
+            </div>
+            <input type="submit" name="save" value="Crear" />
+        </form>
+    </div>
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

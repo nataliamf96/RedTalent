@@ -6,8 +6,8 @@ import javax.validation.constraints.NotBlank;
 
 public class AreaForm {
 
-    private ObjectId areaId;
     private String area;
+    private ObjectId areaId;
 
     public ObjectId getAreaId() {
         return areaId;

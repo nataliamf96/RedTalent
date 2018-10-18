@@ -9,6 +9,5 @@ import java.util.List;
 
 public interface DepartmentRepository extends MongoRepository<Department, String> {
 
-    @Query(("{ 'areaId' : ?0 }"))
-    List<Department> findDepartmentsBy(ObjectId areaId);
+
 }

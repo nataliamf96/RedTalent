@@ -9,12 +9,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.Area;
+import src.redtalent.domain.Department;
 import src.redtalent.forms.AreaForm;
 import src.redtalent.services.AdministratorService;
 import src.redtalent.services.AreaService;
+import src.redtalent.services.DepartmentService;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.List;
 
 @Controller
 @RequestMapping("/area")
@@ -23,6 +26,9 @@ public class AreaController {
     // Services ---------------------------------------------------------------
     @Autowired
     private AreaService areaService;
+
+    @Autowired
+    private DepartmentService departmentService;
 
     @Autowired
     private AdministratorService adminService;
@@ -106,6 +112,10 @@ public class AreaController {
         try {
             Assert.notNull(areaService.findOne(areaForm.getAreaId().toString()), "La id no puede ser nula");
             Area res = areaService.findOne(areaForm.getAreaId().toString());
+
+            List<Department> departments = departmentService.findAll();
+            departments.removeAll(res.getDepartaments());
+            res.setDepartaments(departments);
 
             areaService.remove(res);
 

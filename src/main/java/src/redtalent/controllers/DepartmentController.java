@@ -12,14 +12,19 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.Area;
 import src.redtalent.domain.Department;
+import src.redtalent.domain.Grade;
 import src.redtalent.forms.AreaForm;
 import src.redtalent.forms.DepartmentForm;
 import src.redtalent.services.AdministratorService;
 import src.redtalent.services.AreaService;
 import src.redtalent.services.DepartmentService;
+import src.redtalent.services.GradeService;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/department")
@@ -28,6 +33,12 @@ public class DepartmentController {
     // Services ---------------------------------------------------------------
     @Autowired
     private DepartmentService departmentService;
+
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private GradeService gradeService;
 
     @Autowired
     private AdministratorService adminService;
@@ -63,8 +74,9 @@ public class DepartmentController {
 
         ModelAndView result;
         Collection<Department> departments;
+        Area a = areaService.findOne(areaId.toString());
 
-        departments = departmentService.findDepartmentsBy(areaId);
+        departments = a.getDepartaments();
 
         result = new ModelAndView("department/list");
         result.addObject("requestURI", "department/byArea?areaId="+areaId);
@@ -82,9 +94,11 @@ public class DepartmentController {
         DepartmentForm departmentForm = new DepartmentForm();
 
         try {
+            Collection<Area> areas = areaService.findAll();
 
             result = new ModelAndView("department/create");
             result.addObject("departmentForm", departmentForm);
+            result.addObject("areas", areas);
             result.addObject("requestURI", "./department/create");
 
         } catch (Throwable oops) {
@@ -108,6 +122,14 @@ public class DepartmentController {
                 department.setDepartment(departmentForm.getDepartment());
                 Department saved = this.departmentService.save(department);
 
+                Area area = areaService.findOne(departmentForm.getArea().getId());
+                List<Department> departments = new ArrayList<Department>();
+                departments.addAll(area.getDepartaments());
+                departments.add(saved);
+                area.setDepartaments(departments);
+
+                areaService.save(area);
+
                 result = new ModelAndView("redirect:/department/list");
 
             } catch (Throwable oops) {
@@ -129,9 +151,13 @@ public class DepartmentController {
             Assert.notNull(departmentService.findOne(departmentForm.getDepartmentId().toString()), "La id no puede ser nula");
             Department res = departmentService.findOne(departmentForm.getDepartmentId().toString());
 
+            List<Grade> grades = gradeService.findAll();
+            grades.removeAll(res.getGrades());
+            res.setGrades(grades);
+
             departmentService.remove(res);
 
-            result = new ModelAndView("redirect:/area/list.do");
+            result = new ModelAndView("redirect:/department/list.do");
         } catch (Throwable oops) {
             result = createModelAndView(departmentForm, "No se puede eliminar correctamente");
         }
@@ -150,9 +176,12 @@ public class DepartmentController {
     protected ModelAndView createModelAndView(DepartmentForm departmentForm, String message) {
         ModelAndView result;
 
+        Collection<Area> areas = areaService.findAll();
+
         result = new ModelAndView("department/create");
         result.addObject("departmentForm", departmentForm);
         result.addObject("message", message);
+        result.addObject("areas", areas);
         return result;
     }
 

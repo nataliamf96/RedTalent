@@ -1,11 +1,13 @@
 package src.redtalent.controllers;
 
 import com.mysema.commons.lang.Assert;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.Area;
@@ -57,6 +59,25 @@ public class GradeController {
         result = new ModelAndView("grade/list");
         result.addObject("requestURI", "grade/list");
         result.addObject("grades", grades);
+
+        return result;
+    }
+
+    //DepartmentsByArea -------
+
+    @RequestMapping(value="/byDepartment", method = RequestMethod.GET)
+    public ModelAndView byDepartment(@RequestParam ObjectId departmentId){
+
+        ModelAndView result;
+        Collection<Grade> grades;
+        Department d = departmentService.findOne(departmentId.toString());
+
+        grades = d.getGrades();
+
+        result = new ModelAndView("grade/list");
+        result.addObject("requestURI", "grade/byDepartment?departmentId="+departmentId);
+        result.addObject("grades", grades);
+        result.addObject("departmentId", departmentId);
 
         return result;
     }

@@ -35,8 +35,8 @@ public class DepartmentService {
         return result.get();
     }
 
-    public Collection<Department> findAll() {
-        Collection<Department> result = departmentRepository.findAll();
+    public List<Department> findAll() {
+        List<Department> result = departmentRepository.findAll();
         Assert.notNull(result, "Department Service : list null");
         return result;
     }
@@ -51,6 +51,4 @@ public class DepartmentService {
         Assert.notNull(department, "Department Service : Objeto null");
         departmentRepository.delete(department);
     }
-
-    //}
 }

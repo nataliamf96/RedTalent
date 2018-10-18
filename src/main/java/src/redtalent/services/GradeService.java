@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Grade;
 import src.redtalent.repositories.GradeRepository;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,8 +32,8 @@ public class GradeService {
         return result.get();
     }
 
-    public Collection<Grade> findAll(){
-        Collection<Grade> result = gradeRepository.findAll();
+    public List<Grade> findAll(){
+        List<Grade> result = gradeRepository.findAll();
         Assert.notNull(result,"Grade Service : list null");
         return result;
     }

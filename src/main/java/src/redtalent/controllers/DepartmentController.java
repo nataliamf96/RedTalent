@@ -12,11 +12,13 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.Area;
 import src.redtalent.domain.Department;
+import src.redtalent.domain.Grade;
 import src.redtalent.forms.AreaForm;
 import src.redtalent.forms.DepartmentForm;
 import src.redtalent.services.AdministratorService;
 import src.redtalent.services.AreaService;
 import src.redtalent.services.DepartmentService;
+import src.redtalent.services.GradeService;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -34,6 +36,9 @@ public class DepartmentController {
 
     @Autowired
     private AreaService areaService;
+
+    @Autowired
+    private GradeService gradeService;
 
     @Autowired
     private AdministratorService adminService;
@@ -146,9 +151,13 @@ public class DepartmentController {
             Assert.notNull(departmentService.findOne(departmentForm.getDepartmentId().toString()), "La id no puede ser nula");
             Department res = departmentService.findOne(departmentForm.getDepartmentId().toString());
 
+            List<Grade> grades = gradeService.findAll();
+            grades.removeAll(res.getGrades());
+            res.setGrades(grades);
+
             departmentService.remove(res);
 
-            result = new ModelAndView("redirect:/area/list.do");
+            result = new ModelAndView("redirect:/department/list.do");
         } catch (Throwable oops) {
             result = createModelAndView(departmentForm, "No se puede eliminar correctamente");
         }

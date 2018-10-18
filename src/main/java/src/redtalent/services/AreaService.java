@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Area;
 import src.redtalent.repositories.AreaRepository;
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -31,8 +32,8 @@ public class AreaService {
         return result.get();
     }
 
-    public Collection<Area> findAll() {
-        Collection<Area> result = areaRepository.findAll();
+    public List<Area> findAll() {
+        List<Area> result = areaRepository.findAll();
         Assert.notNull(result, "Area Service : list null");
         return result;
     }

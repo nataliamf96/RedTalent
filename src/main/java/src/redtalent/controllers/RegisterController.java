@@ -67,7 +67,7 @@ public class RegisterController {
         }
         else
             try {
-                User u = new User();
+                User u = userService.create();
                 u.setEmail(userForm.getEmail());
                 u.setEnabled(true);
                 u.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));

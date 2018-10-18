@@ -56,10 +56,12 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
         Team team = teamService.findByUserCreated(user);
+        Set<Project> projects = user.getProjects();
         result = new ModelAndView("user/userData");
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",user);
         result.addObject("team",team);
+        result.addObject("projects", projects);
         return result;
     }
 

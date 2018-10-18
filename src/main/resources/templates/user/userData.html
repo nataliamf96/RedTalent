@@ -81,7 +81,26 @@
             </div>
         </div>
     </div>
-
+    <h2>Mis Proyectos</h2>
+    <div th:if="${projects.size() == 0}" class="row">
+        <div style="margin-top: -12px" class='card card-profile2 text-center col-12'>
+            <h1 style="background-color: gold; margin-top: 10px">NO EXISTEN PROYECTOS</h1>
+            <span style="margin-bottom: 10px">Crea tu primer proyecto <a href="/project/createProject">aquí</a></span>
+        </div>
+    </div>
+    <div th:if="${projects.size() != 0}" class="row">
+        <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                    </h4>
+                    <p class="card-text" th:text="${project.getDescription()}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <div th:replace="masterpage/footer :: footer" />
 </body>

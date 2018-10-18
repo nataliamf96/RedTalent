@@ -8,6 +8,7 @@ import src.redtalent.domain.User;
 import src.redtalent.repositories.UserRepository;
 
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 
@@ -33,6 +34,13 @@ public class UserService {
         return result;
     }
 
+    public User create(){
+        User result = new User();
+        Set<Project> pr = new HashSet<Project>();
+        result.setProjects(pr);
+        return result;
+    }
+
     public User saveUser(User user){
         Assert.notNull(user,"Ocurrió un error al guardar el usuario");
         User result = userRepository.save(user);
@@ -47,6 +55,12 @@ public class UserService {
     public User findByEmail(String email){
         Assert.notNull("email","Email NULL");
         User result = userRepository.findByEmail(email);
+        return result;
+    }
+
+    public User findUserByProjectsContains(Project project){
+        Assert.notNull(project,"Project NULL");
+        User result = userRepository.findUserByProjectsContains(project);
         return result;
     }
 

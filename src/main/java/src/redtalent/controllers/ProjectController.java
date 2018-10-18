@@ -69,6 +69,7 @@ public class ProjectController {
         Project project = projectService.findOne(projectId.toString());
         Team team = teamService.teamByProjectId(project);
 
+        result.addObject("user",userService.findUserByProjectsContains(project));
         result.addObject("project",project);
         result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
@@ -111,9 +112,16 @@ public class ProjectController {
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());
-                project.setUserCreated(user);
 
-                projectService.save(project);
+                Project savee = projectService.save(project);
+
+                Set<Project> pp = new HashSet<Project>();
+                pp.addAll(user.getProjects());
+                pp.add(savee);
+                user.setProjects(pp);
+                userService.saveUser(user);
+
+
                 result = new ModelAndView("redirect:/user/index");
 
             } catch (Throwable oops) {

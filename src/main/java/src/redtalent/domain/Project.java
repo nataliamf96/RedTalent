@@ -48,7 +48,6 @@ public class Project extends DomainEntity{
         this.comments = comments;
         this.alerts = alerts;
         this.projectMonitorings = projectMonitorings;
-        this.userCreated = userCreated;
     }
 
     //Getters and setters -----------------------------------------------
@@ -144,7 +143,6 @@ public class Project extends DomainEntity{
     private List<Comment> comments;
     private List<Alert> alerts;
     private List<ProjectMonitoring> projectMonitorings;
-    private User userCreated;
 
     public List<Tag> getTags() {
         return tags;
@@ -178,11 +176,4 @@ public class Project extends DomainEntity{
         this.projectMonitorings = projectMonitorings;
     }
 
-    public User getUserCreated() {
-        return userCreated;
-    }
-
-    public void setUserCreated(User userCreated) {
-        this.userCreated = userCreated;
-    }
 }

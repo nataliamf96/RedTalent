@@ -23,18 +23,28 @@ public class User extends DomainEntity{
     private boolean enabled;
     @DBRef
     private Set<Role> roles;
+    private Set<Project> projects;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles){
+    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects){
         this.email = email;
         this.password = password;
         this.fullname = fullname;
         this.enabled = enabled;
         this.roles = roles;
+        this.projects = projects;
+    }
+
+    public Set<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(Set<Project> projects) {
+        this.projects = projects;
     }
 
     public String getEmail() {

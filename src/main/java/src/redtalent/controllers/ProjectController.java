@@ -69,7 +69,6 @@ public class ProjectController {
         Project project = projectService.findOne(projectId.toString());
         Team team = teamService.teamByProjectId(project);
 
-        result.addObject("user",userService.findUserByProjectsContains(project));
         result.addObject("project",project);
         result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
@@ -86,7 +85,6 @@ public class ProjectController {
         Project project = projectService.findOne(projectId.toString());
         Team team = teamService.teamByProjectId(project);
 
-        result.addObject("user",userService.findUserByProjectsContains(project));
         result.addObject("project",project);
         result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
@@ -118,7 +116,7 @@ public class ProjectController {
     }
 
     @RequestMapping(value = "/updateProject", method = RequestMethod.POST, params = "updateProject")
-    public ModelAndView updateProject(@Valid ProjectForm projectForm, BindingResult binding) {
+    public ModelAndView updateProject(@Valid ProjectForm projectForm, @RequestParam String projectId, BindingResult binding) {
         ModelAndView result;
 
         if (binding.hasErrors())
@@ -127,7 +125,7 @@ public class ProjectController {
             result = updateEditModelAndViewProject(projectForm,"Acepte los Términos");
         } else
             try {
-                Project project = projectService.findOne(projectForm.getId().toString());
+                Project project = projectService.findOne(projectId);
                 project.setComplexity(projectForm.getComplexity());
                 project.setDescription(projectForm.getDescription());
                 project.setName(projectForm.getName());
@@ -138,6 +136,7 @@ public class ProjectController {
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
+
                 projectService.save(project);
 
                 result = new ModelAndView("redirect:/user/index");

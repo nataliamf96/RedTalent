@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import src.redtalent.security.Role;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Document(collection = "Directivos")
@@ -13,8 +16,11 @@ public class Directivo {
 
     @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
     private String email;
+    @Size(min = 5, max = 32)
     private String password;
+    @NotBlank
     private String fullname;
+    @NotNull
     private boolean enabled;
     @DBRef
     private Set<Role> roles;

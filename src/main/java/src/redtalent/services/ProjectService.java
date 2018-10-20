@@ -40,8 +40,7 @@ public class ProjectService {
 
     public Project save(Project project){
         Assert.notNull(project,"Project Service : Objeto null");
-        Project result = projectRepository.save(project);
-        return result;
+        return projectRepository.save(project);
     }
 
     public Project findOne(String projectId){

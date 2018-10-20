@@ -78,7 +78,23 @@ public class ProjectController {
         return result;
     }
 
-    // RegisterUser ---------------------------------------------------------------
+    @RequestMapping(value = "/allProjectData", method = RequestMethod.GET)
+    public ModelAndView allProjectData(@RequestParam ObjectId projectId) {
+        ModelAndView result;
+        result = new ModelAndView("project/allProjectData");
+
+        Project project = projectService.findOne(projectId.toString());
+        Team team = teamService.teamByProjectId(project);
+
+        result.addObject("user",userService.findUserByProjectsContains(project));
+        result.addObject("project",project);
+        result.addObject("team",team);
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("comments",project.getComments());
+
+        return result;
+    }
+
     //GET--------------------------------------------------------------
     @RequestMapping(value = "/createProject", method = RequestMethod.GET)
     public ModelAndView register() {
@@ -91,13 +107,57 @@ public class ProjectController {
         return result;
     }
 
+    //GET--------------------------------------------------------------
+    @RequestMapping(value = "/updateProject", method = RequestMethod.GET)
+    public ModelAndView updateProject(@RequestParam String projectId) {
+        ModelAndView result;
+        Project project = projectService.findOne(projectId);
+        result = new ModelAndView("project/updateProject");
+        result.addObject("project",project);
+        return result;
+    }
+
+    @RequestMapping(value = "/updateProject", method = RequestMethod.POST, params = "updateProject")
+    public ModelAndView updateProject(@Valid ProjectForm projectForm, BindingResult binding) {
+        ModelAndView result;
+
+        if (binding.hasErrors())
+            result = updateEditModelAndViewProject(projectForm);
+        else if(projectForm.getTerms() == false){
+            result = updateEditModelAndViewProject(projectForm,"Acepte los Términos");
+        } else
+            try {
+                Project project = projectService.findOne(projectForm.getId().toString());
+                project.setComplexity(projectForm.getComplexity());
+                project.setDescription(projectForm.getDescription());
+                project.setName(projectForm.getName());
+                project.setImage(projectForm.getImage());
+                project.setMaxParticipants(projectForm.getMaxParticipants());
+                project.setFinishDate(projectForm.getFinishDate());
+                project.setStartDate(projectForm.getStartDate());
+                project.setAttachedFiles(projectForm.getAttachedFiles());
+                project.setRequiredProfiles(projectForm.getRequiredProfiles());
+                project.setPrivado(projectForm.getPrivado());
+                projectService.save(project);
+
+                result = new ModelAndView("redirect:/user/index");
+
+            } catch (Throwable oops) {
+                result = updateEditModelAndViewProject(projectForm, "ERROR AL ACTUALIZAR EL PROYECTO");
+            }
+
+        return result;
+    }
+
     @RequestMapping(value = "/createProject", method = RequestMethod.POST, params = "saveProject")
     public ModelAndView save(@Valid ProjectForm projectForm, BindingResult binding) {
         ModelAndView result;
 
         if (binding.hasErrors())
             result = createEditModelAndViewProject(projectForm);
-        else
+        else if(projectForm.getTerms() == false){
+            result = createEditModelAndViewProject(projectForm,"Acepte los Términos");
+        } else
             try {
                 Project project = projectService.create();
                 project.setComplexity(projectForm.getComplexity());
@@ -128,6 +188,24 @@ public class ProjectController {
             } catch (Throwable oops) {
                 result = createEditModelAndViewProject(projectForm, "ERROR AL CREAR EL PROYECTO");
             }
+
+        return result;
+    }
+
+
+
+    protected ModelAndView updateEditModelAndViewProject(ProjectForm projectForm) {
+        ModelAndView result;
+        result = updateEditModelAndViewProject(projectForm, null);
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewProject(ProjectForm projectForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("project/updateProject");
+        result.addObject("projectForm", projectForm);
+        result.addObject("message", message);
 
         return result;
     }

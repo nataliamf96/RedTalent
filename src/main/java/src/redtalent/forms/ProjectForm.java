@@ -1,5 +1,6 @@
 package src.redtalent.forms;
 
+import org.bson.types.ObjectId;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
@@ -7,6 +8,7 @@ import java.util.Date;
 
 public class ProjectForm {
 
+    private ObjectId id;
     private String name;
     private String image;
     private String description;
@@ -24,6 +26,16 @@ public class ProjectForm {
     }
 
     //Getters and setters -----------------------------------------------
+
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     @NotNull
     public Boolean getTerms() {
         return terms;

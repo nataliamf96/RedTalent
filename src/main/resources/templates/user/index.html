@@ -46,7 +46,8 @@
                     <h4 class="card-title">
                         <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                     </h4>
-                    <p class="card-text" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
                 </div>
             </div>
         </div>

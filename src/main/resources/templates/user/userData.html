@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Home</title>
+    <title>Mis Datos</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
@@ -96,14 +96,16 @@
                     <h4 class="card-title">
                         <a th:href="@{/project/allProjectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                     </h4>
-                    <p class="card-text" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
                 </div>
             </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 col-sm-4 portfolio-item">
-            <a type="button" class="btn btn-info" href="/user/cambiarContraseña">Cambiar Contraseña</a>
+        <div class="col-12 portfolio-item">
+            <a type="button" class="btn btn-info" href="/user/cambiarContraseña">Modificar Contraseña</a>
+            <a type="button" class="btn btn-info" href="#">Modificar Datos de Usuario</a>
         </div>
     </div>
 </div>

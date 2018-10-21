@@ -112,8 +112,12 @@ public class ProjectController {
     public ModelAndView updateProject(@RequestParam String projectId) {
         ModelAndView result;
         Project project = projectService.findOne(projectId);
+        ProjectForm projectForm;
+        projectForm = new ProjectForm();
+        result = updateEditModelAndViewProject(projectForm);
         result = new ModelAndView("project/updateProject");
-        result.addObject("project",project);
+        result.addObject("projectForm",project);
+        result.addObject("projectId",project.getId());
         return result;
     }
 

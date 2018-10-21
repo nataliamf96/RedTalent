@@ -153,7 +153,14 @@ public class ProjectController {
                 pp.remove(projectService.findOne(projectId));
                 pp.add(savee);
                 user.setProjects(pp);
-                userService.saveUser(user);
+                User creadorTeam = userService.saveUser(user);
+
+                Team team = teamService.create();
+                List<Project> projectList = new ArrayList<Project>();
+                projectList.add(savee);
+                team.setProjects(projectList);
+                team.setUserCreated(creadorTeam);
+                teamService.save(team);
 
                 result = new ModelAndView("redirect:/user/index");
 

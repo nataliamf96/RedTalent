@@ -69,6 +69,7 @@ public class RegisterController {
             try {
                 User u = userService.create();
                 u.setEmail(userForm.getEmail());
+                u.setFullname(userForm.getFullname());
                 u.setEnabled(true);
                 u.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
                 Role role = roleRepository.findByRole(userForm.getRole());

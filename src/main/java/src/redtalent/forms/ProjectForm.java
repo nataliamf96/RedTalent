@@ -1,5 +1,6 @@
 package src.redtalent.forms;
 
+import org.bson.types.ObjectId;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.*;
@@ -7,6 +8,7 @@ import java.util.Date;
 
 public class ProjectForm {
 
+    private ObjectId id;
     private String name;
     private String image;
     private String description;
@@ -17,12 +19,23 @@ public class ProjectForm {
     private Date finishDate;
     private String attachedFiles;
     private Boolean terms;
+    private Boolean privado;
 
     public ProjectForm(){
         super();
     }
 
     //Getters and setters -----------------------------------------------
+
+
+    public ObjectId getId() {
+        return id;
+    }
+
+    public void setId(ObjectId id) {
+        this.id = id;
+    }
+
     @NotNull
     public Boolean getTerms() {
         return terms;
@@ -116,6 +129,14 @@ public class ProjectForm {
         this.attachedFiles = attachedFiles;
     }
 
+    public Boolean getPrivado() {
+        return privado;
+    }
+
+    public void setPrivado(Boolean privado) {
+        this.privado = privado;
+    }
+
     @Override
     public String toString() {
         return "ProjectForm{" +
@@ -129,6 +150,7 @@ public class ProjectForm {
                 ", finishDate=" + finishDate +
                 ", attachedFiles='" + attachedFiles + '\'' +
                 ", terms=" + terms +
+                ", privado=" + privado +
                 '}';
     }
 }

@@ -8,4 +8,6 @@ import java.util.Set;
 
 public interface ProjectRepository extends MongoRepository<Project, String> {
 
+    Set<Project> findAllByPrivadoFalse();
+
 }

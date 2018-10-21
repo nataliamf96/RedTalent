@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @Component
-public class DbSeeder implements CommandLineRunner{
+public class DbSeeder implements CommandLineRunner {
 
     @Autowired
     private AdministratorRepository administratorRepository;
@@ -758,7 +758,7 @@ public class DbSeeder implements CommandLineRunner{
                 Arrays.asList(comment1),
                 Arrays.asList(alert1),
                 Arrays.asList(projectMonitoring1, projectMonitoring2)
-                ,egr1);
+                ,egr1,false);
 
         Project project2 = new Project(
                 "Tetrix",
@@ -774,7 +774,7 @@ public class DbSeeder implements CommandLineRunner{
                 Arrays.asList(comment2),
                 Arrays.asList(alert2),
                 Arrays.asList(projectMonitoring3, projectMonitoring4)
-                ,pro1);
+                ,pro1,true);
 
         Project project3 = new Project(
                 "Proyecto de arduinos",
@@ -790,7 +790,7 @@ public class DbSeeder implements CommandLineRunner{
                 Arrays.asList(comment3),
                 Arrays.asList(alert3),
                 Arrays.asList(projectMonitoring5)
-                ,est1);
+                ,est1,false);
 
         Project a = projectRepository.save(project1);
         Project b = projectRepository.save(project2);

@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
@@ -91,14 +91,19 @@
     <div th:if="${projects.size() != 0}" class="row">
         <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
             <div class="card h-100">
-                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <a th:href="@{/project/allProjectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                        <a th:href="@{/project/allProjectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                     </h4>
                     <p class="card-text" th:text="${project.getDescription()}"></p>
                 </div>
             </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-3 col-sm-4 portfolio-item">
+            <a type="button" class="btn btn-info" href="/user/cambiarContraseña">Cambiar Contraseña</a>
         </div>
     </div>
 </div>

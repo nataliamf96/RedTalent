@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Creación de Proyecto</title>
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
@@ -14,7 +14,7 @@
         Formulario de Proyecto
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/project/createProject}" th:object="${projectForm}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/project/updateProject(projectId=${project.getId()})}" th:object="${project}" method="post" enctype="multipart/form-data">
             <h3>Datos del Proyecto</h3>
             <div class="form-group">
                 <label for="name">Nombre</label>:
@@ -73,7 +73,7 @@
             </div>
             <label>Confirmar Términos del Servicio:</label>
             <input type="checkbox" name="terms" th:checked="false" /><br />
-            <input type="submit" name="saveProject" value="Crear" />
+            <input type="submit" name="updateProject" value="Actualizar" />
         </form>
     </div>
     <br />

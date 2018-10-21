@@ -33,7 +33,7 @@
             </div>
             <div class="form-group">
                 <label for="role">Rol</label>:
-                <select id="role" name="role">
+                <select style="max-width: 350px" id="role" name="role" class="form-control">
                     <option value="ESTUDIANTE">ESTUDIANTE</option>
                     <option value="PROFESOR">PROFESOR</option>
                     <option value="EGRESADO">EGRESADO</option>
@@ -41,7 +41,7 @@
             </div>
             <label>Confirmar Términos del Servicio:</label>
             <input type="checkbox" name="terms" th:checked="false" /><br />
-            <input type="submit" name="saveUser" value="Registrarse" />
+            <input type="submit" class="btn btn-info" name="saveUser" value="Registrarse" />
         </form>
     </div>
     <br />

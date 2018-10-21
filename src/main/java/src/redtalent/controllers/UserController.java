@@ -3,18 +3,25 @@ package src.redtalent.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.Project;
 import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
+import src.redtalent.forms.EditPasswordForm;
+import src.redtalent.forms.UserForm;
 import src.redtalent.services.ProjectService;
 import src.redtalent.services.TeamService;
 import src.redtalent.services.UserService;
 import src.redtalent.services.UtilidadesService;
 
+import javax.validation.Valid;
 import java.util.Set;
 
 @Controller
@@ -33,6 +40,9 @@ public class UserController {
     @Autowired
     private TeamService teamService;
 
+    @Autowired
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
+
     public UserController(){
         super();
     }
@@ -44,9 +54,53 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         result = new ModelAndView("user/index");
-        result.addObject("projects",projectService.findAll());
+        result.addObject("projects",projectService.findAllByPrivadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",utilidadesService.userConectado(authentication.getName()));
+        return result;
+    }
+
+    @RequestMapping(value = "/cambiarContraseña")
+    public ModelAndView cambiarContraseña(){
+        ModelAndView result;
+        EditPasswordForm editPasswordForm;
+        editPasswordForm = new EditPasswordForm();
+
+        result = new ModelAndView("user/cambiarContraseña");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("editPasswordForm",editPasswordForm);
+        return result;
+    }
+
+    @RequestMapping(value = "/cambiarContraseña", method = RequestMethod.POST, params = "saveNuevaContraseña")
+    public ModelAndView save(@Valid EditPasswordForm editPasswordForm, BindingResult binding, final RedirectAttributes redirectAttrs) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = userService.findByEmail(authentication.getName());
+
+        if (binding.hasErrors()){
+            result = createEditModelAndViewChangePassword(editPasswordForm);
+        }else if(!user.getPassword().equals(bCryptPasswordEncoder.encode(editPasswordForm.getPassword()))){
+            redirectAttrs.addFlashAttribute("message", "La Contraseña es Incorrecta");
+            result = createEditModelAndViewChangePassword(editPasswordForm,"La contraseña es incorrecta");
+        }else if(!editPasswordForm.getNewPassword().equals(editPasswordForm.getConfNewPassword())){
+            redirectAttrs.addFlashAttribute("message", "Confirmación de Nueva Contraseña Erronea");
+            result = createEditModelAndViewChangePassword(editPasswordForm,"Confirmación de Nueva Contraseña Erronea");
+        }else{
+            try {
+                System.out.println("Usuario "+user.getEmail()+" Contraseña "+user.getPassword());
+                user.setPassword(bCryptPasswordEncoder.encode(editPasswordForm.getPassword()));
+                System.out.println("Usuario "+user.getEmail()+" Nueva Contraseña "+user.getPassword());
+
+                userService.saveUser(user);
+
+                result = new ModelAndView("redirect:/user/index");
+
+            } catch (Throwable oops) {
+                result = createEditModelAndViewChangePassword(editPasswordForm, "ERROR AL CAMBIAR LA CONTRASEÑA");
+            }
+    }
         return result;
     }
 
@@ -62,6 +116,23 @@ public class UserController {
         result.addObject("user",user);
         result.addObject("team",team);
         result.addObject("projects", projects);
+        return result;
+    }
+
+    protected ModelAndView createEditModelAndViewChangePassword(EditPasswordForm editPasswordForm) {
+        ModelAndView result;
+        result = createEditModelAndViewChangePassword(editPasswordForm, null);
+        return result;
+    }
+
+    protected ModelAndView createEditModelAndViewChangePassword(EditPasswordForm editPasswordForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/cambiarContraseña");
+        result.addObject("editPasswordForm", editPasswordForm);
+        result.addObject("message", message);
+        result.addObject("auth",utilidadesService.actorConectado());
+
         return result;
     }
 

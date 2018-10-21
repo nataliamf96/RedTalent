@@ -22,6 +22,7 @@ public class Project extends DomainEntity{
     private Date startDate;
     private Date finishDate;
     private String attachedFiles;
+    private Boolean privado;
 
     //Constructors -----------------------------------------------
 
@@ -34,7 +35,7 @@ public class Project extends DomainEntity{
     }
 
     public Project(String name, String image, String description, String requiredProfiles, Integer maxParticipants, String complexity, Date startDate, Date finishDate, String attachedFiles,
-                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated){
+                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado){
         this.name = name;
         this.image = image;
         this.description = description;
@@ -48,9 +49,17 @@ public class Project extends DomainEntity{
         this.comments = comments;
         this.alerts = alerts;
         this.projectMonitorings = projectMonitorings;
+        this.privado = privado;
     }
 
     //Getters and setters -----------------------------------------------
+    public Boolean getPrivado() {
+        return privado;
+    }
+
+    public void setPrivado(Boolean privado) {
+        this.privado = privado;
+    }
 
     @javax.validation.constraints.NotBlank
     public String getImage() {

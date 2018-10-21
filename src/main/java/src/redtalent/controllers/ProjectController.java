@@ -153,14 +153,9 @@ public class ProjectController {
                 pp.remove(projectService.findOne(projectId));
                 pp.add(savee);
                 user.setProjects(pp);
-                User creadorTeam = userService.saveUser(user);
+                userService.saveUser(user);
 
-                Team team = teamService.create();
-                List<Project> projectList = new ArrayList<Project>();
-                projectList.add(savee);
-                team.setProjects(projectList);
-                team.setUserCreated(creadorTeam);
-                teamService.save(team);
+
 
                 result = new ModelAndView("redirect:/user/index");
 
@@ -202,8 +197,12 @@ public class ProjectController {
                 pp.addAll(user.getProjects());
                 pp.add(savee);
                 user.setProjects(pp);
-                userService.saveUser(user);
+                User creadorTeam = userService.saveUser(user);
 
+                Team team = teamService.create();
+                team.setProject(savee);
+                team.setUserCreated(creadorTeam);
+                teamService.save(team);
 
                 result = new ModelAndView("redirect:/user/index");
 

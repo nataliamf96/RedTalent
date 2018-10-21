@@ -823,7 +823,7 @@ public class DbSeeder implements CommandLineRunner {
                 Arrays.asList(evaluation1, evaluation2),
                 est1,
                 Arrays.asList(comment1),
-                Arrays.asList(project1));
+                project1);
 
         Team team2 = new Team(
                 "SuperTeam",
@@ -833,7 +833,7 @@ public class DbSeeder implements CommandLineRunner {
                 Arrays.asList(evaluation3, evaluation4),
                 pro2,
                 Arrays.asList(comment2),
-                Arrays.asList(project2));
+                project2);
 
         Team team3 = new Team(
                 "Los Winners",
@@ -843,7 +843,7 @@ public class DbSeeder implements CommandLineRunner {
                 Arrays.asList(evaluation5),
                 egr3,
                 Arrays.asList(comment3),
-                Arrays.asList(project3));
+                project3);
 
         List<Team> teams = Arrays.asList(team1, team2, team3);
         teamRepository.saveAll(teams);

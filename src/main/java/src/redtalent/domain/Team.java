@@ -25,11 +25,10 @@ public class Team extends DomainEntity {
         this.applications = new ArrayList<>();
         this.evaluations = new ArrayList<>();
         this.comments = new ArrayList<>();
-        this.projects = new ArrayList<>();
     }
 
     public Team(String name, String description, boolean closed, List<Application> applications, List<Evaluation> evaluations,
-                User userCreated, List<Comment> comments, List<Project> projects){
+                User userCreated, List<Comment> comments, Project project){
         this.name = name;
         this.description = description;
         this.closed = closed;
@@ -37,7 +36,7 @@ public class Team extends DomainEntity {
         this.evaluations = evaluations;
         this.userCreated = userCreated;
         this.comments = comments;
-        this.projects = projects;
+        this.project = project;
     }
 
     //Getters and setters -----------------------------------------------
@@ -71,7 +70,7 @@ public class Team extends DomainEntity {
     private List<Evaluation> evaluations;
     private User userCreated;
     private List<Comment> comments;
-    private List<Project> projects;
+    private Project project;
 
     public List<Application> getApplications() {
         return applications;
@@ -105,11 +104,11 @@ public class Team extends DomainEntity {
         this.comments = comments;
     }
 
-    public List<Project> getProjects() {
-        return projects;
+    public Project getProject() {
+        return project;
     }
 
-    public void setProjects(List<Project> projects) {
-        this.projects = projects;
+    public void setProject(Project project) {
+        this.project = project;
     }
 }

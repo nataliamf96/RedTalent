@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface TeamRepository extends MongoRepository<Team, String> {
 
-    Team findTeamByProjectsContaining(Project project);
+    Team findTeamByProjectContaining(Project project);
     Team findByUserCreated(User user);
 
 }

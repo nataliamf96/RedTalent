@@ -86,12 +86,14 @@ public class DepartmentController {
         return result;
     }
 
-    // Crear area -------------
+    // Crear departamento -------------
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
-    public ModelAndView create(final RedirectAttributes redirectAttrs) {
+    public ModelAndView create(@RequestParam ObjectId areaId, final RedirectAttributes redirectAttrs) {
         ModelAndView result;
         DepartmentForm departmentForm = new DepartmentForm();
+
+        departmentForm.setAreaId(areaId);
 
         try {
             Collection<Area> areas = areaService.findAll();
@@ -99,7 +101,8 @@ public class DepartmentController {
             result = new ModelAndView("department/create");
             result.addObject("departmentForm", departmentForm);
             result.addObject("areas", areas);
-            result.addObject("requestURI", "./department/create");
+            result.addObject("areaId", areaId);
+            result.addObject("requestURI", "./department/create?areaId="+areaId);
 
         } catch (Throwable oops) {
             result = new ModelAndView("redirect:/department/list");
@@ -111,6 +114,7 @@ public class DepartmentController {
     public ModelAndView saveCreate(@Valid DepartmentForm departmentForm, BindingResult binding, RedirectAttributes redirectAttrs) {
 
         ModelAndView result;
+        departmentForm.setAreaId(departmentForm.getAreaId());
 
         if (binding.hasErrors()) {
             result = createModelAndView(departmentForm);
@@ -122,7 +126,7 @@ public class DepartmentController {
                 department.setDepartment(departmentForm.getDepartment());
                 Department saved = this.departmentService.save(department);
 
-                Area area = areaService.findOne(departmentForm.getArea().getId());
+                Area area = areaService.findOne(departmentForm.getAreaId().toString());
                 List<Department> departments = new ArrayList<Department>();
                 departments.addAll(area.getDepartaments());
                 departments.add(saved);
@@ -130,7 +134,7 @@ public class DepartmentController {
 
                 areaService.save(area);
 
-                result = new ModelAndView("redirect:/department/list");
+                result = new ModelAndView("redirect:/department/byArea?areaId=" + departmentForm.getAreaId());
 
             } catch (Throwable oops) {
                 result = createModelAndView(departmentForm, "No se puede crear correctamente el departamento");
@@ -140,28 +144,29 @@ public class DepartmentController {
         return result;
     }
 
+    // Eliminar departamento --------------
 
-    // Eliminar area --------------
-
-    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-    public ModelAndView delete(DepartmentForm departmentForm, BindingResult binding) {
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public ModelAndView delete(@RequestParam ObjectId departmentId) {
         ModelAndView result;
 
-        try {
-            Assert.notNull(departmentService.findOne(departmentForm.getDepartmentId().toString()), "La id no puede ser nula");
-            Department res = departmentService.findOne(departmentForm.getDepartmentId().toString());
+        Assert.notNull(departmentService.findOne(departmentId.toString()), "La id no puede ser nula");
 
-            List<Grade> grades = gradeService.findAll();
-            grades.removeAll(res.getGrades());
-            res.setGrades(grades);
+        Department res = departmentService.findOne(departmentId.toString());
 
-            departmentService.remove(res);
+        Area a = areaService.findAreaByDepartamentsContaining(res);
+        List<Department> departments = a.getDepartaments();
+        departments.remove(res);
+        a.setDepartaments(departments);
+        areaService.save(a);
 
-            result = new ModelAndView("redirect:/department/list.do");
-        } catch (Throwable oops) {
-            result = createModelAndView(departmentForm, "No se puede eliminar correctamente");
+        for(Grade g: res.getGrades()){
+            gradeService.remove(g);
         }
 
+        departmentService.remove(res);
+
+        result = new ModelAndView("redirect:/department/list");
         return result;
     }
 
@@ -180,6 +185,7 @@ public class DepartmentController {
 
         result = new ModelAndView("department/create");
         result.addObject("departmentForm", departmentForm);
+        result.addObject("areaId", departmentForm.getAreaId());
         result.addObject("message", message);
         result.addObject("areas", areas);
         return result;

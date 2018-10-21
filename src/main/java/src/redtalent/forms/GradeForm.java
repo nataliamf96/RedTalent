@@ -10,7 +10,8 @@ public class GradeForm {
 
     private ObjectId gradeId;
     private String name;
-    private Department department;
+    private ObjectId departmentId;
+    private ObjectId areaId;
 
     public ObjectId getGradeId() {
         return gradeId;
@@ -29,11 +30,19 @@ public class GradeForm {
         this.name = name;
     }
 
-    public Department getDepartment() {
-        return department;
+    public ObjectId getDepartmentId() {
+        return departmentId;
     }
 
-    public void setDepartment(Department department) {
-        this.department = department;
+    public void setDepartmentId(ObjectId departmentId) {
+        this.departmentId = departmentId;
+    }
+
+    public ObjectId getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(ObjectId areaId) {
+        this.areaId = areaId;
     }
 }

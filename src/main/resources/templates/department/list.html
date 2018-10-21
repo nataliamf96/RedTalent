@@ -4,16 +4,19 @@
     <title>Bienvenido/a</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="masterpage/headerAdmin :: nav"></div>
 <div class="container">
     <h5>Facultades</h5>
     <div class="row">
-        <div th:each="department : ${departments}" class="col-lg-3 col-sm-6 portfolio-item">
-            <span th:text="${department.getDepartment()}"></span>
+        <div th:each="department : ${departments}" class="col-12 portfolio-item">
+            <a th:href="@{/grade/byDepartment(departmentId=${department.getId()}, areaId=${areaId})}"><span th:text="${department.getDepartment()}" /></a>
+            <a th:href="@{/department/delete(departmentId=${department.getId()})}"><i class="far fa-trash-alt"></i></a>
         </div>
     </div>
+    <a th:href="@{/department/create(areaId=${areaId})}">Añadir departamento</a>
 </div>
 <div th:replace="masterpage/footer :: footer"></div>
 </body>

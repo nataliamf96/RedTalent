@@ -1,19 +1,23 @@
 package src.redtalent.controllers;
 
 import com.mysema.commons.lang.Assert;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.Area;
 import src.redtalent.domain.Department;
+import src.redtalent.domain.Grade;
 import src.redtalent.forms.AreaForm;
 import src.redtalent.services.AdministratorService;
 import src.redtalent.services.AreaService;
 import src.redtalent.services.DepartmentService;
+import src.redtalent.services.GradeService;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -31,7 +35,7 @@ public class AreaController {
     private DepartmentService departmentService;
 
     @Autowired
-    private AdministratorService adminService;
+    private GradeService gradeService;
 
 
     // Constructors -----------------------------------------------------------
@@ -105,25 +109,24 @@ public class AreaController {
 
     // Eliminar area --------------
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "delete")
-    public ModelAndView delete(AreaForm areaForm, BindingResult binding) {
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public ModelAndView delete(@RequestParam ObjectId areaId) {
         ModelAndView result;
 
-        try {
-            Assert.notNull(areaService.findOne(areaForm.getAreaId().toString()), "La id no puede ser nula");
-            Area res = areaService.findOne(areaForm.getAreaId().toString());
+        Assert.notNull(areaService.findOne(areaId.toString()), "La id no puede ser nula");
 
-            List<Department> departments = departmentService.findAll();
-            departments.removeAll(res.getDepartaments());
-            res.setDepartaments(departments);
+        Area res = areaService.findOne(areaId.toString());
 
-            areaService.remove(res);
-
-            result = new ModelAndView("redirect:/area/list.do");
-        } catch (Throwable oops) {
-            result = createModelAndView(areaForm, "No se puede eliminar correctamente");
+        for(Department d: res.getDepartaments()){
+            departmentService.remove(d);
+            for(Grade g : d.getGrades()){
+                gradeService.remove(g);
+            }
         }
 
+        areaService.remove(res);
+
+        result = new ModelAndView("redirect:/area/list");
         return result;
     }
 

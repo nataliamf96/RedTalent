@@ -4,16 +4,19 @@
     <title>Bienvenido/a</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="masterpage/headerAdmin :: nav"></div>
 <div class="container">
     <h5>Áreas de la US</h5>
     <div class="row">
-        <div th:each="area : ${areas}" class="col-lg-3 col-sm-6 portfolio-item">
-            <span th:text="${area.getArea()}"></span>
+        <div th:each="area : ${areas}" class="col-12 portfolio-item">
+            <a th:href="@{/department/byArea(areaId=${area.getId()})}"><span th:text="${area.getArea()}" /></a>
+            <a th:href="@{/area/delete(areaId=${area.getId()})}"><i class="far fa-trash-alt"></i></a>
         </div>
     </div>
+    <a th:href="@{/area/create}">Añadir área</a>
 </div>
 <div th:replace="masterpage/footer :: footer"></div>
 </body>

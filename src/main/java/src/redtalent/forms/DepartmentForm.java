@@ -9,7 +9,7 @@ public class DepartmentForm {
 
     private ObjectId departmentId;
     private String department;
-    private Area area;
+    private ObjectId areaId;
 
     public ObjectId getDepartmentId() {
         return departmentId;
@@ -28,11 +28,11 @@ public class DepartmentForm {
         this.department = department;
     }
 
-    public Area getArea() {
-        return area;
+    public ObjectId getAreaId() {
+        return areaId;
     }
 
-    public void setArea(Area area) {
-        this.area = area;
+    public void setAreaId(ObjectId areaId) {
+        this.areaId = areaId;
     }
 }

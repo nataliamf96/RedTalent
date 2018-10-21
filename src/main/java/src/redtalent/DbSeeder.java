@@ -425,7 +425,7 @@ public class DbSeeder implements CommandLineRunner{
                 "Grado en Turismo");
 
         List<Grade> grades = Arrays.asList(grade1, grade2, grade3, grade4, grade5, grade6, grade7, grade8, grade9, grade10, grade11, grade12, grade13, grade14, grade15, grade16, grade17, grade18, grade19, grade20, grade21, grade22,
-                grade23, grade24, grade25, grade26, grade27, grade28, grade29, grade30, grade31, grade32, grade33, grade34, grade35, grade36, grade27, grade38, grade39, grade40, grade41, grade42, grade43, grade44, grade45, grade46, grade47, grade48, grade49,
+                grade23, grade24, grade25, grade26, grade27, grade28, grade29, grade30, grade31, grade32, grade33, grade34, grade35, grade36, grade37, grade38, grade39, grade40, grade41, grade42, grade43, grade44, grade45, grade46, grade47, grade48, grade49,
                 grade50, grade51, grade52, grade53, grade54, grade55, grade56, grade57, grade58, grade59, grade60, grade61, grade62, grade63, grade64, grade65, grade66, grade67, grade68, grade69, grade70, grade71, grade72, grade73, grade74, grade75, grade76,
                 grade77, grade78, grade79, grade80, grade81, grade82, grade83, grade84, grade85, grade86, grade87, grade88, grade89);
         gradeRepository.saveAll(grades);
@@ -576,7 +576,7 @@ public class DbSeeder implements CommandLineRunner{
 
         Area area3 = new Area(
                 "Bio-Ciencias",
-                Arrays.asList(department15, department16, department17, department18, department19, department20, department21)
+                Arrays.asList(department15, department16, department17, department18, department19, department20, department21, department22)
         );
 
         Area area4 = new Area(

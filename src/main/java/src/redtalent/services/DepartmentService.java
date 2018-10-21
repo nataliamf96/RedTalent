@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Area;
 import src.redtalent.domain.Department;
+import src.redtalent.domain.Grade;
 import src.redtalent.repositories.DepartmentRepository;
 
 import java.util.Collection;
@@ -50,5 +51,10 @@ public class DepartmentService {
     public void remove(Department department) {
         Assert.notNull(department, "Department Service : Objeto null");
         departmentRepository.delete(department);
+    }
+
+    public Department findDepartmentByGradesContaining(Grade grade){
+        Assert.notNull(grade, "El grado no puede ser nulo");
+        return departmentRepository.findDepartmentByGradesContaining(grade);
     }
 }

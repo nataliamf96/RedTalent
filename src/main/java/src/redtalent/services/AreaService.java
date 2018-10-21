@@ -1,10 +1,12 @@
 package src.redtalent.services;
 
 import com.mysema.commons.lang.Assert;
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Area;
+import src.redtalent.domain.Department;
 import src.redtalent.repositories.AreaRepository;
 import java.util.Collection;
 import java.util.List;
@@ -48,4 +50,10 @@ public class AreaService {
         Assert.notNull(area, "Area Service : Objeto null");
         areaRepository.delete(area);
     }
+
+    public Area findAreaByDepartamentsContaining(Department department){
+        Assert.notNull(department, "El departamento no puede ser nulo");
+        return areaRepository.findAreaByDepartamentsContaining(department);
+    }
+
 }

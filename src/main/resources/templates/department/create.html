@@ -14,20 +14,20 @@
         Nuevo departamento
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/department/create}" th:object="${departmentForm}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/department/create(areaId=${areaId})}" th:object="${departmentForm}" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="department">Departamento</label>:
                 <input type="text" class="form-control" id="department" name="department" style="max-width: 350px" th:field="*{department}"/>
                 <li th:each="err : ${#fields.errors('department')}" th:text="${err}" />
             </div>
-            <div class="form-group row">
+            <!-- <div class="form-group row">
                 <select class="form-control" id="area" name="area">
                     <option value="0">Seleccionar área</option>
                     <option th:each="area : ${areas}"
                             th:value="${area.id}"
                             th:text="${area.area}"></option>
                 </select>
-            </div>
+            </div> -->
             <input type="submit" name="save" value="Crear" />
         </form>
     </div>

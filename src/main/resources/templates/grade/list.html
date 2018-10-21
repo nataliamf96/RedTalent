@@ -4,16 +4,19 @@
     <title>Bienvenido/a</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
 </head>
 <body>
 <div th:replace="masterpage/headerAdmin :: nav"></div>
 <div class="container">
     <h5>Grados de la Universidad de Sevilla</h5>
     <div class="row">
-        <div th:each="grade : ${grades}" class="col-lg-3 col-sm-6 portfolio-item">
-            <span th:text="${grade.getName()}"></span>
+        <div th:each="grade : ${grades}" class="col-12 portfolio-item">
+            <span th:text="${grade.getName()}" />
+            <a th:href="@{/grade/delete(gradeId=${grade.getId()})}"><i class="far fa-trash-alt"></i></a>
         </div>
     </div>
+    <a th:href="@{/grade/create(departmentId=${departmentId}, areaId=${areaId})}">Añadir grado</a>
 </div>
 <div th:replace="masterpage/footer :: footer"></div>
 </body>

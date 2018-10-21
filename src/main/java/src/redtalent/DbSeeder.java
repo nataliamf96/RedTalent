@@ -818,36 +818,30 @@ public class DbSeeder implements CommandLineRunner {
         Team team1 = new Team(
                 "Los Comadrejas",
                 "Equipo cualificado para los proyectos de ámbito informático",
-                moment2,
-                4,
+                true,
                 Arrays.asList(application1, application2, application3),
                 Arrays.asList(evaluation1, evaluation2),
                 est1,
-                Arrays.asList(tag1, tag2),
                 Arrays.asList(comment1),
                 Arrays.asList(project1));
 
         Team team2 = new Team(
                 "SuperTeam",
                 "Necesitamos gente aplicada. ¡Nos encanta conocer gente nueva!",
-                moment2,
-                5,
+                true,
                 Arrays.asList(application4, application5),
                 Arrays.asList(evaluation3, evaluation4),
                 pro2,
-                Arrays.asList(tag3, tag4),
                 Arrays.asList(comment2),
                 Arrays.asList(project2));
 
         Team team3 = new Team(
                 "Los Winners",
                 "Queremos ganar el concurso de idea. Necesitamos gente competente.",
-                moment2,
-                6,
+                true,
                 Arrays.asList(application6),
                 Arrays.asList(evaluation5),
                 egr3,
-                Arrays.asList(tag4, tag5),
                 Arrays.asList(comment3),
                 Arrays.asList(project3));
 

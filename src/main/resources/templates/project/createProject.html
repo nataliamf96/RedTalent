@@ -23,7 +23,7 @@
             </div>
             <div class="form-group">
                 <label for="description">Descripcion</label>:
-                <input type="text" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
+                <textarea type="textarea" class="form-control" id="description" name="description" style="max-width: 350px; max-height: 300px" th:field="*{description}"/>
                 <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
             </div>
             <div class="form-group">
@@ -73,7 +73,7 @@
             </div>
             <label>Confirmar Términos del Servicio:</label>
             <input type="checkbox" name="terms" th:checked="false" /><br />
-            <input type="submit" name="saveProject" value="Crear" />
+            <input type="submit" class="btn btn-info" name="saveProject" value="Crear" />
         </form>
     </div>
     <br />

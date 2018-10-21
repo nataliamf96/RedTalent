@@ -73,7 +73,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/cambiarContraseña", method = RequestMethod.POST, params = "saveNuevaContraseña")
-    public ModelAndView save(@Valid EditPasswordForm editPasswordForm, BindingResult binding, final RedirectAttributes redirectAttrs) {
+    public ModelAndView save(@Valid EditPasswordForm editPasswordForm, BindingResult binding) {
         ModelAndView result;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -81,22 +81,15 @@ public class UserController {
 
         if (binding.hasErrors()){
             result = createEditModelAndViewChangePassword(editPasswordForm);
-        }else if(!user.getPassword().equals(bCryptPasswordEncoder.encode(editPasswordForm.getPassword()))){
-            redirectAttrs.addFlashAttribute("message", "La Contraseña es Incorrecta");
+        }else if(!bCryptPasswordEncoder.matches(editPasswordForm.getPassword(),user.getPassword())){
             result = createEditModelAndViewChangePassword(editPasswordForm,"La contraseña es incorrecta");
         }else if(!editPasswordForm.getNewPassword().equals(editPasswordForm.getConfNewPassword())){
-            redirectAttrs.addFlashAttribute("message", "Confirmación de Nueva Contraseña Erronea");
             result = createEditModelAndViewChangePassword(editPasswordForm,"Confirmación de Nueva Contraseña Erronea");
         }else{
             try {
-                System.out.println("Usuario "+user.getEmail()+" Contraseña "+user.getPassword());
-                user.setPassword(bCryptPasswordEncoder.encode(editPasswordForm.getPassword()));
-                System.out.println("Usuario "+user.getEmail()+" Nueva Contraseña "+user.getPassword());
-
+                user.setPassword(bCryptPasswordEncoder.encode(editPasswordForm.getNewPassword()));
                 userService.saveUser(user);
-
                 result = new ModelAndView("redirect:/user/index");
-
             } catch (Throwable oops) {
                 result = createEditModelAndViewChangePassword(editPasswordForm, "ERROR AL CAMBIAR LA CONTRASEÑA");
             }

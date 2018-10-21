@@ -3,6 +3,7 @@ package src.redtalent.services;
 import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Project;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.UserRepository;
@@ -13,6 +14,7 @@ import java.util.Optional;
 import java.util.Set;
 
 @Service
+@Transactional
 public class UserService {
 
     @Autowired

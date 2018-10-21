@@ -23,6 +23,10 @@ public class TeamService {
         super();
     }
 
+    public Team create(){
+        Team team = new Team();
+        return team;
+    }
     public Team findOne(String teamId){
         Assert.notNull(teamId,"Team Service : id null");
         Optional<Team> result = teamRepository.findById(teamId);

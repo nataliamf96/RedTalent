@@ -103,7 +103,6 @@
             </div>
         </div>
         <div class="col-lg-6 col-sm-6 portfolio-item">
-
                 <div th:if="${team.getName() != null}" class="row">
                     <div class="col-lg-4 col-sm-4 portfolio-item">
                         <p>
@@ -116,6 +115,13 @@
                         </p>
                     </div>
                 </div>
+        </div>
+    </div>
+    <div th:if="${auth.equals('USER')}" class="row">
+        <div class="col-12">
+            <div >
+                <a type="button" class="btn btn-info" th:href="@{/application/crearAplicacionProyecto(projectId=${project.getId()})}">Solicitar Acceso al Equipo del Proyecto</a>
+            </div>
         </div>
     </div>
 </div>

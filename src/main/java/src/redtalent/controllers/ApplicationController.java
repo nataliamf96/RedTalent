@@ -12,6 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.*;
 import src.redtalent.services.*;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.Set;
@@ -43,7 +44,13 @@ public class ApplicationController{
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
+        List<Project> projects = new ArrayList<Project>();
+        user.getApplications().stream().forEach(x->projects.add(teamService.findTeamByApplicationsContaining(x).getProjects().get(0)));
+        List<Team> teams = new ArrayList<Team>();
+        user.getApplications().stream().forEach(x->teams.add(teamService.findTeamByApplicationsContaining(x)));
 
+        result.addObject("teams", teams);
+        result.addObject("projects", projects);
         result.addObject("applications", user.getApplications());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("requestURI", "application/list");
@@ -54,7 +61,7 @@ public class ApplicationController{
     @RequestMapping(value = "/crearAplicacionTeam", method = RequestMethod.GET)
     public ModelAndView crearAplicacion(@RequestParam ObjectId teamId){
         ModelAndView result;
-        result = new ModelAndView("application/list");
+        result = new ModelAndView("application/crearAplicacionTeam");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
@@ -72,13 +79,15 @@ public class ApplicationController{
         team.setApplications(applicationsTeam);
         teamService.save(team);
 
+        result = new ModelAndView("redirect:/application/list");
+
         return result;
     }
 
     @RequestMapping(value = "/crearAplicacionProyecto", method = RequestMethod.GET)
     public ModelAndView crearAplicacionProyecto(@RequestParam ObjectId projectId){
         ModelAndView result;
-        result = new ModelAndView("application/list");
+        result = new ModelAndView("application/crearAplicacionProyecto");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
@@ -97,6 +106,8 @@ public class ApplicationController{
         applicationsTeam.add(savee);
         team.setApplications(applicationsTeam);
         teamService.save(team);
+
+        result = new ModelAndView("redirect:/application/list");
 
         return result;
     }

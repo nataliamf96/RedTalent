@@ -106,30 +106,17 @@
                     <h5>Nombre</h5>
                     <span th:text="${team.getName()}"></span>
                 </div>
-                <div class="col-lg-4 col-sm-4 portfolio-item">
-                    <h5>Registro</h5>
-                    <span th:text="${#dates.format(team.getFinishRegistration(), 'dd/MM/yyyy')}"></span>
-                </div>
-                <div class="col-lg-4 col-sm-4 portfolio-item">
-                    <h5>Participantes</h5>
-                    <span th:text="${team.getParticipants()}"></span>
-                </div>
             </div>
             </p>
             <p>
             <h5>Descripción</h5>
             <span th:text="${team.getDescription()}"></span>
-            </p>
-            <p>
-            <h5>Creador</h5>
-            <b>Nombre: </b><span th:text="${team.getUserCreated().getFullname()}"></span>
-            <b>Email: </b><span th:text="${team.getUserCreated().getEmail()}"></span>
-            </p>
         </div>
     </div>
     <div class="row">
-        <div class="col-lg-3 col-sm-4 portfolio-item">
+        <div class="col-12 portfolio-item">
             <a type="button" class="btn btn-info" th:href="@{/project/updateProject(projectId=${project.getId()})}">Cambiar Datos del Proyecto</a>
+            <a th:if="${team == null}" type="button" class="btn btn-info" th:href="@{/team/create(projectId=${project.getId()})}">Añadir Equipo</a>
         </div>
     </div>
 </div>

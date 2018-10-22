@@ -8,6 +8,7 @@ import src.redtalent.domain.Application;
 import src.redtalent.repositories.ApplicationRepository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -19,6 +20,14 @@ public class ApplicationService {
 
     public ApplicationService(){
         super();
+    }
+
+    public Application create(){
+        Application result = new Application();
+        java.util.Date fecha = new Date();
+        result.setMoment(fecha);
+        result.setStatus("PENDING");
+        return result;
     }
 
     public Application findOne(String applicationId){
@@ -35,8 +44,7 @@ public class ApplicationService {
 
     public Application save(Application application){
         Assert.notNull(application,"Application Service : Objeto null");
-        Application result = applicationRepository.save(application);
-        return result;
+        return applicationRepository.save(application);
     }
 
     public void remove(Application application){

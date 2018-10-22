@@ -57,29 +57,6 @@
                 </div>
             </div>
         </div>
-        <div th:if="${team != null}" class="col-lg-8 col-sm-6 portfolio-item">
-            <div style="margin-top: -12px" class='card card-profile text-center'>
-                <img alt='' class='card-img-top' th:src="@{/images/color-img2.jpg}">
-                <div class='card-block'>
-                    <img alt='' class='card-img-profile2' th:src="@{https://www.unistudio.design/wp-content/uploads/2017/01/Team-Unistudio-site-web-300x140.jpg}">
-                    <h4 style="margin-top: -23px" class='card-title'>
-                        <i th:text="${team.getName()}" />
-                        <small th:text="${team.getDescription()}"></small>
-                    </h4>
-                    <div class='card-links'>
-                        <a class='fa fa-dribbble' href='#'></a>
-                        <a class='fa fa-twitter' href='#'></a>
-                        <a class='fa fa-facebook' href='#'></a>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div th:if="${team == null}" class="col-lg-8 col-sm-6 portfolio-item">
-            <div style="margin-top: -12px" class='card card-profile2 text-center'>
-                <h1 style="background-color: gold; margin-top: 10px">NO EXISTE EQUIPO</h1>
-                <span style="margin-bottom: 10px">Crea tu equipo de trabajo <a href="#">aquí</a></span>
-            </div>
-        </div>
     </div>
     <h2>Mis Proyectos</h2>
     <div th:if="${projects.size() == 0}" class="row">
@@ -98,6 +75,31 @@
                     </h4>
                     <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
                     <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <h2>Mis Equipos</h2>
+    <div th:if="${user.getTeams().size() == 0}" class="row">
+        <div style="margin-top: -12px" class='card card-profile2 text-center col-12'>
+            <h2>No tiene ningún equipo creado</h2>
+        </div>
+    </div>
+    <div style="margin-top: +20px" th:if="${user.getTeams().size() != 0}" class="row">
+        <div th:each="team : ${user.getTeams()}" class="col-lg-4 col-sm-6 portfolio-item">
+            <div style="margin-top: -12px" class='card card-profile text-center'>
+                <img class="card-img-top" th:src="@{/images/color-img2.jpg}">
+                <div class='card-block'>
+                    <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img alt='' class='card-img-profile2' th:src="@{https://www.unistudio.design/wp-content/uploads/2017/01/Team-Unistudio-site-web-300x140.jpg}"></a>
+                    <h4 style="margin-top: -23px" class='card-title'>
+                        <a th:href="@{/team/teamData(teamId=${team.getId()})}"><i th:text="${team.getName()}" /></a>
+                        <small th:text="${team.getDescription()}"></small>
+                    </h4>
+                    <div class='card-links'>
+                        <a class='fa fa-dribbble' href='#'></a>
+                        <a class='fa fa-twitter' href='#'></a>
+                        <a class='fa fa-facebook' href='#'></a>
+                    </div>
                 </div>
             </div>
         </div>

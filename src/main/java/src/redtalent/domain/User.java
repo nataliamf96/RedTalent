@@ -29,19 +29,23 @@ public class User extends DomainEntity{
     @DBRef
     private Set<Role> roles;
     private Set<Project> projects;
+    private Set<Team> teams;
+    private Set<Application> applications;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects){
+    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects, Set<Team> teams, Set<Application> applications){
         this.email = email;
         this.password = password;
         this.fullname = fullname;
         this.enabled = enabled;
         this.roles = roles;
         this.projects = projects;
+        this.teams = teams;
+        this.applications = applications;
     }
 
     public Set<Project> getProjects() {
@@ -50,6 +54,14 @@ public class User extends DomainEntity{
 
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
+    }
+
+    public Set<Team> getTeams() {
+        return teams;
+    }
+
+    public void setTeams(Set<Team> teams) {
+        this.teams = teams;
     }
 
     public String getEmail() {
@@ -92,4 +104,11 @@ public class User extends DomainEntity{
         this.roles = roles;
     }
 
+    public Set<Application> getApplications() {
+        return applications;
+    }
+
+    public void setApplications(Set<Application> applications) {
+        this.applications = applications;
+    }
 }

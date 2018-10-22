@@ -4,7 +4,9 @@ import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import src.redtalent.domain.Application;
 import src.redtalent.domain.Project;
+import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.UserRepository;
 
@@ -39,6 +41,10 @@ public class UserService {
     public User create(){
         User result = new User();
         Set<Project> pr = new HashSet<Project>();
+        Set<Team> ta = new HashSet<Team>();
+        Set<Application> ap = new HashSet<Application>();
+        result.setApplications(ap);
+        result.setTeams(ta);
         result.setProjects(pr);
         return result;
     }
@@ -62,6 +68,18 @@ public class UserService {
     public User findUserByProjectsContains(Project project){
         Assert.notNull(project,"Project NULL");
         User result = userRepository.findUserByProjectsContains(project);
+        return result;
+    }
+
+    public User findUserByTeamsConstains(Team team){
+        Assert.notNull(team,"Team NULL");
+        User result = userRepository.findUserByTeamsContains(team);
+        return result;
+    }
+
+    public User findUserByApplicationsContains(Application application){
+        Assert.notNull(application,"Application NULL");
+        User result = userRepository.findUsersByApplicationsContaining(application);
         return result;
     }
 

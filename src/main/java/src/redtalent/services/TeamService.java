@@ -55,10 +55,4 @@ public class TeamService {
         Team result = teamRepository.findTeamByProjectsContaining(project);
         return result;
     }
-
-    public Team findByUserCreated(User user){
-        Assert.notNull(user,"user null");
-        Team result = teamRepository.findByUserCreated(user);
-        return result;
-    }
 }

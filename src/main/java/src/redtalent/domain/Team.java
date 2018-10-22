@@ -1,14 +1,8 @@
 package src.redtalent.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Document(collection = "Teams")
@@ -28,14 +22,12 @@ public class Team extends DomainEntity {
         this.projects = new ArrayList<>();
     }
 
-    public Team(String name, String description, boolean closed, List<Application> applications, List<Evaluation> evaluations,
-                User userCreated, List<Comment> comments, List<Project> projects){
+    public Team(String name, String description, boolean closed, List<Application> applications, List<Evaluation> evaluations, List<Comment> comments, List<Project> projects){
         this.name = name;
         this.description = description;
         this.closed = closed;
         this.applications = applications;
         this.evaluations = evaluations;
-        this.userCreated = userCreated;
         this.comments = comments;
         this.projects = projects;
     }
@@ -69,7 +61,6 @@ public class Team extends DomainEntity {
     //Relationships -----------------------------------------------
     private List<Application> applications;
     private List<Evaluation> evaluations;
-    private User userCreated;
     private List<Comment> comments;
     private List<Project> projects;
 
@@ -87,14 +78,6 @@ public class Team extends DomainEntity {
 
     public void setEvaluations(List<Evaluation> evaluations) {
         this.evaluations = evaluations;
-    }
-
-    public User getUserCreated() {
-        return userCreated;
-    }
-
-    public void setUserCreated(User userCreated) {
-        this.userCreated = userCreated;
     }
 
     public List<Comment> getComments() {

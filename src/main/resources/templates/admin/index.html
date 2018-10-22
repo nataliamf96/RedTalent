@@ -2,8 +2,9 @@
 <html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
     <title>Bienvenido/a Administrador</title>
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
 </head>
 <body>
 <div th:if="${auth.equals('USER')}">
@@ -18,8 +19,69 @@
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
 </div>
-<div class="bg container-fluid">
-    Hola <span sec:authentication="name" />!!
+<div style="margin-top: -25px" class="container py-4">
+    <h1 class="my-4">RedTalent
+        <small>Haz realidad tus ideas</small>
+    </h1>
+    <div style="margin-top: -12px" class='card card-profile text-center'>
+        <img alt='' class='card-img-top' th:src="@{/images/color-img.jpg}">
+        <div class='card-block'>
+            <img alt='' class='card-img-profile' th:src="@{/images/profile.jpg}">
+            <h4 style="margin-top: -23px" class='card-title'>
+                <i th:text="${admin.getFullname()}" />
+                <small th:text="${admin.getEmail()}"></small>
+            </h4>
+            <div class='card-links'>
+                <a class='fa fa-dribbble' href='#'></a>
+                <a class='fa fa-twitter' href='#'></a>
+                <a class='fa fa-facebook' href='#'></a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                    </h4>
+                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.row -->
+
+    <!-- Pagination -->
+    <ul class="pagination justify-content-center">
+        <li class="page-item">
+            <a class="page-link" href="#" aria-label="Previous">
+                <span aria-hidden="true">&laquo;</span>
+                <span class="sr-only">Previous</span>
+            </a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="/user/index">1</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="/user/index">2</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="/user/index">3</a>
+        </li>
+        <li class="page-item">
+            <a class="page-link" href="/user/index" aria-label="Next">
+                <span aria-hidden="true">&raquo;</span>
+                <span class="sr-only">Next</span>
+            </a>
+        </li>
+    </ul>
+    <br />
+    <br />
+    <br />
+    <br />
 </div>
 <div th:replace="masterpage/footer :: footer"></div>
 </body>

@@ -4,6 +4,7 @@ import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import src.redtalent.domain.Application;
 import src.redtalent.domain.Project;
 import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
@@ -53,6 +54,12 @@ public class TeamService {
     public Team teamByProjectId(Project project){
         Assert.notNull(project,"Team Service : Objeto null");
         Team result = teamRepository.findTeamByProjectsContaining(project);
+        return result;
+    }
+
+    public Team findTeamByApplicationsContaining(Application application){
+        Assert.notNull(application,"La solicitud es NULL");
+        Team result = teamRepository.findTeamByApplicationsContaining(application);
         return result;
     }
 }

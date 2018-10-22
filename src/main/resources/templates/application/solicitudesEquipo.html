@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Solicitudes al Equipo</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div style="margin-top: -25px" class="container py-4">
+    <h3 class="my-4">
+        Mis Solicitudes
+    </h3>
+    <div class="row">
+        <table class="table">
+            <thead>
+            <tr>
+                <th scope="col"> </th>
+                <th scope="col">Usuario</th>
+                <th scope="col">Estado</th>
+                <th scope="col">Fecha de Solicitud</th>
+                <th scope="col">Proyecto</th>
+                <th scope="col">Equipo</th>
+                <th scope="col">Aceptar</th>
+                <th scope="col">Denegar</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="applicationn,iter : ${applications}">
+                <th scope="row" th:text="${iter.index}"></th>
+                <td th:text="${users.get(iter.index).getFullname()}"></td>
+                <td th:text="${applicationn.getStatus()}"></td>
+                <td th:text="${#dates.format(applicationn.getMoment(), 'dd/MM/yyyy')}"></td>
+                <td th:text="${projects.get(iter.index).getName()}"></td>
+                <td th:text="${teams.get(iter.index).getName()}"></td>
+                <td><a th:href="@{/application/aplicar(applicationId=${applicationn.getId()},projectId=${projects.get(iter.index).getId()})}"><img style="width: 20px" th:src="@{http://icons.iconarchive.com/icons/dryicons/aesthetica-2/128/user-accept-icon.png}"></a></td>
+                <td><a th:href="@{/application/noaplicar(applicationId=${applicationn.getId()},projectId=${projects.get(iter.index).getId()})}"><img style="width: 20px" th:src="@{http://www.preoc.es/img/portada/close_256.png}"></a></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+</div>
+<div th:replace="masterpage/footer :: footer" />
+</body>
+</html>

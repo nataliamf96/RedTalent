@@ -12,9 +12,7 @@ import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.*;
 import src.redtalent.services.*;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Controller
 @RequestMapping("/application")
@@ -43,8 +41,38 @@ public class ApplicationController{
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
+        List<Project> projects = new ArrayList<Project>();
+        user.getApplications().stream().forEach(x->projects.add(teamService.findTeamByApplicationsContaining(x).getProjects().get(0)));
+        List<Team> teams = new ArrayList<Team>();
+        user.getApplications().stream().forEach(x->teams.add(teamService.findTeamByApplicationsContaining(x)));
 
+        result.addObject("teams", teams);
+        result.addObject("projects", projects);
         result.addObject("applications", user.getApplications());
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("requestURI", "application/list");
+
+        return result;
+    }
+
+    @RequestMapping(value = "/solicitudesEquipo", method = RequestMethod.GET)
+    public ModelAndView solicitudesEquipo(@RequestParam ObjectId teamId) {
+        ModelAndView result;
+        result = new ModelAndView("application/solicitudesEquipo");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Team team = teamService.findOne(teamId.toString());
+        List<Project> projects = new ArrayList<Project>();
+        team.getApplications().stream().forEach(x->projects.add(teamService.findTeamByApplicationsContaining(x).getProjects().get(0)));
+        List<Team> teams = new ArrayList<Team>();
+        team.getApplications().stream().forEach(x->teams.add(teamService.findTeamByApplicationsContaining(x)));
+        List<User> users = new ArrayList<User>();
+        team.getApplications().stream().forEach(x->users.add(userService.findUserByApplicationsContains(x)));
+
+        result.addObject("users", users);
+        result.addObject("teams", teams);
+        result.addObject("projects", projects);
+        result.addObject("applications", team.getApplications());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("requestURI", "application/list");
 
@@ -54,23 +82,39 @@ public class ApplicationController{
     @RequestMapping(value = "/crearAplicacionTeam", method = RequestMethod.GET)
     public ModelAndView crearAplicacion(@RequestParam ObjectId teamId){
         ModelAndView result;
-        result = new ModelAndView("application/list");
+        result = new ModelAndView("application/crearAplicacionTeam");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
         Application application = applicationService.create();
         Application savee = applicationService.save(application);
 
-        Set<Application> applicationsUser = user.getApplications();
+        Set<Application> applicationsUser = new HashSet<Application>();
+        applicationsUser.addAll(user.getApplications());
         applicationsUser.add(savee);
         user.setApplications(applicationsUser);
         userService.saveUser(user);
 
         Team team = teamService.findOne(teamId.toString());
-        List<Application> applicationsTeam = team.getApplications();
+        List<Application> applicationsTeam = new ArrayList<Application>();
+        applicationsTeam.addAll(team.getApplications());
         applicationsTeam.add(savee);
         team.setApplications(applicationsTeam);
-        teamService.save(team);
+        Team saTeam = teamService.save(team);
+
+        //Usuario creador del Team -> Debe de guardar también las aplications nuevas dentro del team
+
+        User u = userService.findUserByTeamsConstains(team);
+        Set<Team> tt = new HashSet<Team>();
+        tt.addAll(u.getTeams());
+        tt.remove(team);
+        tt.add(saTeam);
+        u.setTeams(tt);
+        userService.saveUser(u);
+
+
+
+        result = new ModelAndView("redirect:/application/list");
 
         return result;
     }
@@ -78,7 +122,7 @@ public class ApplicationController{
     @RequestMapping(value = "/crearAplicacionProyecto", method = RequestMethod.GET)
     public ModelAndView crearAplicacionProyecto(@RequestParam ObjectId projectId){
         ModelAndView result;
-        result = new ModelAndView("application/list");
+        result = new ModelAndView("application/crearAplicacionProyecto");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
@@ -96,7 +140,62 @@ public class ApplicationController{
         List<Application> applicationsTeam = team.getApplications();
         applicationsTeam.add(savee);
         team.setApplications(applicationsTeam);
-        teamService.save(team);
+        Team saTeam = teamService.save(team);
+
+        //Usuario creador del Team -> Debe de guardar también las aplications nuevas dentro del team
+
+        User u = userService.findUserByProjectsContains(project);
+        Set<Team> tt = new HashSet<Team>();
+        tt.addAll(u.getTeams());
+        tt.remove(team);
+        tt.add(saTeam);
+        u.setTeams(tt);
+        userService.saveUser(u);
+
+        result = new ModelAndView("redirect:/application/list");
+
+        return result;
+    }
+
+    @RequestMapping(value = "/aplicar", method = RequestMethod.GET)
+    public ModelAndView aplicar(@RequestParam ObjectId applicationId, @RequestParam ObjectId projectId) {
+        ModelAndView result;
+        result = new ModelAndView("application/aplicar");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //Usuario creador Team
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        Application a = applicationService.findOne(applicationId.toString());
+        a.setStatus("ACCEPTED");
+        Application savee = applicationService.save(a);
+
+        //Usuario creador Application
+        User userCrea = userService.findUserByApplicationsContains(a);
+        List<Application> appUserCrea = new ArrayList<Application>();
+        appUserCrea.addAll(userCrea.getApplications());
+        appUserCrea.remove(a);
+        appUserCrea.add(savee);
+        userService.saveUser(userCrea);
+
+        Project p = projectService.findOne(projectId.toString());
+        Team t = teamService.teamByProjectId(p);
+        List<Application> appUser = new ArrayList<Application>();
+        appUser.addAll(t.getApplications());
+        appUser.remove(a);
+        appUser.add(savee);
+        t.setApplications(appUser);
+        Team saveTeam = teamService.save(t);
+        Set<Team> teams = new HashSet<Team>();
+        teams.addAll(user.getTeams());
+        teams.remove(t);
+        teams.add(saveTeam);
+        user.setTeams(teams);
+        userService.saveUser(user);
+
+        result = new ModelAndView("redirect:/user/index");
+
+        result.addObject("auth",utilidadesService.actorConectado());
 
         return result;
     }

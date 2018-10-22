@@ -36,7 +36,7 @@ public class UtilidadesService {
     public List<User> usuariosDelEquipo(Team team){
         List<User> result = new ArrayList<User>();
         result.add(userService.findUserByTeamsConstains(team));
-        team.getApplications().stream().forEach(x->result.add(userService.findUserByApplicationsContains(x)));
+        team.getApplications().stream().filter(x->x.getStatus().equals("ACCEPTED")).forEach(x->result.add(userService.findUserByApplicationsContains(x)));
         return result;
     }
 

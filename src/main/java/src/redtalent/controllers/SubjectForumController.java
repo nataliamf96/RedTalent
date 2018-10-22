@@ -135,7 +135,7 @@ public class SubjectForumController {
         comments = subjectForum.getComments();
 
         result = new ModelAndView("subjectForum/listComment");
-        result.addObject("requestURI", "subjectForm/listComment?subjectForumId="+subjectForumId);
+        result.addObject("requestURI", "subjectForum/listComment?subjectForumId="+subjectForumId);
         result.addObject("comments", comments);
         result.addObject("subjectForumId", subjectForumId);
 
@@ -197,7 +197,7 @@ public class SubjectForumController {
                 subjectForum.setComments(comments1);
                 subjectForumService.save(subjectForum);
 
-                result = new ModelAndView("redirect:/subjectForum/commentList?subjectForumId=" +commentForm.getSubjectForumId());
+                result = new ModelAndView("redirect:/subjectForum/listComment?subjectForumId=" +commentForm.getSubjectForumId());
 
             } catch (Throwable oops) {
                 result = createCommentModelAndView(commentForm, "No se puede crear correctamente los comentarios del foro");

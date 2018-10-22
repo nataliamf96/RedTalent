@@ -20,20 +20,44 @@
     <div th:replace="masterpage/header :: nav"></div>
 </div>
 <div style="margin-top: -25px" class="container py-4">
+    <h3 class="my-4">
+        Mis Solicitudes
+    </h3>
     <div class="row">
-        <div th:each="applicationn,iter : ${applications}" class="col-lg-4 col-sm-6 portfolio-item">
-            <p>
-                <span th:text="${#dates.format(applicationn.getMoment(), 'dd/MM/yyyy')}"></span>
-                <span th:text="${applicationn.getStatus()}"></span>
-                <span th:text="${projects.get(iter.index).getName()}"></span>
-                <span th:text="${teams.get(iter.index).getName()}"></span>
-            </p>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col"> </th>
+                    <th scope="col">Estado</th>
+                    <th scope="col">Fecha de Solicitud</th>
+                    <th scope="col">Proyecto</th>
+                    <th scope="col">Equipo</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr th:each="applicationn,iter : ${applications}">
+                    <th scope="row" th:text="${iter.index}"></th>
+                    <td th:text="${applicationn.getStatus()}"></td>
+                    <td th:text="${#dates.format(applicationn.getMoment(), 'dd/MM/yyyy')}"></td>
+                    <td th:text="${projects.get(iter.index).getName()}"></td>
+                    <td th:text="${teams.get(iter.index).getName()}"></td>
+                </tr>
+                </tbody>
+            </table>
         </div>
     </div>
     <br />
     <br />
     <br />
     <br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
+<br />
 </div>
 <div th:replace="masterpage/footer :: footer" />
 </body>

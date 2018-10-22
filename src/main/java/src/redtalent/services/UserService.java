@@ -77,6 +77,12 @@ public class UserService {
         return result;
     }
 
+    public User findUserByTeams(Team team){
+        Assert.notNull(team,"Team NULL");
+        User result = userRepository.findUserByTeams(team);
+        return result;
+    }
+
     public User findUserByApplicationsContains(Application application){
         Assert.notNull(application,"Application NULL");
         User result = userRepository.findUsersByApplicationsContaining(application);

@@ -67,6 +67,11 @@
             </div>
         </div>
     </div>
+    <div th:if="${auth.equals('USER')}" class="row">
+        <div class="col-12 portfolio-item">
+            <a type="button" class="btn btn-info" th:href="@{/application/solicitudesEquipo(teamId=${team.getId()})}">Solicitudes al Equipo</a>
+        </div>
+    </div>
 
 
 </div>

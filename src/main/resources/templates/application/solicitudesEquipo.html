@@ -45,8 +45,8 @@
                 <td th:text="${#dates.format(applicationn.getMoment(), 'dd/MM/yyyy')}"></td>
                 <td th:text="${projects.get(iter.index).getName()}"></td>
                 <td th:text="${teams.get(iter.index).getName()}"></td>
-                <td><a th:href="@{/application/aplicar(applicationId=${applicationn.getId()})(projectId=${projects.get(iter.index).getId()})}"><img style="width: 20px" th:src="@{http://icons.iconarchive.com/icons/dryicons/aesthetica-2/128/user-accept-icon.png}"></a></td>
-                <td><a th:href="@{/application/noaplicar(applicationId=${applicationn.getId()})}"><img style="width: 20px" th:src="@{http://www.preoc.es/img/portada/close_256.png}"></a></td>
+                <td><a th:href="@{/application/aplicar(applicationId=${applicationn.getId()},projectId=${projects.get(iter.index).getId()})}"><img style="width: 20px" th:src="@{http://icons.iconarchive.com/icons/dryicons/aesthetica-2/128/user-accept-icon.png}"></a></td>
+                <td><a th:href="@{/application/noaplicar(applicationId=${applicationn.getId()},projectId=${projects.get(iter.index).getId()})}"><img style="width: 20px" th:src="@{http://www.preoc.es/img/portada/close_256.png}"></a></td>
             </tr>
             </tbody>
         </table>

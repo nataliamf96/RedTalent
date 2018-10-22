@@ -44,5 +44,11 @@ public class AdministratorService {
         administratorRepository.delete(administrator);
     }
 
+    public Administrator findByEmail(String email){
+        Assert.notNull("email","Email NULL");
+        Administrator result = administratorRepository.findByEmail(email);
+        return result;
+    }
+
 
 }

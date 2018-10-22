@@ -44,6 +44,11 @@ public class UtilidadesService {
         return result;
     }
 
+    public Administrator adminConectado(String email){
+        Administrator result = administratorService.findByEmail(email);
+        return result;
+    }
+
     public String actorConectado(){
         String res = "";
         //Para saber quién está authenticado

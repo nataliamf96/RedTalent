@@ -1,14 +1,8 @@
 package src.redtalent.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
-import org.springframework.format.annotation.DateTimeFormat;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Future;
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 @Document(collection = "Teams")
@@ -25,18 +19,17 @@ public class Team extends DomainEntity {
         this.applications = new ArrayList<>();
         this.evaluations = new ArrayList<>();
         this.comments = new ArrayList<>();
+        this.projects = new ArrayList<>();
     }
 
-    public Team(String name, String description, boolean closed, List<Application> applications, List<Evaluation> evaluations,
-                User userCreated, List<Comment> comments, Project project){
+    public Team(String name, String description, boolean closed, List<Application> applications, List<Evaluation> evaluations, List<Comment> comments, List<Project> projects){
         this.name = name;
         this.description = description;
         this.closed = closed;
         this.applications = applications;
         this.evaluations = evaluations;
-        this.userCreated = userCreated;
         this.comments = comments;
-        this.project = project;
+        this.projects = projects;
     }
 
     //Getters and setters -----------------------------------------------
@@ -68,9 +61,8 @@ public class Team extends DomainEntity {
     //Relationships -----------------------------------------------
     private List<Application> applications;
     private List<Evaluation> evaluations;
-    private User userCreated;
     private List<Comment> comments;
-    private Project project;
+    private List<Project> projects;
 
     public List<Application> getApplications() {
         return applications;
@@ -88,14 +80,6 @@ public class Team extends DomainEntity {
         this.evaluations = evaluations;
     }
 
-    public User getUserCreated() {
-        return userCreated;
-    }
-
-    public void setUserCreated(User userCreated) {
-        this.userCreated = userCreated;
-    }
-
     public List<Comment> getComments() {
         return comments;
     }
@@ -104,11 +88,11 @@ public class Team extends DomainEntity {
         this.comments = comments;
     }
 
-    public Project getProject() {
-        return project;
+    public List<Project> getProjects() {
+        return projects;
     }
 
-    public void setProject(Project project) {
-        this.project = project;
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
     }
 }

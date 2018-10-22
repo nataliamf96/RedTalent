@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Bienvenido/a</title>
+    <title>Datos del Proyecto</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
@@ -113,24 +113,6 @@
                         <p>
                             <h5 th:if="${team.getDescription() != null}">Descripción</h5>
                             <span th:text="${team.getDescription()}"></span>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 portfolio-item">
-                        <h5>Creador</h5>
-                        <p>
-                            <b>Nombre: </b><span th:text="${team.getUserCreated().getFullname()}"></span>
-                            <b>Email: </b><span th:text="${team.getUserCreated().getEmail()}"></span>
-                        </p>
-                    </div>
-                </div>
-                <div class="row">
-                    <div class="col-6 portfolio-item">
-                        <h5>Usuarios</h5>
-                        <p>
-                            <b>Nombre: </b><span th:text="${team.getUserCreated().getFullname()}"></span>
-                            <b>Email: </b><span th:text="${team.getUserCreated().getEmail()}"></span>
                         </p>
                     </div>
                 </div>

@@ -155,8 +155,6 @@ public class ProjectController {
                 user.setProjects(pp);
                 userService.saveUser(user);
 
-
-
                 result = new ModelAndView("redirect:/user/index");
 
             } catch (Throwable oops) {
@@ -197,12 +195,8 @@ public class ProjectController {
                 pp.addAll(user.getProjects());
                 pp.add(savee);
                 user.setProjects(pp);
-                User creadorTeam = userService.saveUser(user);
+                userService.saveUser(user);
 
-                Team team = teamService.create();
-                team.setProject(savee);
-                team.setUserCreated(creadorTeam);
-                teamService.save(team);
 
                 result = new ModelAndView("redirect:/user/index");
 

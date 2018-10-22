@@ -112,20 +112,23 @@ public class DbSeeder implements CommandLineRunner {
         Set<Role> roleDirectivo = new HashSet<Role>();
         roleDirectivo.add(directivo);
 
-        User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante,new HashSet<Project>());
-        User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante,new HashSet<Project>());
-        User est3 = new User("user3@user.com",bCryptPasswordEncoder.encode("user3"),"Usuario 3",true,roleEstudiante,new HashSet<Project>());
-        User pro1 = new User("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),"Profesor 1",true,roleProfesor,new HashSet<Project>());
-        User pro2 = new User("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),"Profesor 2",true,roleProfesor,new HashSet<Project>());
-        User pro3 = new User("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),"Profesor 3",true,roleProfesor,new HashSet<Project>());
-        User egr1 = new User("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),"Egresado 1",true,roleEgresado,new HashSet<Project>());
-        User egr2 = new User("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),"Egresado 2",true,roleEgresado,new HashSet<Project>());
-        User egr3 = new User("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),"Egresado 3",true,roleEgresado,new HashSet<Project>());
-        List<User> users = Arrays.asList(est2,est3,pro2,pro3,egr2,egr3);
+        User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User est3 = new User("user3@user.com",bCryptPasswordEncoder.encode("user3"),"Usuario 3",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User pro1 = new User("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),"Profesor 1",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User pro2 = new User("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),"Profesor 2",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User pro3 = new User("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),"Profesor 3",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User egr1 = new User("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),"Egresado 1",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User egr2 = new User("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),"Egresado 2",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        User egr3 = new User("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),"Egresado 3",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
+        List<User> users = Arrays.asList(est3,pro3,egr3);
         userRepository.saveAll(users);
         User aa = userRepository.save(est1);
         User bb = userRepository.save(pro1);
         User cc = userRepository.save(egr1);
+        User dd = userRepository.save(est2);
+        User ee = userRepository.save(pro2);
+        User ff = userRepository.save(egr2);
 
         Administrator adm1 = new Administrator("admin@admin.com",bCryptPasswordEncoder.encode("admin"),"admin",true,roleAdministrador);
         administratorRepository.save(adm1);
@@ -616,22 +619,12 @@ public class DbSeeder implements CommandLineRunner {
 
         Application application3 = new Application(
                 moment,
-                "DENIED");
-
-        Application application4 = new Application(
-                moment2,
-                "PENDING");
-
-        Application application5 = new Application(
-                moment2,
                 "ACCEPTED");
 
-        Application application6 = new Application(
-                moment2,
-                "DENIED");
 
-        List<Application> applications = Arrays.asList(application1, application2, application3, application4, application5, application6);
-        applicationRepository.saveAll(applications);
+        Application ap1 = applicationRepository.save(application1);
+        Application ap2 = applicationRepository.save(application2);
+        Application ap3 = applicationRepository.save(application3);
 
         // Comments -----------------------------------------
 
@@ -799,19 +792,14 @@ public class DbSeeder implements CommandLineRunner {
         Set<Project> pa = aa.getProjects();
         pa.add(a);
         aa.setProjects(pa);
-        userRepository.save(aa);
 
         Set<Project> pb = bb.getProjects();
         pb.add(b);
         bb.setProjects(pb);
-        userRepository.save(bb);
 
         Set<Project> pc = cc.getProjects();
         pc.add(c);
         cc.setProjects(pc);
-        userRepository.save(cc);
-
-
 
         // Team -----------------------------------------
 
@@ -819,34 +807,64 @@ public class DbSeeder implements CommandLineRunner {
                 "Los Comadrejas",
                 "Equipo cualificado para los proyectos de ámbito informático",
                 true,
-                Arrays.asList(application1, application2, application3),
+                Arrays.asList(ap1),
                 Arrays.asList(evaluation1, evaluation2),
-                est1,
                 Arrays.asList(comment1),
-                project1);
+                Arrays.asList(project1));
 
         Team team2 = new Team(
                 "SuperTeam",
                 "Necesitamos gente aplicada. ¡Nos encanta conocer gente nueva!",
                 true,
-                Arrays.asList(application4, application5),
+                Arrays.asList(ap2),
                 Arrays.asList(evaluation3, evaluation4),
-                pro2,
                 Arrays.asList(comment2),
-                project2);
+                Arrays.asList(project2));
 
         Team team3 = new Team(
                 "Los Winners",
                 "Queremos ganar el concurso de idea. Necesitamos gente competente.",
                 true,
-                Arrays.asList(application6),
+                Arrays.asList(ap3),
                 Arrays.asList(evaluation5),
-                egr3,
                 Arrays.asList(comment3),
-                project3);
+                Arrays.asList(project3));
 
-        List<Team> teams = Arrays.asList(team1, team2, team3);
-        teamRepository.saveAll(teams);
+        Team teama = teamRepository.save(team1);
+        Team teamb = teamRepository.save(team2);
+        Team teamc = teamRepository.save(team3);
+
+        Set<Team> ta = aa.getTeams();
+        ta.add(teama);
+        aa.setTeams(ta);
+
+        Set<Application> listaApplicationsAA = dd.getApplications();
+        listaApplicationsAA.add(ap1);
+        dd.setApplications(listaApplicationsAA);
+        userRepository.save(aa);
+        userRepository.save(dd);
+
+        Set<Team> tb = bb.getTeams();
+        tb.add(teamb);
+        bb.setTeams(tb);
+
+        Set<Application> listaApplicationsBB = ee.getApplications();
+        listaApplicationsBB.add(ap2);
+        ee.setApplications(listaApplicationsBB);
+        userRepository.save(bb);
+        userRepository.save(ee);
+
+        Set<Team> tc = cc.getTeams();
+        tc.add(teamc);
+        cc.setTeams(tc);
+
+        Set<Application> listaApplicationsCC = ff.getApplications();
+        listaApplicationsCC.add(ap3);
+        ff.setApplications(listaApplicationsCC);
+        userRepository.save(cc);
+        userRepository.save(ff);
+
+
 
         // Phase ---------------------------------------------------
 

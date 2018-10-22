@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Datos del Equipo</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+    <style>
+        .card-img-profile2 {
+            max-width: 100%;
+            margin-top: -95px;
+            margin-bottom: 35px;
+        }
+        .card-profile2 {
+            width: 100%;
+            max-height: 350px;
+            margin: 50px auto;
+            background-color: gold;
+            border-radius: 0;
+            border: 0;
+            box-shadow: 1em 1em 2em rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div class="container">
+    <h3 class="my-4">
+        Equipo <i th:text="${team.getName()}"></i>
+    </h3>
+    <h3 class="my-4">
+        Trabaja en los Proyectos
+    </h3>
+    <div class="row">
+        <div th:each="user : ${usuariosTeam}" style="margin-top: -12px" class='text-center col-lg-1 col-md-3 col-sm-4 col-xl-6'>
+            <h3 th:text="${user.getFullname()}"></h3>
+        </div>
+    </div>
+    <div th:if="${team.getProjects().size() == 0}" class="row">
+        <div style="margin-top: -12px" class='card card-profile2 text-center col-12'>
+            <h1 style="background-color: gold; margin-top: 10px">NO EXISTEN PROYECTOS</h1>
+            <span style="margin-bottom: 10px">Crea tu primer proyecto <a href="/project/createProject">aquí</a></span>
+        </div>
+    </div>
+    <div th:if="${team.getProjects().size() != 0}" class="row">
+        <div th:each="project : ${team.getProjects()}" class="col-lg-4 col-sm-6 portfolio-item">
+            <div class="card h-100">
+                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                    </h4>
+                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

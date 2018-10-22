@@ -22,8 +22,7 @@ import src.redtalent.services.UserService;
 import src.redtalent.services.UtilidadesService;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 @Controller
 @RequestMapping("/team")
@@ -61,6 +60,21 @@ public class TeamController {
         result.addObject("requestURI", "team/byProject?projectId=" +projectId);
         result.addObject("team", team);
 
+
+        return result;
+    }
+
+    @RequestMapping(value = "/teamData", method = RequestMethod.GET)
+    public ModelAndView team(@RequestParam ObjectId teamId) {
+        ModelAndView result;
+        result = new ModelAndView("team/teamData");
+        Team team = teamService.findOne(teamId.toString());
+        List<User> usuariosTeam = utilidadesService.usuariosDelEquipo(team);
+
+        result.addObject("team",team);
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("usuariosTeam", usuariosTeam);
+
         return result;
     }
 
@@ -73,14 +87,14 @@ public class TeamController {
         teamForm.setProjectId(projectId);
 
         try {
-            Assert.isTrue(teamForm.isClosed(), "No se puede crear un proyecto que no está cerrado");
+            //Assert.isTrue(teamForm.isClosed(), "No se puede crear un equipo que no está cerrado");
             result = new ModelAndView("team/create");
             result.addObject("teamForm", teamForm);
             result.addObject("projectId", projectId);
             result.addObject("requestURI", "./team/create?projectId="+projectId);
 
         } catch (Throwable oops) {
-            result = new ModelAndView("redirect:/home/index");
+            result = new ModelAndView("redirect:/user/index");
         }
         return result;
     }
@@ -103,10 +117,19 @@ public class TeamController {
                 Team team = teamService.create();
                 team.setName(teamForm.getName());
                 team.setDescription(teamForm.getDescription());
+                Project project = projectService.findOne(teamForm.getProjectId().toString());
+                List<Project> projects = new ArrayList<Project>();
+                projects.add(project);
+                team.setProjects(projects);
                 Team saved = this.teamService.save(team);
 
-                Assert.isTrue(!principal.equals(teamForm.getUserCreated()), "El usuario debe ser el mismo que el creador");
-                result = new ModelAndView("redirect:/team/byProject?projectId=" + teamForm.getProjectId());
+                Set<Team> teams = new HashSet<Team>();
+                teams.addAll(principal.getTeams());
+                teams.add(saved);
+                principal.setTeams(teams);
+                userService.saveUser(principal);
+
+                result = new ModelAndView("redirect:/user/index");
 
             } catch (Throwable oops) {
                 result = createModelAndView(teamForm, "No se puede crear correctamente el equipo");

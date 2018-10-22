@@ -52,13 +52,7 @@ public class TeamService {
 
     public Team teamByProjectId(Project project){
         Assert.notNull(project,"Team Service : Objeto null");
-        Team result = teamRepository.findTeamByProject(project);
-        return result;
-    }
-
-    public Team findByUserCreated(User user){
-        Assert.notNull(user,"user null");
-        Team result = teamRepository.findByUserCreated(user);
+        Team result = teamRepository.findTeamByProjectsContaining(project);
         return result;
     }
 }

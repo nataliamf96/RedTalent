@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.Administrator;
+import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.AdministratorRepository;
 import src.redtalent.repositories.UserRepository;
@@ -23,9 +24,20 @@ public class UtilidadesService {
     private AdministratorService administratorService;
     @Autowired
     private DirectivoService directivoService;
+    @Autowired
+    private ProjectService projectService;
+    @Autowired
+    private TeamService teamService;
 
     public UtilidadesService(){
         super();
+    }
+
+    public List<User> usuariosDelEquipo(Team team){
+        List<User> result = new ArrayList<User>();
+        result.add(userService.findUserByTeamsConstains(team));
+        team.getApplications().stream().forEach(x->result.add(userService.findUserByApplicationsContains(x)));
+        return result;
     }
 
     public List<String> allEmails(){

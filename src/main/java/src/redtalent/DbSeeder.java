@@ -50,12 +50,14 @@ public class DbSeeder implements CommandLineRunner {
     private AreaRepository areaRepository;
     @Autowired
     private DirectivoRepository directivoRepository;
+    @Autowired
+    private SubjectForumRepository subjectForumRepository;
 
     // Constructor -------------------------------------------------
     public DbSeeder(DirectivoRepository directivoRepository, AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
                     CommentRepository commentRepository, EvaluationRepository evaluationRepository, GradeRepository gradeRepository, PhaseRepository phaseRepository,
                     ProjectRepository projectRepository, ProjectMonitoringRepository projectMonitoringRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository,
-                    RoleRepository roleRepository){
+                    RoleRepository roleRepository, SubjectForumRepository subjectForumRepository){
         this.directivoRepository = directivoRepository;
         this.academicProfileRepository = academicProfileRepository;
         this.administratorRepository = administratorRepository;
@@ -71,6 +73,7 @@ public class DbSeeder implements CommandLineRunner {
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
         this.projectMonitoringRepository = projectMonitoringRepository;
+        this.subjectForumRepository = subjectForumRepository;
     }
 
     public void run(String... strings) throws Exception {
@@ -92,6 +95,7 @@ public class DbSeeder implements CommandLineRunner {
         projectRepository.deleteAll();
         userRepository.deleteAll();
         directivoRepository.deleteAll();
+        subjectForumRepository.deleteAll();
 
         Role estudiante = new Role("ESTUDIANTE");
         Role profesor = new Role("PROFESOR");
@@ -112,23 +116,58 @@ public class DbSeeder implements CommandLineRunner {
         Set<Role> roleDirectivo = new HashSet<Role>();
         roleDirectivo.add(directivo);
 
-        User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User est3 = new User("user3@user.com",bCryptPasswordEncoder.encode("user3"),"Usuario 3",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User pro1 = new User("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),"Profesor 1",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User pro2 = new User("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),"Profesor 2",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User pro3 = new User("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),"Profesor 3",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User egr1 = new User("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),"Egresado 1",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User egr2 = new User("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),"Egresado 2",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        User egr3 = new User("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),"Egresado 3",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>());
-        List<User> users = Arrays.asList(est3,pro3,egr3);
-        userRepository.saveAll(users);
+        // Comments -----------------------------------------
+
+        Date moment = new Date(2018,07,11);
+        Date moment2 = new Date(2018, 10, 13);
+
+        Comment comment1 = new Comment(
+                "Buena idea",
+                "Opino lo mismo, el proyecto está muy currado",
+                moment2);
+
+        Comment comment2 = new Comment(
+                "¡Me encanta!",
+                "Este proyecto es increíble",
+                moment);
+
+        Comment comment3 = new Comment(
+                "¡Increíble!",
+                "Es muy buena idea, me parece increíble",
+                moment);
+
+        List<Comment> comments = Arrays.asList(comment1, comment2, comment3);
+        commentRepository.saveAll(comments);
+
+        // Users ---------------------------------------------
+
+        Set<Comment> comments1 = new HashSet<Comment>();
+        comments1.add(comment1);
+
+        Set<Comment> comments2 = new HashSet<Comment>();
+        comments2.add(comment2);
+
+        Set<Comment> comments3 = new HashSet<Comment>();
+        comments3.add(comment3);
+
+        User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), comments1);
+        User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
+        User est3 = new User("user3@user.com",bCryptPasswordEncoder.encode("user3"),"Usuario 3",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
+        User pro1 = new User("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),"Profesor 1",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), comments2);
+        User pro2 = new User("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),"Profesor 2",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
+        User pro3 = new User("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),"Profesor 3",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
+        User egr1 = new User("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),"Egresado 1",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), comments3);
+        User egr2 = new User("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),"Egresado 2",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
+        User egr3 = new User("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),"Egresado 3",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
         User aa = userRepository.save(est1);
         User bb = userRepository.save(pro1);
         User cc = userRepository.save(egr1);
         User dd = userRepository.save(est2);
         User ee = userRepository.save(pro2);
         User ff = userRepository.save(egr2);
+        User gg = userRepository.save(est3);
+        User hh = userRepository.save(pro3);
+        User ii = userRepository.save(egr3);
 
         Administrator adm1 = new Administrator("admin@admin.com",bCryptPasswordEncoder.encode("admin"),"admin",true,roleAdministrador);
         administratorRepository.save(adm1);
@@ -606,9 +645,6 @@ public class DbSeeder implements CommandLineRunner {
 
         // Applications -----------------------------------------
 
-        Date moment = new Date(2018,07,11);
-        Date moment2 = new Date(2018, 10, 13);
-
         Application application1 = new Application(
                 moment,
                 "PENDING");
@@ -625,26 +661,6 @@ public class DbSeeder implements CommandLineRunner {
         Application ap1 = applicationRepository.save(application1);
         Application ap2 = applicationRepository.save(application2);
         Application ap3 = applicationRepository.save(application3);
-
-        // Comments -----------------------------------------
-
-        Comment comment1 = new Comment(
-                "Buena idea",
-                "Opino lo mismo, el proyecto está muy currado",
-                moment2);
-
-        Comment comment2 = new Comment(
-                "¡Me encanta!",
-                "Este proyecto es increíble",
-                moment);
-
-        Comment comment3 = new Comment(
-                "¡Increíble!",
-                "Es muy buena idea, me parece increíble",
-                moment);
-
-        List<Comment> comments = Arrays.asList(comment1, comment2, comment3);
-        commentRepository.saveAll(comments);
 
         // Evaluations -----------------------------------------
 
@@ -886,6 +902,48 @@ public class DbSeeder implements CommandLineRunner {
         List<Phase> phases = Arrays.asList(phase1, phase2, phase3);
         phaseRepository.saveAll(phases);
 
+
+        //SubjectForum
+
+        SubjectForum subjectForum1 = new SubjectForum(
+                "La programación es un arte",
+                "La programación es un arte, PHP es mi mejor lenguaje",
+                moment,
+                Arrays.asList(tag1),
+                Arrays.asList(comment1, comment2));
+
+        SubjectForum subjectForum2 = new SubjectForum(
+                "Aprende de los demás",
+                "Siempre he creido que aprender de los demás es lo mejor",
+                moment,
+                Arrays.asList(tag2),
+                Arrays.asList(comment3));
+
+        SubjectForum subjectForum3 = new SubjectForum(
+                "Los tutoriales ayudan mucho",
+                "Hay tutoriales que me han enseñado más que profesores",
+                moment,
+                Arrays.asList(tag3),
+                null);
+
+        SubjectForum foruma = subjectForumRepository.save(subjectForum1);
+        SubjectForum forumb = subjectForumRepository.save(subjectForum2);
+        SubjectForum forumc = subjectForumRepository.save(subjectForum3);
+
+        Set<SubjectForum> fa = gg.getSubjectForums();
+        fa.add(foruma);
+        gg.setSubjectForums(fa);
+        userRepository.save(gg);
+
+        Set<SubjectForum> fb = hh.getSubjectForums();
+        fb.add(forumb);
+        hh.setSubjectForums(fb);
+        userRepository.save(hh);
+
+        Set<SubjectForum> fc = ii.getSubjectForums();
+        fc.add(forumc);
+        ii.setSubjectForums(fc);
+        userRepository.save(ii);
 
     }
 }

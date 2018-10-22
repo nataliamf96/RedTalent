@@ -1,14 +1,12 @@
 package src.redtalent.domain;
 
-import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import java.util.Date;
 
-@Document(collection = "Comments")
-public class Comment extends DomainEntity {
+public class Reply {
 
     // Attributes ---------------------------------------------------
     private String title;
@@ -16,11 +14,11 @@ public class Comment extends DomainEntity {
     private Date moment;
 
     // Constructors ---------------------------------------------------
-    public Comment(){
+    public Reply(){
         super();
     }
 
-    public Comment(String title, String text, Date moment){
+    public Reply(String title, String text, Date moment){
         this.title = title;
         this.text = text;
         this.moment = moment;

@@ -31,13 +31,15 @@ public class User extends DomainEntity{
     private Set<Project> projects;
     private Set<Team> teams;
     private Set<Application> applications;
+    private Set<SubjectForum> subjectForums;
+    private Set<Comment> comments;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects, Set<Team> teams, Set<Application> applications){
+    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<SubjectForum> subjectForums, Set<Comment> comments){
         this.email = email;
         this.password = password;
         this.fullname = fullname;
@@ -46,6 +48,8 @@ public class User extends DomainEntity{
         this.projects = projects;
         this.teams = teams;
         this.applications = applications;
+        this.subjectForums = subjectForums;
+        this.comments = comments;
     }
 
     public Set<Project> getProjects() {
@@ -110,5 +114,21 @@ public class User extends DomainEntity{
 
     public void setApplications(Set<Application> applications) {
         this.applications = applications;
+    }
+
+    public Set<SubjectForum> getSubjectForums() {
+        return subjectForums;
+    }
+
+    public void setSubjectForums(Set<SubjectForum> subjectForums) {
+        this.subjectForums = subjectForums;
+    }
+
+    public Set<Comment> getComments() {
+        return comments;
+    }
+
+    public void setComments(Set<Comment> comments) {
+        this.comments = comments;
     }
 }

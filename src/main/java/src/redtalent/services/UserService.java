@@ -84,7 +84,13 @@ public class UserService {
 
     public User findUserByApplicationsContains(Application application){
         Assert.notNull(application,"Application NULL");
-        User result = userRepository.findUsersByApplicationsContaining(application);
+        User result = new User();
+        for(User user : userRepository.findAll()){
+            if(user.getApplications().contains(application)){
+                result = user;
+                break;
+            }
+        }
         return result;
     }
 

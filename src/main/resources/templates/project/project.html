@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Datos del Proyecto</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+    <style>
+        .card-img-profile2 {
+            max-width: 100%;
+            margin-top: -95px;
+            margin-bottom: 35px;
+        }
+        .card-profile2 {
+            width: 100%;
+            max-height: 350px;
+            margin: 50px auto;
+            background-color: gold;
+            border-radius: 0;
+            border: 0;
+            box-shadow: 1em 1em 2em rgba(0, 0, 0, 0.2);
+        }
+    </style>
+</head>
+<body>
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div class="container">
+    <h3 class="my-4">
+        Proyecto <i th:text="${project.getName()}"></i>
+    </h3>
+    <div class="row">
+        <div class="col-lg-6 col-sm-6 portfolio-item">
+            <h5>Creador</h5>
+            <span th:text="${user.getFullname()}"></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-lg-6 col-sm-6 portfolio-item">
+            <p>
+                <div class="row">
+                    <div class="col-lg-4 col-sm-4 portfolio-item">
+                        <h5>Fecha de Inicio</h5>
+                        <span th:text="${#dates.format(project.getStartDate(), 'dd/MM/yyyy')}"></span>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 portfolio-item">
+                        <h5>Fecha de Fín</h5>
+                        <span th:text="${#dates.format(project.getFinishDate(), 'dd/MM/yyyy')}"></span>
+                    </div>
+                    <div class="col-lg-4 col-sm-4 portfolio-item">
+                        <h5>Complejidad</h5>
+                        <span th:text="${project.getComplexity()}"></span>
+                    </div>
+                </div>
+            </p>
+            <p>
+                <h5>Descripción</h5>
+                <span th:text="${project.getDescription()}"></span>
+            </p>
+            <p>
+                <h5>Perfiles Requeridos</h5>
+                <span th:text="${project.getRequiredProfiles()}"></span>
+            </p>
+        </div>
+        <div class="col-lg-6 col-sm-6 portfolio-item">
+            <img class="card-img-top" th:src="${project.getImage()}">
+        </div>
+    </div>
+    <div th:if="${team == null}" class="row">
+        <div  class="col-lg-6 col-sm-6 portfolio-item">
+            <h2>EN ESTOS MOMENTOS NO EXISTE EQUIPO ASOCIADO AL PROYECTO</h2>
+            <h4>Puedes ponerte en contacto con:</h4>
+            <b>Nombre: </b><span th:text="${user.getFullname()}" />
+            <b>Email: </b><span th:text="${user.getEmail()}" />
+        </div>
+    </div>
+    <div th:if="${team != null}" class="row">
+        <div  class="col-lg-6 col-sm-6 portfolio-item">
+            <div style="margin-top: -12px" class='card card-profile text-center'>
+                <img alt='' class='card-img-top' th:src="@{/images/color-img2.jpg}">
+                <div class='card-block'>
+                    <img alt='' class='card-img-profile2' th:src="@{https://www.unistudio.design/wp-content/uploads/2017/01/Team-Unistudio-site-web-300x140.jpg}">
+                    <h4 style="margin-top: -23px" class='card-title'>
+                        <i th:if="${team.getName() != null}" th:text="${team.getName()}" />
+                        <small th:if="${team.getName() != null}" th:text="${team.getDescription()}" />
+                    </h4>
+                    <div class='card-links'>
+                        <a class='fa fa-dribbble' href='#'></a>
+                        <a class='fa fa-twitter' href='#'></a>
+                        <a class='fa fa-facebook' href='#'></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-sm-6 portfolio-item">
+                <div th:if="${team.getName() != null}" class="row">
+                    <div class="col-lg-4 col-sm-4 portfolio-item">
+                        <p>
+                            <h5 th:if="${team.getName() != null}">Nombre</h5>
+                            <span th:if="${team.getName() != null}" th:text="${team.getName()}"></span>
+                         </p>
+                        <p>
+                            <h5 th:if="${team.getDescription() != null}">Descripción</h5>
+                            <span th:text="${team.getDescription()}"></span>
+                        </p>
+                    </div>
+                </div>
+        </div>
+    </div>
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

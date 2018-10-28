@@ -26,10 +26,10 @@
     <div class="row">
         <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
             <div class="card h-100">
-                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <a th:href="@{/project/project(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                        <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                     </h4>
                     <p class="card-text" th:text="${project.getDescription()}"></p>
                 </div>

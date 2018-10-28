@@ -61,6 +61,23 @@ public class ProjectController {
         return result;
     }
 
+    @RequestMapping(value = "/project", method = RequestMethod.GET)
+    public ModelAndView projectDataList2(@RequestParam ObjectId projectId) {
+        ModelAndView result;
+        result = new ModelAndView("project/project");
+
+        Project project = projectService.findOne(projectId.toString());
+        Team team = teamService.teamByProjectId(project);
+
+        result.addObject("user",userService.findUserByProjectsContains(project));
+        result.addObject("project",project);
+        result.addObject("team",team);
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("comments",project.getComments());
+
+        return result;
+    }
+
     @RequestMapping(value = "/projectData", method = RequestMethod.GET)
     public ModelAndView projectDataList(@RequestParam ObjectId projectId) {
         ModelAndView result;

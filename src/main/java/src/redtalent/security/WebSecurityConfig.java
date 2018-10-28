@@ -47,6 +47,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/user/index").hasAnyAuthority("ESTUDIANTE","PROFESOR","EGRESADO")
                 .antMatchers("/admin/index").hasAuthority("ADMIN")
                 .antMatchers("/project/projectData").permitAll()
+                .antMatchers("/project/project").permitAll()
                 .antMatchers("/directivo/dashboardDirectivo").hasAuthority("DIRECTIVO")
                 .antMatchers("/project/createProject").hasAnyAuthority("ESTUDIANTE","PROFESOR","EGRESADO")
                 .antMatchers("/area/**").hasAuthority("ADMIN")

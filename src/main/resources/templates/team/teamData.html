@@ -43,8 +43,22 @@
         Trabaja en los Proyectos
     </h3>
     <div class="row">
-        <div th:each="user : ${usuariosTeam}" style="margin-top: -12px" class='text-center col-lg-1 col-md-3 col-sm-4 col-xl-6'>
-            <h3 th:text="${user.getFullname()}"></h3>
+        <div th:each="user : ${usuariosTeam}" style="margin-top: -12px" class='col-lg-4 col-sm-6 portfolio-item'>
+            <div style="margin-top: -12px" class='card card-profile text-center'>
+                <img alt='' class='card-img-top' th:src="@{/images/color-img.jpg}">
+                <div class='card-block'>
+                    <img alt='' class='card-img-profile' th:src="@{/images/profile.jpg}">
+                    <h4 style="margin-top: -23px" class='card-title'>
+                        <i th:text="${user.getFullname()}" />
+                        <small th:text="${user.getEmail()}"></small>
+                    </h4>
+                    <div class='card-links'>
+                        <a class='fa fa-dribbble' href='#'></a>
+                        <a class='fa fa-twitter' href='#'></a>
+                        <a class='fa fa-facebook' href='#'></a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <div th:if="${team.getProjects().size() == 0}" class="row">

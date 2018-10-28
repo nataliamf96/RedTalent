@@ -1,5 +1,7 @@
 package src.redtalent.controllers;
 
+import java.util.Base64;
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -15,6 +17,8 @@ import src.redtalent.services.UserService;
 import src.redtalent.services.UtilidadesService;
 
 import javax.validation.Valid;
+import java.io.File;
+import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -76,6 +80,7 @@ public class RegisterController {
                 Set<Role> roles = new HashSet<Role>();
                 roles.add(role);
                 u.setRoles(roles);
+                u.setImage(userForm.getImage());
                 userService.saveUser(u);
 
                 result = new ModelAndView("redirect:/login");

@@ -9,6 +9,7 @@ import src.redtalent.security.Role;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
@@ -33,6 +34,7 @@ public class User extends DomainEntity{
     private Set<Application> applications;
     private Set<SubjectForum> subjectForums;
     private Set<Comment> comments;
+    private String image;
 
     //Constructors -----------------------------------------------
     public User(){
@@ -58,6 +60,14 @@ public class User extends DomainEntity{
 
     public void setProjects(Set<Project> projects) {
         this.projects = projects;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Set<Team> getTeams() {

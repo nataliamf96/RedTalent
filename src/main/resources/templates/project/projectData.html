@@ -117,8 +117,11 @@
                 </div>
         </div>
     </div>
-    <div th:if="${auth.equals('USER')}" class="row">
-        <div class="col-12">
+    <div th:if="${auth.equals('USER') && !yaEresDelEquipo}" class="row">
+        <div th:if="${tieneSolicitudEnviada!=null}" class="col-12">
+            <h4>Solicitud en estado <i th:text="${tieneSolicitudEnviada.getStatus()}"></i></h4>
+        </div>
+        <div th:if="${tieneSolicitudEnviada==null}" class="col-12">
             <div >
                 <a type="button" class="btn btn-info" th:href="@{/application/crearAplicacionProyecto(projectId=${project.getId()})}">Solicitar Acceso al Equipo del Proyecto</a>
             </div>

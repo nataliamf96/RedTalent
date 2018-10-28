@@ -69,6 +69,12 @@ public class ProjectController {
         Project project = projectService.findOne(projectId.toString());
         Team team = teamService.teamByProjectId(project);
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+        Boolean yaEresDelEquipo = utilidadesService.estaEnElEquipo(user,team);
+
+        result.addObject("tieneSolicitudEnviada",utilidadesService.tieneSolicitudEnviada(user,team));
+        result.addObject("yaEresDelEquipo",yaEresDelEquipo);
         result.addObject("user",userService.findUserByProjectsContains(project));
         result.addObject("project",project);
         result.addObject("team",team);

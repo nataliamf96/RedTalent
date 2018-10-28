@@ -6,10 +6,9 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.Administrator;
+import src.redtalent.domain.Application;
 import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
-import src.redtalent.repositories.AdministratorRepository;
-import src.redtalent.repositories.UserRepository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -56,6 +55,35 @@ public class UtilidadesService {
         return result;
     }
 
+    public Boolean estaEnElEquipo(User user, Team team){
+        Boolean result = false;
+
+        if(user.getTeams().contains(team)){
+            result = true;
+        }else{
+            for(Application application:user.getApplications()){
+                if(team.getApplications().contains(application)){
+                    if(application.getStatus().equals("ACCEPTED")){
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public Application tieneSolicitudEnviada(User user, Team team){
+        Application result = null;
+            for(Application application:user.getApplications()){
+                if(team.getApplications().contains(application)){
+                        result = application;
+                        break;
+                }
+            }
+        return result;
+    }
+
     public Administrator adminConectado(String email){
         Administrator result = administratorService.findByEmail(email);
         return result;
@@ -79,5 +107,4 @@ public class UtilidadesService {
 
         return res;
     }
-
 }

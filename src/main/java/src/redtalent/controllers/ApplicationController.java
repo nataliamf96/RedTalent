@@ -172,10 +172,11 @@ public class ApplicationController{
 
         //Usuario creador Application
         User userCrea = userService.findUserByApplicationsContains(a);
-        List<Application> appUserCrea = new ArrayList<Application>();
+        Set<Application> appUserCrea = new HashSet<Application>();
         appUserCrea.addAll(userCrea.getApplications());
         appUserCrea.remove(a);
         appUserCrea.add(savee);
+        userCrea.setApplications(appUserCrea);
         userService.saveUser(userCrea);
 
         Project p = projectService.findOne(projectId.toString());

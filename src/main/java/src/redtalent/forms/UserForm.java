@@ -4,6 +4,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
+import java.io.File;
 
 public class UserForm {
 
@@ -12,9 +13,18 @@ public class UserForm {
     private String fullname;
     private String role;
     private Boolean terms;
+    private String image;
 
     public UserForm(){
         super();
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     @NotNull
@@ -64,14 +74,6 @@ public class UserForm {
         this.role = role;
     }
 
-    @Override
-    public String toString() {
-        return "UserForm{" +
-                "email='" + email + '\'' +
-                ", password='" + password + '\'' +
-                ", fullname='" + fullname + '\'' +
-                ", terms=" + terms +
-                ", role='" + role + '\'' +
-                '}';
-    }
+
+
 }

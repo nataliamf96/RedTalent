@@ -35,6 +35,7 @@ public class ProjectService {
         result.setTags(tags);
         result.setComments(comments);
         result.setProjectMonitorings(projectMonitorings);
+        result.setEstado(false);
         return result;
     }
 

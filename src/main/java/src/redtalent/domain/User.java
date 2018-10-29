@@ -41,7 +41,7 @@ public class User extends DomainEntity{
         super();
     }
 
-    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<SubjectForum> subjectForums, Set<Comment> comments){
+    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<SubjectForum> subjectForums, Set<Comment> comments, String image){
         this.email = email;
         this.password = password;
         this.fullname = fullname;
@@ -52,6 +52,7 @@ public class User extends DomainEntity{
         this.applications = applications;
         this.subjectForums = subjectForums;
         this.comments = comments;
+        this.image = image;
     }
 
     public Set<Project> getProjects() {

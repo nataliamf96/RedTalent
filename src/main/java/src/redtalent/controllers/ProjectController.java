@@ -160,8 +160,6 @@ public class ProjectController {
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
                 project.setMaxParticipants(projectForm.getMaxParticipants());
-                project.setFinishDate(projectForm.getFinishDate());
-                project.setStartDate(projectForm.getStartDate());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
@@ -203,8 +201,6 @@ public class ProjectController {
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
                 project.setMaxParticipants(projectForm.getMaxParticipants());
-                project.setFinishDate(projectForm.getFinishDate());
-                project.setStartDate(projectForm.getStartDate());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());

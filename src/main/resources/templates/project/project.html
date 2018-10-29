@@ -50,14 +50,6 @@
             <p>
                 <div class="row">
                     <div class="col-lg-4 col-sm-4 portfolio-item">
-                        <h5>Fecha de Inicio</h5>
-                        <span th:text="${#dates.format(project.getStartDate(), 'dd/MM/yyyy')}"></span>
-                    </div>
-                    <div class="col-lg-4 col-sm-4 portfolio-item">
-                        <h5>Fecha de Fín</h5>
-                        <span th:text="${#dates.format(project.getFinishDate(), 'dd/MM/yyyy')}"></span>
-                    </div>
-                    <div class="col-lg-4 col-sm-4 portfolio-item">
                         <h5>Complejidad</h5>
                         <span th:text="${project.getComplexity()}"></span>
                     </div>

@@ -47,7 +47,7 @@
             <div style="margin-top: -12px" class='card card-profile text-center'>
                 <img alt='' class='card-img-top' th:src="@{/images/color-img.jpg}">
                 <div class='card-block'>
-                    <img alt='' class='card-img-profile' th:src="@{/images/profile.jpg}">
+                    <img alt='' class='card-img-profile' th:src="${user.getImage()}">
                     <h4 style="margin-top: -23px" class='card-title'>
                         <i th:text="${user.getFullname()}" />
                         <small th:text="${user.getEmail()}"></small>

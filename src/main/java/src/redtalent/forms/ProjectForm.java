@@ -16,7 +16,6 @@ public class ProjectForm {
     private Integer maxParticipants;
     private String complexity;
     private String attachedFiles;
-    private Boolean terms;
     private Boolean privado;
 
     public ProjectForm(){
@@ -32,15 +31,6 @@ public class ProjectForm {
 
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    @NotNull
-    public Boolean getTerms() {
-        return terms;
-    }
-
-    public void setTerms(Boolean terms) {
-        this.terms = terms;
     }
 
    @NotBlank
@@ -123,7 +113,6 @@ public class ProjectForm {
                 ", maxParticipants=" + maxParticipants +
                 ", complexity='" + complexity + '\'' +
                 ", attachedFiles='" + attachedFiles + '\'' +
-                ", terms=" + terms +
                 ", privado=" + privado +
                 '}';
     }

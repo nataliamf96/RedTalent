@@ -150,9 +150,7 @@ public class ProjectController {
 
         if (binding.hasErrors())
             result = updateEditModelAndViewProject(projectForm);
-        else if(projectForm.getTerms() == false){
-            result = updateEditModelAndViewProject(projectForm,"Acepte los Términos");
-        } else
+        else
             try {
                 Project project = projectService.findOne(projectId);
                 project.setComplexity(projectForm.getComplexity());
@@ -191,9 +189,7 @@ public class ProjectController {
 
         if (binding.hasErrors())
             result = createEditModelAndViewProject(projectForm);
-        else if(projectForm.getTerms() == false){
-            result = createEditModelAndViewProject(projectForm,"Acepte los Términos");
-        } else
+        else
             try {
                 Project project = projectService.create();
                 project.setComplexity(projectForm.getComplexity());

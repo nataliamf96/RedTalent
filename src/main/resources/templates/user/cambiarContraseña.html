@@ -40,6 +40,9 @@
                 <input type="password" class="form-control" id="confNewPassword" name="confNewPassword" style="max-width: 350px" />
                 <li th:each="err : ${#fields.errors('confNewPassword')}" th:text="${err}" />
             </div>
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
             <input type="submit" class="btn btn-info" name="saveNuevaContraseña" value="Cambiar Contraseña" />
         </form>
     </div>

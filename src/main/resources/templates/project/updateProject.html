@@ -62,7 +62,10 @@
                 <li th:each="err : ${#fields.errors('attachedFiles')}" th:text="${err}" />
             </div>
             <label>Confirmar Términos del Servicio:</label>
-            <input type="checkbox" name="terms" th:checked="false" /><br />
+            <input type="checkbox" name="terms" th:checked="false" />
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
             <input type="submit" name="updateProject" value="Actualizar" />
         </form>
     </div>

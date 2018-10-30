@@ -20,10 +20,10 @@
             </h3>
             <form class="form-signin" th:action="@{/login}" method="post">
                 <h1 class="h3 mb-3 font-weight-normal">Porfavor, Inicie sesión</h1>
-                <div th:if="${param.error}">
+                <div style="color: red" th:if="${param.error}">
                     Correo Electrónico o Contraseña Inválidos
                 </div>
-                <div th:if="${param.logout}">
+                <div style="color: red" th:if="${param.logout}">
                     Usted ha sido desconectado.
                 </div>
                 <div class="form-group">

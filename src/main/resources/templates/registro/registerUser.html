@@ -61,10 +61,13 @@
                 <label for="image">Foto de Perfil</label>
                 <input type="file" onchange="previewFile()" class="form-control-file">
                 <input type="text" style="display: none" id="image" name="image">
-                <img src="" id="imagenPreview" style="max-height: 200px; display: none" alt="Image preview...">
+                <img src="" id="imagenPreview" style="max-height: 200px; max-height: 200px; display: none" alt="Image preview...">
             </div>
             <label>Confirmar Términos del Servicio:</label>
             <input type="checkbox" name="terms" th:checked="false" /><br />
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
             <input type="submit" class="btn btn-info" name="saveUser" value="Registrarse" />
         </form>
     </div>

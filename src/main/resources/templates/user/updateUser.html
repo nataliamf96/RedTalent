@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Modificar Datos de Usuario</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script>
+        function previewFile() {
+            var preview = document.getElementById("imagenPreview");
+            var imageSend = document.getElementById("image");
+            document.getElementById("imagenPreview").style = "display:block; max-width: 200px";
+            document.getElementById("imagenPreview2").style = "display:none";
+            var file    = document.querySelector('input[type=file]').files[0];
+            var reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+                imageSend.value = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</head>
+<body class="bg-light">
+<div th:replace="masterpage/headerUser :: nav"></div>
+<br />
+<br />
+<div class="container py-4">
+    <h3 class="my-4">
+        Formulario de Usuario
+    </h3>
+    <div class="container-fluid">
+        <form th:action="@{/user/updateUpdateUser}" th:object="${updateUserForm}" method="post" enctype="multipart/form-data">
+            <h3>Datos del Usuario</h3>
+            <div class="form-group">
+                <label for="name">Nombre</label>:
+                <input type="text" class="form-control" id="name" name="name" style="max-width: 350px" th:field="*{fullname}"/>
+                <li th:each="err : ${#fields.errors('fullname')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="image">Fotografía del Proyecto</label>
+                <input type="file" onchange="previewFile()" class="form-control-file">
+                <input type="text" style="display: none" id="image" name="image" th:value="${updateUserForm.getImage()}">
+                <img src="" id="imagenPreview" style="max-height: 300px; max-height: 300px; display: none" alt="Image preview...">
+                <img th:src="${updateUserForm.getImage()}" id="imagenPreview2" style="max-height: 300px; max-height: 300px; display: block">
+            </div>
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
+            <input type="submit" class="btn btn-info" name="saveModUser" value="Actualizar" />
+        </form>
+    </div>
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

@@ -5,13 +5,12 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import src.redtalent.domain.Administrator;
-import src.redtalent.domain.Application;
-import src.redtalent.domain.Team;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -36,6 +35,21 @@ public class UtilidadesService {
         List<User> result = new ArrayList<User>();
         result.add(userService.findUserByTeamsConstains(team));
         team.getApplications().stream().filter(x->x.getStatus().equals("ACCEPTED")).forEach(x->result.add(userService.findUserByApplicationsContains(x)));
+        return result;
+    }
+
+    public Set<Project> todosLosProyectosEnLosQueEstoy(User user){
+        Set<Project> result = new HashSet<Project>();
+
+        for(Team t : teamService.findAll()){
+            for(Application a : user.getApplications()){
+                if(t.getApplications().contains(a)){
+                    Project p = t.getProjects().get(0);
+                    result.add(p);
+                }
+            }
+        }
+
         return result;
     }
 

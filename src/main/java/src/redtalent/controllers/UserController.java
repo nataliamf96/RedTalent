@@ -15,6 +15,7 @@ import src.redtalent.domain.Project;
 import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
 import src.redtalent.forms.EditPasswordForm;
+import src.redtalent.forms.UpdateUserForm;
 import src.redtalent.forms.UserForm;
 import src.redtalent.services.ProjectService;
 import src.redtalent.services.TeamService;
@@ -104,11 +105,67 @@ public class UserController {
         User user = utilidadesService.userConectado(authentication.getName());
         //Team team = teamService.findByUserCreated(user);
         Set<Project> projects = user.getProjects();
+        projects.addAll(utilidadesService.todosLosProyectosEnLosQueEstoy(user));
         result = new ModelAndView("user/userData");
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",user);
         //result.addObject("team",team);
         result.addObject("projects", projects);
+        return result;
+    }
+
+    //GET--------------------------------------------------------------
+    @RequestMapping(value = "/updateUser", method = RequestMethod.GET)
+    public ModelAndView updateUser() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+        UpdateUserForm updateUserForm;
+        updateUserForm = new UpdateUserForm();
+        result = updateEditModelAndViewUser(updateUserForm);
+        result = new ModelAndView("user/updateUser");
+        result.addObject("updateUserForm",user);
+        result.addObject("userId",user.getId());
+        return result;
+    }
+
+    @RequestMapping(value = "/updateUser", method = RequestMethod.POST, params = "saveModUser")
+    public ModelAndView updateUser(@Valid UpdateUserForm updateUserForm, BindingResult binding) {
+        ModelAndView result;
+
+        if (binding.hasErrors())
+            result = updateEditModelAndViewUser(updateUserForm);
+        else
+            try {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                user.setFullname(updateUserForm.getFullname());
+                user.setImage(updateUserForm.getImage());
+                userService.saveUser(user);
+                result = new ModelAndView("redirect:/user/index");
+
+            } catch (Throwable oops) {
+                result = updateEditModelAndViewUser(updateUserForm, "ERROR AL ACTUALIZAR EL USUARIO");
+            }
+
+        return result;
+    }
+
+
+    protected ModelAndView updateEditModelAndViewUser(UpdateUserForm updateUserForm) {
+        ModelAndView result;
+        result = updateEditModelAndViewUser(updateUserForm, null);
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewUser(UpdateUserForm updateUserForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/updateUser");
+        result.addObject("updateUserForm", updateUserForm);
+        result.addObject("message", message);
+        result.addObject("auth",utilidadesService.actorConectado());
+
         return result;
     }
 

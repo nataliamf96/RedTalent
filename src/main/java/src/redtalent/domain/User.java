@@ -142,4 +142,5 @@ public class User extends DomainEntity{
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
+
 }

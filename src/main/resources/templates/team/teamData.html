@@ -50,7 +50,7 @@
                     <img alt='' class='card-img-profile' th:src="${user.getImage()}">
                     <h4 style="margin-top: -23px" class='card-title'>
                         <i th:text="${user.getFullname()}" />
-                        <small th:text="${user.getEmail()}"></small>
+                        <small th:text="${user.getAccount().getEmail()}"></small>
                     </h4>
                     <div class='card-links'>
                         <a class='fa fa-dribbble' href='#'></a>

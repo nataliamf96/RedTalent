@@ -9,10 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.*;
-import src.redtalent.repositories.AdministratorRepository;
-import src.redtalent.repositories.DirectivoRepository;
-import src.redtalent.repositories.RoleRepository;
-import src.redtalent.repositories.UserRepository;
+import src.redtalent.repositories.*;
 
 import java.util.*;
 
@@ -29,27 +26,30 @@ public class CustomUserDetailsService implements UserDetailsService {
     private AdministratorRepository administratorRepository;
     @Autowired
     private DirectivoRepository directivoRepository;
+    @Autowired
+    private AccountRepository accountRepository;
 
     public User findUserByEmail(String email) {
-        return userRepository.findByEmail(email);
+        return userRepository.findByAccount(accountRepository.findByEmail(email));
     }
 
     @Override
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
 
-        User user = userRepository.findByEmail(email);
-        Administrator admin = administratorRepository.findByEmail(email);
-        Directivo directivo = directivoRepository.findByEmail(email);
+        Account account = accountRepository.findByEmail(email);
+        User user = userRepository.findByAccount(account);
+        Administrator admin = administratorRepository.findByAccount(account);
+        Directivo directivo = directivoRepository.findByAccount(account);
 
         if(user != null) {
-            List<GrantedAuthority> authorities = getUserAuthority(user.getRoles());
-            return buildUserForAuthentication(user, authorities);
+            List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
+            return buildUserForAuthentication(user.getAccount(), authorities);
         } else if(admin != null){
-            List<GrantedAuthority> authorities = getUserAuthority(admin.getRoles());
-            return buildAdminForAuthentication(admin, authorities);
+            List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
+            return buildAdminForAuthentication(admin.getAccount(), authorities);
         }else if(directivo != null){
-            List<GrantedAuthority> authorities = getUserAuthority(directivo.getRoles());
-            return buildDirectivoForAuthentication(directivo, authorities);
+            List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
+            return buildDirectivoForAuthentication(directivo.getAccount(), authorities);
         }else{
             throw new UsernameNotFoundException("Email not found");
         }
@@ -65,16 +65,16 @@ public class CustomUserDetailsService implements UserDetailsService {
         return grantedAuthorities;
     }
 
-    private UserDetails buildUserForAuthentication(User user, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), authorities);
+    private UserDetails buildUserForAuthentication(Account account, List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(account.getEmail(), account.getPassword(), authorities);
     }
 
-    private UserDetails buildAdminForAuthentication(Administrator admin, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(admin.getEmail(), admin.getPassword(), authorities);
+    private UserDetails buildAdminForAuthentication(Account account, List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(account.getEmail(), account.getPassword(), authorities);
     }
 
-    private UserDetails buildDirectivoForAuthentication(Directivo directivo, List<GrantedAuthority> authorities) {
-        return new org.springframework.security.core.userdetails.User(directivo.getEmail(), directivo.getPassword(), authorities);
+    private UserDetails buildDirectivoForAuthentication(Account account, List<GrantedAuthority> authorities) {
+        return new org.springframework.security.core.userdetails.User(account.getEmail(), account.getPassword(), authorities);
     }
 
 }

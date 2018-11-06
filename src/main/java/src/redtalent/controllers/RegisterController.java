@@ -9,8 +9,10 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
+import src.redtalent.domain.Account;
 import src.redtalent.domain.User;
 import src.redtalent.forms.UserForm;
+import src.redtalent.repositories.AccountRepository;
 import src.redtalent.repositories.RoleRepository;
 import src.redtalent.security.Role;
 import src.redtalent.services.UserService;
@@ -37,6 +39,9 @@ public class RegisterController {
 
     @Autowired
     private UtilidadesService utilidadesService;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     public RegisterController(){
         super();
@@ -72,14 +77,17 @@ public class RegisterController {
         else
             try {
                 User u = userService.create();
-                u.setEmail(userForm.getEmail());
-                u.setFullname(userForm.getFullname());
-                u.setEnabled(true);
-                u.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
+                Account a = new Account();
+                a.setEmail(userForm.getEmail());
+                a.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
                 Role role = roleRepository.findByRole(userForm.getRole());
                 Set<Role> roles = new HashSet<Role>();
                 roles.add(role);
-                u.setRoles(roles);
+                a.setRoles(roles);
+                a.setEnabled(true);
+                Account save = accountRepository.save(a);
+                u.setAccount(save);
+                u.setFullname(userForm.getFullname());
                 u.setImage(userForm.getImage());
                 userService.saveUser(u);
 

@@ -29,7 +29,7 @@
             <img alt='' class='card-img-profile' th:src="@{/images/profile.jpg}">
             <h4 style="margin-top: -23px" class='card-title'>
                 <i th:text="${admin.getFullname()}" />
-                <small th:text="${admin.getEmail()}"></small>
+                <small th:text="${admin.getAccount().getEmail()}"></small>
             </h4>
             <div class='card-links'>
                 <a class='fa fa-dribbble' href='#'></a>

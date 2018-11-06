@@ -13,44 +13,17 @@ import java.util.Set;
 
 @Document(collection = "Directivos")
 public class Directivo {
-
-    @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
-    private String email;
-    @Size(min = 5, max = 32)
-    private String password;
     @NotBlank
     private String fullname;
-    @NotNull
-    private boolean enabled;
-    @DBRef
-    private Set<Role> roles;
+    private Account account;
 
     public Directivo(){
         super();
     }
 
-    public Directivo(String email, String password, String fullname, Boolean enabled, Set<Role> roles){
-        this.email = email;
-        this.password = password;
+    public Directivo( Account account,String fullname){
         this.fullname = fullname;
-        this.enabled = enabled;
-        this.roles = roles;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+        this.account = account;
     }
 
     public String getFullname() {
@@ -61,20 +34,11 @@ public class Directivo {
         this.fullname = fullname;
     }
 
-    public boolean isEnabled() {
-        return enabled;
+    public Account getAccount() {
+        return account;
     }
 
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
+    public void setAccount(Account account) {
+        this.account = account;
     }
-
-    public Set<Role> getRoles() {
-        return roles;
-    }
-
-    public void setRoles(Set<Role> roles) {
-        this.roles = roles;
-    }
-
 }

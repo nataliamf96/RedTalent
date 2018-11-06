@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.*;
+import src.redtalent.repositories.AccountRepository;
 import src.redtalent.repositories.UserRepository;
 
 import java.util.Collection;
@@ -18,6 +19,9 @@ public class UserService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     public UserService(){
         super();
@@ -60,7 +64,7 @@ public class UserService {
 
     public User findByEmail(String email){
         Assert.notNull("email","Email NULL");
-        User result = userRepository.findByEmail(email);
+        User result =  userRepository.findByAccount(accountRepository.findByEmail(email));
         return result;
     }
 

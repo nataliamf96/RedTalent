@@ -6,7 +6,7 @@
     <groupId>src</groupId>
     <artifactId>redtalent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
 
     <name>redtalent</name>
     <description>Application Red Talent</description>

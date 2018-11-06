@@ -6,6 +6,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.*;
+import src.redtalent.repositories.AccountRepository;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -26,6 +27,8 @@ public class UtilidadesService {
     private ProjectService projectService;
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private AccountRepository accountRepository;
 
     public UtilidadesService(){
         super();
@@ -55,12 +58,8 @@ public class UtilidadesService {
 
     public List<String> allEmails(){
         List<String> result = new ArrayList<String>();
-        List<String> a = userService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
-        List<String> b = administratorService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
-        List<String> c = directivoService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
+        List<String> a = accountRepository.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
         result.addAll(a);
-        result.addAll(b);
-        result.addAll(c);
         return result;
     }
 

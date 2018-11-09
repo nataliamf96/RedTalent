@@ -8,10 +8,7 @@ import org.springframework.stereotype.Service;
 import src.redtalent.domain.*;
 import src.redtalent.repositories.AccountRepository;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -65,6 +62,27 @@ public class UtilidadesService {
 
     public User userConectado(String email){
         User result = userService.findByEmail(email);
+        return result;
+    }
+
+    public List<User> ultimosCincoUsuariosRegistrados(){
+        Collection<User> allList = userService.findAll();
+        List<User> result = new ArrayList<User>();
+
+        try{
+            int cont = 1;
+            for(User u:allList){
+                if(cont == 6){
+                    break;
+                } else{
+                    result.add((User) allList.toArray()[allList.size()-cont]);
+                    cont++;
+                }
+            }
+        }catch (Throwable oops){
+
+        }
+
         return result;
     }
 

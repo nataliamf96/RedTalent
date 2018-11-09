@@ -66,11 +66,11 @@ public class UserController {
     public ModelAndView index() {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         result = new ModelAndView("user/index");
         result.addObject("projects",projectService.findAllByPrivadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",utilidadesService.userConectado(authentication.getName()));
+        result.addObject("ultimosCincoUsers", utilidadesService.ultimosCincoUsuariosRegistrados());
         return result;
     }
 

@@ -12,7 +12,7 @@ import java.util.*;
 
 
 @Component
-public class DbSeeder implements CommandLineRunner{
+public class DbSeeder{
 
     @Autowired
     AccountRepository accountRepository;

@@ -7,24 +7,25 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-@Document(collection = "SubjectForums")
-public class SubjectForum extends DomainEntity {
+@Document(collection = "Blogs")
+public class Blog extends DomainEntity {
 
     private String title;
     private String body;
+    private String image;
     private Date moment;
 
-    public SubjectForum(){
+    public Blog(){
         super();
-        this.tags = new ArrayList<Tag>();
         this.comments = new ArrayList<Comment>();
     }
 
-    public SubjectForum(String title, String body, Date moment, List<Tag> tags, List<Comment> comments){
+    public Blog(String title, String body, Date moment, String image, Category category, List<Comment> comments){
         this.title = title;
         this.body = body;
         this.moment = moment;
-        this.tags = tags;
+        this.image = image;
+        this.category = category;
         this.comments = comments;
     }
 
@@ -46,6 +47,14 @@ public class SubjectForum extends DomainEntity {
         this.body = body;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Date getMoment() {
         return moment;
     }
@@ -56,15 +65,15 @@ public class SubjectForum extends DomainEntity {
 
     //Relationships
 
-    private List<Tag> tags;
+    private Category category;
     private List<Comment> comments;
 
-    public List<Tag> getTags() {
-        return tags;
+    public Category getCategory() {
+        return category;
     }
 
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public List<Comment> getComments() {

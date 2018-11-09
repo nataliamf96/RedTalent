@@ -8,7 +8,7 @@ public class CommentForm {
 
     private String title;
     private String text;
-    private ObjectId subjectForumId;
+    private ObjectId blogId;
     private ObjectId commentId;
     private ObjectId userId;
 
@@ -30,12 +30,12 @@ public class CommentForm {
         this.text = text;
     }
 
-    public ObjectId getSubjectForumId() {
-        return subjectForumId;
+    public ObjectId getBlogId() {
+        return blogId;
     }
 
-    public void setSubjectForumId(ObjectId subjectForumId) {
-        this.subjectForumId = subjectForumId;
+    public void setBlogId(ObjectId blogId) {
+        this.blogId = blogId;
     }
 
     public ObjectId getUserId() {

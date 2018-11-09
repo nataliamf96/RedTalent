@@ -4,10 +4,12 @@ import org.bson.types.ObjectId;
 
 import javax.validation.constraints.NotBlank;
 
-public class SubjectForumForm {
+public class BlogForm {
 
     private String title;
     private String body;
+    private String image;
+    private ObjectId categoryId;
     private ObjectId subjectForumId;
     private ObjectId userId;
 
@@ -27,6 +29,22 @@ public class SubjectForumForm {
 
     public void setBody(String body) {
         this.body = body;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
+    public ObjectId getCategoryId() {
+        return categoryId;
+    }
+
+    public void setCategoryId(ObjectId categoryId) {
+        this.categoryId = categoryId;
     }
 
     public ObjectId getSubjectForumId() {

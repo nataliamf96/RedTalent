@@ -51,13 +51,15 @@ public class DbSeeder implements CommandLineRunner {
     @Autowired
     private DirectivoRepository directivoRepository;
     @Autowired
-    private SubjectForumRepository subjectForumRepository;
+    private BlogRepository blogRepository;
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     // Constructor -------------------------------------------------
     public DbSeeder(DirectivoRepository directivoRepository, AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
                     CommentRepository commentRepository, EvaluationRepository evaluationRepository, GradeRepository gradeRepository, PhaseRepository phaseRepository,
                     ProjectRepository projectRepository, ProjectMonitoringRepository projectMonitoringRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository,
-                    RoleRepository roleRepository, SubjectForumRepository subjectForumRepository){
+                    RoleRepository roleRepository, BlogRepository blogRepository, CategoryRepository categoryRepository){
         this.directivoRepository = directivoRepository;
         this.academicProfileRepository = academicProfileRepository;
         this.administratorRepository = administratorRepository;
@@ -73,7 +75,8 @@ public class DbSeeder implements CommandLineRunner {
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
         this.projectMonitoringRepository = projectMonitoringRepository;
-        this.subjectForumRepository = subjectForumRepository;
+        this.blogRepository = blogRepository;
+        this.categoryRepository = categoryRepository;
     }
 
     public void run(String... strings) throws Exception {
@@ -95,7 +98,8 @@ public class DbSeeder implements CommandLineRunner {
         projectRepository.deleteAll();
         userRepository.deleteAll();
         directivoRepository.deleteAll();
-        subjectForumRepository.deleteAll();
+        blogRepository.deleteAll();
+        categoryRepository.deleteAll();
 
         Role estudiante = new Role("ESTUDIANTE");
         Role profesor = new Role("PROFESOR");
@@ -150,15 +154,15 @@ public class DbSeeder implements CommandLineRunner {
         Set<Comment> comments3 = new HashSet<Comment>();
         comments3.add(comment3);
 
-        User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), comments1);
-        User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
-        User est3 = new User("user3@user.com",bCryptPasswordEncoder.encode("user3"),"Usuario 3",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
-        User pro1 = new User("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),"Profesor 1",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), comments2);
-        User pro2 = new User("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),"Profesor 2",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
-        User pro3 = new User("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),"Profesor 3",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
-        User egr1 = new User("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),"Egresado 1",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), comments3);
-        User egr2 = new User("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),"Egresado 2",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
-        User egr3 = new User("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),"Egresado 3",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<SubjectForum>(), new HashSet<Comment>());
+        User est1 = new User("user1@user.com",bCryptPasswordEncoder.encode("user1"),"Usuario 1",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), comments1);
+        User est2 = new User("user2@user.com",bCryptPasswordEncoder.encode("user2"),"Usuario 2",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), new HashSet<Comment>());
+        User est3 = new User("user3@user.com",bCryptPasswordEncoder.encode("user3"),"Usuario 3",true,roleEstudiante,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), new HashSet<Comment>());
+        User pro1 = new User("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),"Profesor 1",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), comments2);
+        User pro2 = new User("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),"Profesor 2",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), new HashSet<Comment>());
+        User pro3 = new User("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),"Profesor 3",true,roleProfesor,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), new HashSet<Comment>());
+        User egr1 = new User("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),"Egresado 1",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), comments3);
+        User egr2 = new User("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),"Egresado 2",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), new HashSet<Comment>());
+        User egr3 = new User("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),"Egresado 3",true,roleEgresado,new HashSet<Project>(),new HashSet<Team>(),new HashSet<Application>(), new HashSet<Blog>(), new HashSet<Comment>());
         User aa = userRepository.save(est1);
         User bb = userRepository.save(pro1);
         User cc = userRepository.save(egr1);
@@ -751,6 +755,19 @@ public class DbSeeder implements CommandLineRunner {
         List<Tag> tags = Arrays.asList(tag1, tag2, tag3, tag4, tag5);
         tagRepository.saveAll(tags);
 
+        //Category
+        Category category1 = new Category(
+                "Ciencias"
+        );
+
+        Category category2 = new Category(
+                "Arte"
+        );
+
+        Category category3 = new Category(
+                "Música"
+        );
+
         // Projects -----------------------------------------
 
         Project project1 = new Project(
@@ -902,47 +919,49 @@ public class DbSeeder implements CommandLineRunner {
         List<Phase> phases = Arrays.asList(phase1, phase2, phase3);
         phaseRepository.saveAll(phases);
 
+        //Blog
 
-        //SubjectForum
-
-        SubjectForum subjectForum1 = new SubjectForum(
+        Blog blog1 = new Blog(
                 "La programación es un arte",
                 "La programación es un arte, PHP es mi mejor lenguaje",
                 moment,
-                Arrays.asList(tag1),
+                "aqui va una imagen",
+                category1,
                 Arrays.asList(comment1, comment2));
 
-        SubjectForum subjectForum2 = new SubjectForum(
+        Blog blog2 = new Blog(
                 "Aprende de los demás",
                 "Siempre he creido que aprender de los demás es lo mejor",
                 moment,
-                Arrays.asList(tag2),
+                "aqui va una imagen",
+                category2,
                 Arrays.asList(comment3));
 
-        SubjectForum subjectForum3 = new SubjectForum(
+        Blog blog3 = new Blog(
                 "Los tutoriales ayudan mucho",
                 "Hay tutoriales que me han enseñado más que profesores",
                 moment,
-                Arrays.asList(tag3),
+                "aqui va una imagen",
+                category3,
                 null);
 
-        SubjectForum foruma = subjectForumRepository.save(subjectForum1);
-        SubjectForum forumb = subjectForumRepository.save(subjectForum2);
-        SubjectForum forumc = subjectForumRepository.save(subjectForum3);
+        Blog bloga = blogRepository.save(blog1);
+        Blog blogb = blogRepository.save(blog2);
+        Blog blogc = blogRepository.save(blog3);
 
-        Set<SubjectForum> fa = gg.getSubjectForums();
-        fa.add(foruma);
-        gg.setSubjectForums(fa);
+        Set<Blog> ba = gg.getBlogs();
+        ba.add(bloga);
+        gg.setBlogs(ba);
         userRepository.save(gg);
 
-        Set<SubjectForum> fb = hh.getSubjectForums();
-        fb.add(forumb);
-        hh.setSubjectForums(fb);
+        Set<Blog> fb = hh.getBlogs();
+        fb.add(blogb);
+        hh.setBlogs(fb);
         userRepository.save(hh);
 
-        Set<SubjectForum> fc = ii.getSubjectForums();
-        fc.add(forumc);
-        ii.setSubjectForums(fc);
+        Set<Blog> bc = ii.getBlogs();
+        bc.add(blogc);
+        ii.setBlogs(bc);
         userRepository.save(ii);
 
     }

@@ -61,6 +61,23 @@ public class ProjectController {
         return result;
     }
 
+    @RequestMapping(value = "/project", method = RequestMethod.GET)
+    public ModelAndView projectDataList2(@RequestParam ObjectId projectId) {
+        ModelAndView result;
+        result = new ModelAndView("project/project");
+
+        Project project = projectService.findOne(projectId.toString());
+        Team team = teamService.teamByProjectId(project);
+
+        result.addObject("user",userService.findUserByProjectsContains(project));
+        result.addObject("project",project);
+        result.addObject("team",team);
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("comments",project.getComments());
+
+        return result;
+    }
+
     @RequestMapping(value = "/projectData", method = RequestMethod.GET)
     public ModelAndView projectDataList(@RequestParam ObjectId projectId) {
         ModelAndView result;
@@ -69,6 +86,12 @@ public class ProjectController {
         Project project = projectService.findOne(projectId.toString());
         Team team = teamService.teamByProjectId(project);
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+        Boolean yaEresDelEquipo = utilidadesService.estaEnElEquipo(user,team);
+
+        result.addObject("tieneSolicitudEnviada",utilidadesService.tieneSolicitudEnviada(user,team));
+        result.addObject("yaEresDelEquipo",yaEresDelEquipo);
         result.addObject("user",userService.findUserByProjectsContains(project));
         result.addObject("project",project);
         result.addObject("team",team);
@@ -127,9 +150,7 @@ public class ProjectController {
 
         if (binding.hasErrors())
             result = updateEditModelAndViewProject(projectForm);
-        else if(projectForm.getTerms() == false){
-            result = updateEditModelAndViewProject(projectForm,"Acepte los Términos");
-        } else
+        else
             try {
                 Project project = projectService.findOne(projectId);
                 project.setComplexity(projectForm.getComplexity());
@@ -137,8 +158,6 @@ public class ProjectController {
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
                 project.setMaxParticipants(projectForm.getMaxParticipants());
-                project.setFinishDate(projectForm.getFinishDate());
-                project.setStartDate(projectForm.getStartDate());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
@@ -170,9 +189,7 @@ public class ProjectController {
 
         if (binding.hasErrors())
             result = createEditModelAndViewProject(projectForm);
-        else if(projectForm.getTerms() == false){
-            result = createEditModelAndViewProject(projectForm,"Acepte los Términos");
-        } else
+        else
             try {
                 Project project = projectService.create();
                 project.setComplexity(projectForm.getComplexity());
@@ -180,8 +197,6 @@ public class ProjectController {
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
                 project.setMaxParticipants(projectForm.getMaxParticipants());
-                project.setFinishDate(projectForm.getFinishDate());
-                project.setStartDate(projectForm.getStartDate());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());

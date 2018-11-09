@@ -29,7 +29,7 @@
             <img alt='' class='card-img-profile' th:src="@{/images/profile.jpg}">
             <h4 style="margin-top: -23px" class='card-title'>
                 <i th:text="${admin.getFullname()}" />
-                <small th:text="${admin.getEmail()}"></small>
+                <small th:text="${admin.getAccount().getEmail()}"></small>
             </h4>
             <div class='card-links'>
                 <a class='fa fa-dribbble' href='#'></a>
@@ -41,10 +41,10 @@
     <div class="row">
         <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
             <div class="card h-100">
-                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <a th:href="@{/project/project(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                 <div class="card-body">
                     <h4 class="card-title">
-                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                        <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                     </h4>
                     <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
                     <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>

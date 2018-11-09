@@ -15,10 +15,7 @@ public class ProjectForm {
     private String requiredProfiles;
     private Integer maxParticipants;
     private String complexity;
-    private Date startDate;
-    private Date finishDate;
     private String attachedFiles;
-    private Boolean terms;
     private Boolean privado;
 
     public ProjectForm(){
@@ -34,15 +31,6 @@ public class ProjectForm {
 
     public void setId(ObjectId id) {
         this.id = id;
-    }
-
-    @NotNull
-    public Boolean getTerms() {
-        return terms;
-    }
-
-    public void setTerms(Boolean terms) {
-        this.terms = terms;
     }
 
    @NotBlank
@@ -99,28 +87,6 @@ public class ProjectForm {
         this.maxParticipants = maxParticipants;
     }
 
-    @NotNull
-    @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    @NotNull
-    @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-    public Date getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
-    }
-
     public String getAttachedFiles() {
         return attachedFiles;
     }
@@ -146,10 +112,7 @@ public class ProjectForm {
                 ", requiredProfiles='" + requiredProfiles + '\'' +
                 ", maxParticipants=" + maxParticipants +
                 ", complexity='" + complexity + '\'' +
-                ", startDate=" + startDate +
-                ", finishDate=" + finishDate +
                 ", attachedFiles='" + attachedFiles + '\'' +
-                ", terms=" + terms +
                 ", privado=" + privado +
                 '}';
     }

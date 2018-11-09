@@ -5,14 +5,13 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import src.redtalent.domain.Administrator;
-import src.redtalent.domain.Team;
-import src.redtalent.domain.User;
-import src.redtalent.repositories.AdministratorRepository;
-import src.redtalent.repositories.UserRepository;
+import src.redtalent.domain.*;
+import src.redtalent.repositories.AccountRepository;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Service
@@ -28,6 +27,8 @@ public class UtilidadesService {
     private ProjectService projectService;
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private AccountRepository accountRepository;
 
     public UtilidadesService(){
         super();
@@ -40,19 +41,59 @@ public class UtilidadesService {
         return result;
     }
 
+    public Set<Project> todosLosProyectosEnLosQueEstoy(User user){
+        Set<Project> result = new HashSet<Project>();
+
+        for(Team t : teamService.findAll()){
+            for(Application a : user.getApplications()){
+                if(t.getApplications().contains(a)){
+                    Project p = t.getProjects().get(0);
+                    result.add(p);
+                }
+            }
+        }
+
+        return result;
+    }
+
     public List<String> allEmails(){
         List<String> result = new ArrayList<String>();
-        List<String> a = userService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
-        List<String> b = administratorService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
-        List<String> c = directivoService.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
+        List<String> a = accountRepository.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());
         result.addAll(a);
-        result.addAll(b);
-        result.addAll(c);
         return result;
     }
 
     public User userConectado(String email){
         User result = userService.findByEmail(email);
+        return result;
+    }
+
+    public Boolean estaEnElEquipo(User user, Team team){
+        Boolean result = false;
+
+        if(user.getTeams().contains(team)){
+            result = true;
+        }else{
+            for(Application application:user.getApplications()){
+                if(team.getApplications().contains(application)){
+                    if(application.getStatus().equals("ACCEPTED")){
+                        result = true;
+                        break;
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    public Application tieneSolicitudEnviada(User user, Team team){
+        Application result = null;
+            for(Application application:user.getApplications()){
+                if(team.getApplications().contains(application)){
+                        result = application;
+                        break;
+                }
+            }
         return result;
     }
 
@@ -79,5 +120,4 @@ public class UtilidadesService {
 
         return res;
     }
-
 }

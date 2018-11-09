@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Administrator;
+import src.redtalent.repositories.AccountRepository;
 import src.redtalent.repositories.AdministratorRepository;
 
 import java.util.Collection;
@@ -16,6 +17,9 @@ public class AdministratorService {
 
     @Autowired
     private AdministratorRepository administratorRepository;
+
+    @Autowired
+    private AccountRepository accountRepository;
 
     public AdministratorService(){
         super();
@@ -46,7 +50,7 @@ public class AdministratorService {
 
     public Administrator findByEmail(String email){
         Assert.notNull("email","Email NULL");
-        Administrator result = administratorRepository.findByEmail(email);
+        Administrator result = administratorRepository.findByAccount(accountRepository.findByEmail(email));
         return result;
     }
 

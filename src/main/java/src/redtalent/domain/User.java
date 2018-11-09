@@ -18,10 +18,6 @@ public class User extends DomainEntity{
 
     //Attributes -----------------------------------------------
 
-    @Indexed(unique = true, direction = IndexDirection.DESCENDING, dropDups = true)
-    private String email;
-    @Size(min = 5, max = 32)
-    private String password;
     @NotBlank
     private String fullname;
     @NotNull
@@ -33,15 +29,15 @@ public class User extends DomainEntity{
     private Set<Application> applications;
     private Set<Blog> blogs;
     private Set<Comment> comments;
+    private String image;
+    private Account account;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(String email, String password, String fullname, Boolean enabled, Set<Role> roles, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Comment> comments){
-        this.email = email;
-        this.password = password;
+    public User(Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Comment> comments, String image){
         this.fullname = fullname;
         this.enabled = enabled;
         this.roles = roles;
@@ -50,6 +46,8 @@ public class User extends DomainEntity{
         this.applications = applications;
         this.blogs = blogs;
         this.comments = comments;
+        this.image = image;
+        this.account = account;
     }
 
     public Set<Project> getProjects() {
@@ -60,28 +58,20 @@ public class User extends DomainEntity{
         this.projects = projects;
     }
 
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
+    }
+
     public Set<Team> getTeams() {
         return teams;
     }
 
     public void setTeams(Set<Team> teams) {
         this.teams = teams;
-    }
-
-    public String getEmail() {
-        return email;
-    }
-
-    public void setEmail(String email) {
-        this.email = email;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
     }
 
     public String getFullname() {
@@ -131,4 +121,13 @@ public class User extends DomainEntity{
     public void setComments(Set<Comment> comments) {
         this.comments = comments;
     }
+
+    public Account getAccount() {
+        return account;
+    }
+
+    public void setAccount(Account account) {
+        this.account = account;
+    }
+
 }

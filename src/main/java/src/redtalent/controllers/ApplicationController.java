@@ -172,10 +172,55 @@ public class ApplicationController{
 
         //Usuario creador Application
         User userCrea = userService.findUserByApplicationsContains(a);
-        List<Application> appUserCrea = new ArrayList<Application>();
+        Set<Application> appUserCrea = new HashSet<Application>();
         appUserCrea.addAll(userCrea.getApplications());
         appUserCrea.remove(a);
         appUserCrea.add(savee);
+        userCrea.setApplications(appUserCrea);
+        userService.saveUser(userCrea);
+
+        Project p = projectService.findOne(projectId.toString());
+        Team t = teamService.teamByProjectId(p);
+        List<Application> appUser = new ArrayList<Application>();
+        appUser.addAll(t.getApplications());
+        appUser.remove(a);
+        appUser.add(savee);
+        t.setApplications(appUser);
+        Team saveTeam = teamService.save(t);
+        Set<Team> teams = new HashSet<Team>();
+        teams.addAll(user.getTeams());
+        teams.remove(t);
+        teams.add(saveTeam);
+        user.setTeams(teams);
+        userService.saveUser(user);
+
+        result = new ModelAndView("redirect:/user/index");
+
+        result.addObject("auth",utilidadesService.actorConectado());
+
+        return result;
+    }
+
+    @RequestMapping(value = "/noaplicar", method = RequestMethod.GET)
+    public ModelAndView noaplicar(@RequestParam ObjectId applicationId, @RequestParam ObjectId projectId) {
+        ModelAndView result;
+        result = new ModelAndView("application/noaplicar");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        //Usuario creador Team
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        Application a = applicationService.findOne(applicationId.toString());
+        a.setStatus("DENIED");
+        Application savee = applicationService.save(a);
+
+        //Usuario creador Application
+        User userCrea = userService.findUserByApplicationsContains(a);
+        Set<Application> appUserCrea = new HashSet<Application>();
+        appUserCrea.addAll(userCrea.getApplications());
+        appUserCrea.remove(a);
+        appUserCrea.add(savee);
+        userCrea.setApplications(appUserCrea);
         userService.saveUser(userCrea);
 
         Project p = projectService.findOne(projectId.toString());

@@ -19,10 +19,9 @@ public class Project extends DomainEntity{
     private String requiredProfiles;
     private Integer maxParticipants;
     private String complexity;
-    private Date startDate;
-    private Date finishDate;
     private String attachedFiles;
     private Boolean privado;
+    private Boolean estado;
 
     //Constructors -----------------------------------------------
 
@@ -34,22 +33,21 @@ public class Project extends DomainEntity{
         this.projectMonitorings = new ArrayList<>();
     }
 
-    public Project(String name, String image, String description, String requiredProfiles, Integer maxParticipants, String complexity, Date startDate, Date finishDate, String attachedFiles,
-                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado){
+    public Project(String name, String image, String description, String requiredProfiles, Integer maxParticipants, String complexity, String attachedFiles,
+                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado){
         this.name = name;
         this.image = image;
         this.description = description;
         this.requiredProfiles = requiredProfiles;
         this.maxParticipants = maxParticipants;
         this.complexity = complexity;
-        this.startDate = startDate;
-        this.finishDate = finishDate;
         this.attachedFiles = attachedFiles;
         this.tags = tags;
         this.comments = comments;
         this.alerts = alerts;
         this.projectMonitorings = projectMonitorings;
         this.privado = privado;
+        this.estado = estado;
     }
 
     //Getters and setters -----------------------------------------------
@@ -116,28 +114,6 @@ public class Project extends DomainEntity{
         this.maxParticipants = maxParticipants;
     }
 
-    @NotNull
-    @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-    public Date getStartDate() {
-        return startDate;
-    }
-
-    public void setStartDate(Date startDate) {
-        this.startDate = startDate;
-    }
-
-    @NotNull
-    @Future
-    @DateTimeFormat(pattern = "dd/MM/yyyy HH:mm")
-    public Date getFinishDate() {
-        return finishDate;
-    }
-
-    public void setFinishDate(Date finishDate) {
-        this.finishDate = finishDate;
-    }
-
     public String getAttachedFiles() {
         return attachedFiles;
     }
@@ -185,4 +161,11 @@ public class Project extends DomainEntity{
         this.projectMonitorings = projectMonitorings;
     }
 
+    public Boolean getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Boolean estado) {
+        this.estado = estado;
+    }
 }

@@ -25,6 +25,9 @@
                 <input type="text" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
                 <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
             </div>
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
             <input type="submit" name="save" value="Crear" />
         </form>
     </div>

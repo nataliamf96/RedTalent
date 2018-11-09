@@ -50,14 +50,6 @@
                 <li th:each="err : ${#fields.errors('requiredProfiles')}" th:text="${err}" />
             </div>
             <div class="form-group">
-                <label for="complexity">Complejidad</label>:
-                <select style="max-width: 350px" id="complexity" name="complexity" class="form-control">
-                    <option value="HIGH">DIFICIL</option>
-                    <option value="LOW">FACIL</option>
-                    <option value="MEDIUM">MEDIO</option>
-                </select>
-            </div>
-            <div class="form-group">
                 <label for="privado">Visibilidad</label>:
                 <select style="max-width: 350px" id="privado" name="privado" class="form-control">
                     <option value="true">Privado</option>
@@ -71,17 +63,10 @@
                 <img src="" id="imagenPreview" style="max-height: 300px; max-height: 300px; display: none" alt="Image preview...">
             </div>
             <div class="form-group">
-                <label for="requiredProfiles">Máximo de Participantes</label>:
-                <input type="text" class="form-control" id="maxParticipants" name="maxParticipants" style="max-width: 350px" th:field="*{maxParticipants}"/>
-                <li th:each="err : ${#fields.errors('maxParticipants')}" th:text="${err}" />
-            </div>
-            <div class="form-group">
                 <label for="attachedFiles">Archivos</label>:
                 <input type="text" class="form-control" id="attachedFiles" name="attachedFiles" style="max-width: 350px" th:field="*{attachedFiles}"/>
                 <li th:each="err : ${#fields.errors('attachedFiles')}" th:text="${err}" />
             </div>
-            <label>Confirmar Términos del Servicio:</label>
-            <input type="checkbox" name="terms" th:checked="false" />
             <b style="color: red" th:text="${message}" />
             <br />
             <br />

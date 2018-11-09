@@ -2,6 +2,10 @@ package src.redtalent.services;
 
 import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.*;
@@ -63,6 +67,26 @@ public class ProjectService {
 
     public Set<Project> findAllByPrivadoFalse(){
         return projectRepository.findAllByPrivadoFalse();
+    }
+
+    public Page<Project> findPaginated(Pageable pageable) {
+        int pageSize = pageable.getPageSize();
+        int currentPage = pageable.getPageNumber();
+        int startItem = currentPage * pageSize;
+        List<Project> list;
+        List<Project> projects = projectRepository.findAll();
+
+        if (projects.size() < startItem) {
+            list = Collections.emptyList();
+        } else {
+            int toIndex = Math.min(startItem + pageSize, projects.size());
+            list = projects.subList(startItem, toIndex);
+        }
+
+        Page<Project> bookPage
+                = new PageImpl<Project>(list, PageRequest.of(currentPage, pageSize), projects.size());
+
+        return bookPage;
     }
 
 }

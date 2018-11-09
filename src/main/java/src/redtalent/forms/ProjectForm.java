@@ -13,8 +13,6 @@ public class ProjectForm {
     private String image;
     private String description;
     private String requiredProfiles;
-    private Integer maxParticipants;
-    private String complexity;
     private String attachedFiles;
     private Boolean privado;
 
@@ -52,16 +50,6 @@ public class ProjectForm {
     }
 
     @NotBlank
-    @Pattern(regexp = "^HIGH|LOW|MEDIUM$")
-    public String getComplexity() {
-        return complexity;
-    }
-
-    public void setComplexity(String complexity) {
-        this.complexity = complexity;
-    }
-
-    @NotBlank
     public String getDescription() {
         return description;
     }
@@ -77,14 +65,6 @@ public class ProjectForm {
 
     public void setRequiredProfiles(String requiredProfiles) {
         this.requiredProfiles = requiredProfiles;
-    }
-
-    public Integer getMaxParticipants() {
-        return maxParticipants;
-    }
-
-    public void setMaxParticipants(Integer maxParticipants) {
-        this.maxParticipants = maxParticipants;
     }
 
     public String getAttachedFiles() {
@@ -110,8 +90,6 @@ public class ProjectForm {
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
                 ", requiredProfiles='" + requiredProfiles + '\'' +
-                ", maxParticipants=" + maxParticipants +
-                ", complexity='" + complexity + '\'' +
                 ", attachedFiles='" + attachedFiles + '\'' +
                 ", privado=" + privado +
                 '}';

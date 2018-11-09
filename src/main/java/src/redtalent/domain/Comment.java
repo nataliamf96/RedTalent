@@ -55,4 +55,5 @@ public class Comment extends DomainEntity {
     public void setMoment(Date moment) {
         this.moment = moment;
     }
+
 }

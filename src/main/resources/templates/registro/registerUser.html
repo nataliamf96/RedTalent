@@ -8,6 +8,8 @@
         function previewFile() {
             var preview = document.getElementById("imagenPreview");
             var imageSend = document.getElementById("image");
+            alert(imageSend.size);
+            var tam = imageSend.size;
             document.getElementById("imagenPreview").style = "display:block; max-width: 200px";
             var file    = document.querySelector('input[type=file]').files[0];
             var reader  = new FileReader();

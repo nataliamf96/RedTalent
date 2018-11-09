@@ -153,11 +153,9 @@ public class ProjectController {
         else
             try {
                 Project project = projectService.findOne(projectId);
-                project.setComplexity(projectForm.getComplexity());
                 project.setDescription(projectForm.getDescription());
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
-                project.setMaxParticipants(projectForm.getMaxParticipants());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
@@ -192,11 +190,9 @@ public class ProjectController {
         else
             try {
                 Project project = projectService.create();
-                project.setComplexity(projectForm.getComplexity());
                 project.setDescription(projectForm.getDescription());
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
-                project.setMaxParticipants(projectForm.getMaxParticipants());
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());

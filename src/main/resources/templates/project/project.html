@@ -48,14 +48,6 @@
     <div class="row">
         <div class="col-lg-6 col-sm-6 portfolio-item">
             <p>
-                <div class="row">
-                    <div class="col-lg-4 col-sm-4 portfolio-item">
-                        <h5>Complejidad</h5>
-                        <span th:text="${project.getComplexity()}"></span>
-                    </div>
-                </div>
-            </p>
-            <p>
                 <h5>Descripción</h5>
                 <span th:text="${project.getDescription()}"></span>
             </p>
@@ -73,7 +65,7 @@
             <h2>EN ESTOS MOMENTOS NO EXISTE EQUIPO ASOCIADO AL PROYECTO</h2>
             <h4>Puedes ponerte en contacto con:</h4>
             <b>Nombre: </b><span th:text="${user.getFullname()}" />
-            <b>Email: </b><span th:text="${user.getEmail()}" />
+            <b>Email: </b><span th:text="${user.getAccount().getEmail()}" />
         </div>
     </div>
     <div th:if="${team != null}" class="row">

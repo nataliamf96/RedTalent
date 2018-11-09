@@ -1,6 +1,8 @@
 package src.redtalent.controllers;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -25,7 +27,11 @@ import src.redtalent.services.UserService;
 import src.redtalent.services.UtilidadesService;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 @Controller
 @RequestMapping("/user")
@@ -49,6 +55,9 @@ public class UserController {
     @Autowired
     private AccountRepository accountRepository;
 
+    private static int currentPage = 1;
+    private static int pageSize = 5;
+
     public UserController(){
         super();
     }
@@ -56,7 +65,6 @@ public class UserController {
     @RequestMapping(value = "/index")
     public ModelAndView index() {
         ModelAndView result;
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         result = new ModelAndView("user/index");

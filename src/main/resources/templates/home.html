@@ -2,6 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Bienvenido/a</title>
+    <link rel="icon" href="images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
 </head>
@@ -31,7 +32,8 @@
                     <h4 class="card-title">
                         <a th:href="@{project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                     </h4>
-                    <p class="card-text" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
                 </div>
             </div>
         </div>

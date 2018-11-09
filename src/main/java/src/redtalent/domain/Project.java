@@ -17,8 +17,6 @@ public class Project extends DomainEntity{
     private String image;
     private String description;
     private String requiredProfiles;
-    private Integer maxParticipants;
-    private String complexity;
     private String attachedFiles;
     private Boolean privado;
     private Boolean estado;
@@ -33,14 +31,12 @@ public class Project extends DomainEntity{
         this.projectMonitorings = new ArrayList<>();
     }
 
-    public Project(String name, String image, String description, String requiredProfiles, Integer maxParticipants, String complexity, String attachedFiles,
+    public Project(String name, String image, String description, String requiredProfiles, String attachedFiles,
                    List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado){
         this.name = name;
         this.image = image;
         this.description = description;
         this.requiredProfiles = requiredProfiles;
-        this.maxParticipants = maxParticipants;
-        this.complexity = complexity;
         this.attachedFiles = attachedFiles;
         this.tags = tags;
         this.comments = comments;
@@ -78,16 +74,6 @@ public class Project extends DomainEntity{
     }
 
     @NotBlank
-    @Pattern(regexp = "^HIGH|LOW|MEDIUM$")
-    public String getComplexity() {
-        return complexity;
-    }
-
-    public void setComplexity(String complexity) {
-        this.complexity = complexity;
-    }
-
-    @NotBlank
     public String getDescription() {
         return description;
     }
@@ -103,15 +89,6 @@ public class Project extends DomainEntity{
 
     public void setRequiredProfiles(String requiredProfiles) {
         this.requiredProfiles = requiredProfiles;
-    }
-
-    @Size(min = 1)
-    public Integer getMaxParticipants() {
-        return maxParticipants;
-    }
-
-    public void setMaxParticipants(Integer maxParticipants) {
-        this.maxParticipants = maxParticipants;
     }
 
     public String getAttachedFiles() {

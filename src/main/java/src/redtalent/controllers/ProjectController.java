@@ -109,11 +109,15 @@ public class ProjectController {
         Project project = projectService.findOne(projectId.toString());
         Team team = teamService.teamByProjectId(project);
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userConnect = utilidadesService.userConectado(authentication.getName());
+
         result.addObject("user",userService.findUserByProjectsContains(project));
         result.addObject("project",project);
         result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("comments",project.getComments());
+        result.addObject("userConnect",userConnect);
 
         return result;
     }

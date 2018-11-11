@@ -9,9 +9,7 @@ import src.redtalent.domain.Reply;
 import src.redtalent.repositories.CommentRepository;
 import src.redtalent.repositories.ReplyRepository;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
+import java.util.*;
 
 @Transactional
 @Service
@@ -40,8 +38,8 @@ public class ReplyService {
         return result.get();
     }
 
-    public List<Reply> findAll() {
-        List<Reply> result = replyRepository.findAll();
+    public Collection<Reply> findAll() {
+        Collection<Reply> result = replyRepository.findAll();
         Assert.notNull(result, "Reply Service : list null");
         return result;
     }

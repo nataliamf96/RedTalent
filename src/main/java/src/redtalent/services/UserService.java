@@ -108,4 +108,22 @@ public class UserService {
         return result;
     }
 
+    public User findUserByBlogsContains(Blog blog){
+        Assert.notNull(blog, "Blog null");
+        User result = userRepository.findUserByBlogsContains(blog);
+        return result;
+    }
+
+    public User findUserByRepliesContaining(Reply reply){
+        Assert.notNull(reply, "Reply null");
+        User result = userRepository.findUserByRepliesContaining(reply);
+        return result;
+    }
+
+    public User findUserByCommentsContains(Comment comment){
+        Assert.notNull(comment, "Comment null");
+        User result = userRepository.findUserByCommentsContains(comment);
+        return result;
+    }
+
 }

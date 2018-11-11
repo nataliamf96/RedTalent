@@ -20,6 +20,7 @@ import src.redtalent.services.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -147,7 +148,7 @@ public class BlogController {
     // Crear lista de las respuestas de los comentarios
 
     @RequestMapping(value = "/listReply", method = RequestMethod.GET)
-    public ModelAndView listReplies(@RequestParam ObjectId commentId){
+    public ModelAndView listReplies(@RequestParam ObjectId blogId, @RequestParam ObjectId commentId){
 
         ModelAndView result;
         Collection<Reply> replies;
@@ -156,9 +157,10 @@ public class BlogController {
         replies = comment.getReplies();
 
         result = new ModelAndView("blog/listReply");
-        result.addObject("requestURI", "blog/listReply?commentId="+commentId);
+        result.addObject("requestURI", "blog/listReply?blogId=" + blogId + "&commentId=" +commentId);
         result.addObject("replies", replies);
         result.addObject("commentId", commentId);
+        result.addObject("blogId", blogId);
 
         return result;
     }
@@ -231,7 +233,7 @@ public class BlogController {
     // Crear respuestas para los comentarios del foro
 
     @RequestMapping(value = "/createReply", method = RequestMethod.GET)
-    public ModelAndView createReply(@RequestParam ObjectId commentId, final RedirectAttributes redirectAttrs) {
+    public ModelAndView createReply(@RequestParam ObjectId blogId, @RequestParam ObjectId commentId, final RedirectAttributes redirectAttrs) {
         ModelAndView result;
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -239,12 +241,14 @@ public class BlogController {
 
         ReplyForm replyForm = new ReplyForm();
         replyForm.setCommentId(commentId);
+        replyForm.setBlogId(blogId);
 
         try {
             result = new ModelAndView("blog/createReply");
             result.addObject("replyForm", replyForm);
-            result.addObject("requestURI", "./blog/createReply?commentId=" + commentId);
+            result.addObject("requestURI", "./blog/createReply?blogId=" + blogId + "&commentId=" + commentId);
             result.addObject("commentId", commentId);
+            result.addObject("blogId", blogId);
         } catch (Throwable oops) {
             result = new ModelAndView("redirect:/blog/list");
         }
@@ -256,6 +260,7 @@ public class BlogController {
 
         ModelAndView result;
         replyForm.setCommentId(replyForm.getCommentId());
+        replyForm.setBlogId(replyForm.getBlogId());
 
         if (binding.hasErrors()) {
             result = createReplyModelAndView(replyForm);
@@ -276,12 +281,12 @@ public class BlogController {
                 userService.saveUser(user);
 
                 Comment comment = commentService.findOne(replyForm.getCommentId().toString());
-                List<Reply> replies1 = comment.getReplies();
+                Set<Reply> replies1 = comment.getReplies();
                 replies1.add(saved);
                 comment.setReplies(replies1);
                 commentService.save(comment);
 
-                Blog blog = blogService.findBlogByCommentsContaining(comment);
+                Blog blog = blogService.findOne(replyForm.getBlogId().toString());
                 List<Comment> comments = blog.getComments();
                 for(Comment c: comments){
                     c.setReplies(replies1);
@@ -289,7 +294,7 @@ public class BlogController {
                 blog.setComments(comments);
                 blogService.save(blog);
 
-                result = new ModelAndView("redirect:/blog/listReply?commentId=" +replyForm.getCommentId());
+                result = new ModelAndView("redirect:/blog/listReply?blogId=" + replyForm.getBlogId() + "&commentId=" +replyForm.getCommentId());
 
             } catch (Throwable oops) {
                 result = createReplyModelAndView(replyForm, "No se puede crear correctamente las respuestas del comentario");
@@ -298,6 +303,107 @@ public class BlogController {
         }
         return result;
     }
+
+    //Eliminar un tema
+
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public ModelAndView delete(@RequestParam ObjectId blogId) {
+        ModelAndView result;
+
+        Assert.notNull(blogService.findOne(blogId.toString()), "La id no puede ser nula");
+        Blog res = blogService.findOne(blogId.toString());
+
+        User user = userService.findUserByBlogsContains(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        if(user.equals(userCreated)) {
+            for (Comment c : res.getComments()) {
+                commentService.remove(c);
+                for (Reply r : c.getReplies()) {
+                    replyService.remove(r);
+                }
+            }
+
+            blogService.remove(res);
+        }
+
+        result = new ModelAndView("redirect:/blog/list");
+        return result;
+    }
+
+
+    //Eliminar un comentario
+
+    @RequestMapping(value = "/deleteComment", method = RequestMethod.GET)
+    public ModelAndView deleteComment(@RequestParam ObjectId commentId) {
+        ModelAndView result;
+        Assert.notNull(commentService.findOne(commentId.toString()), "La id no puede ser nula");
+
+        Comment res = commentService.findOne(commentId.toString());
+        User user = userService.findUserByCommentsContains(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+        Blog b = blogService.findBlogByCommentsContaining(res);
+
+        if(user.equals(userCreated)) {
+
+            if(res.getReplies() != null) {
+                for (Reply r : res.getReplies()) {
+                    replyService.remove(r);
+                }
+            }
+
+            Set<Comment> comments = user.getComments();
+            comments.remove(res);
+            user.setComments(comments);
+            userService.saveUser(user);
+
+            List<Comment> comments1 = b.getComments();
+            comments1.remove(res);
+            b.setComments(comments1);
+            blogService.save(b);
+
+            commentService.remove(res);
+        }
+
+        result = new ModelAndView("redirect:/blog/listComment?blogId=" +b.getId());
+        return result;
+    }
+
+    //Eliminar una respuesta
+
+    @RequestMapping(value = "/deleteReply", method = RequestMethod.GET)
+    public ModelAndView deleteReply(@RequestParam ObjectId replyId) {
+        ModelAndView result;
+        Assert.notNull(replyService.findOne(replyId.toString()), "La id no puede ser nula");
+
+        Reply res = replyService.findOne(replyId.toString());
+        User user = userService.findUserByRepliesContaining(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+        Comment c = commentService.findCommentByRepliesContaining(res);
+        Blog b = blogService.findBlogByCommentsContaining(c);
+
+        if(user.equals(userCreated)) {
+
+            Set<Reply> replies = user.getReplies();
+            replies.remove(res);
+            user.setReplies(replies);
+            userService.saveUser(user);
+
+            Set<Reply> replies1 = c.getReplies();
+            replies1.remove(res);
+            c.setReplies(replies1);
+            commentService.save(c);
+
+            replyService.remove(res);
+        }
+
+        result = new ModelAndView("redirect:/blog/listReply?blogId=" +b.getId() + "&commentId=" + c.getId());
+        return result;
+    }
+
 
     // Model and View ---------------
 
@@ -354,6 +460,7 @@ public class BlogController {
 
         result = new ModelAndView("blog/createReply");
         result.addObject("replyForm", replyForm);
+        result.addObject("blogId", replyForm.getBlogId());
         result.addObject("commentId", replyForm.getCommentId());
         result.addObject("userCreated", userCreated);
         result.addObject("message", message);

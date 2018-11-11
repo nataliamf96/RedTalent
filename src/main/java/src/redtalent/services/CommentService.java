@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Comment;
+import src.redtalent.domain.Reply;
 import src.redtalent.repositories.CommentRepository;
 
 import java.util.Date;
@@ -53,5 +54,11 @@ public class CommentService {
     public void remove(Comment comment) {
         Assert.notNull(comment, "Comment Service : Objeto null");
         commentRepository.delete(comment);
+    }
+
+    public Comment findCommentByRepliesContaining(Reply reply){
+        Assert.notNull(reply, "Reply Service: Objeto null");
+        Comment res = commentRepository.findCommentByRepliesContaining(reply);
+        return res;
     }
 }

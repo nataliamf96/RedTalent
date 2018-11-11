@@ -14,7 +14,7 @@
         Crea un nuevo comentario
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/blog/createReply(commentId=${commentId})}" th:object="${replyForm}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/blog/createReply(blogId=${blogId}, commentId=${commentId})}" th:object="${replyForm}" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="title">Título</label>:
                 <input type="text" class="form-control" id="title" name="title" style="max-width: 350px" th:field="*{title}"/>

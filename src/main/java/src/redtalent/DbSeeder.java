@@ -153,23 +153,32 @@ public class DbSeeder implements CommandLineRunner{
 
         // Comments -----------------------------------------
 
+        Set<Reply> replies1 = new HashSet<Reply>();
+        replies1.add(reply1);
+
+        Set<Reply> replies2 = new HashSet<Reply>();
+        replies2.add(reply2);
+
+        Set<Reply> replies3 = new HashSet<Reply>();
+        replies3.add(reply3);
+
         Comment comment1 = new Comment(
                 "Buena idea",
                 "Opino lo mismo, el proyecto está muy currado",
                 moment,
-                Arrays.asList(reply1));
+                replies1);
 
         Comment comment2 = new Comment(
                 "¡Me encanta!",
                 "Este proyecto es increíble",
                 moment,
-                Arrays.asList(reply2));
+                replies2);
 
         Comment comment3 = new Comment(
                 "¡Increíble!",
                 "Es muy buena idea, me parece increíble",
                 moment,
-                Arrays.asList(reply3));
+                replies3);
 
         List<Comment> comments = Arrays.asList(comment1, comment2, comment3);
         commentRepository.saveAll(comments);
@@ -184,15 +193,6 @@ public class DbSeeder implements CommandLineRunner{
 
         Set<Comment> comments3 = new HashSet<Comment>();
         comments3.add(comment3);
-
-        Set<Reply> replies1 = new HashSet<Reply>();
-        replies1.add(reply1);
-
-        Set<Reply> replies2 = new HashSet<Reply>();
-        replies2.add(reply2);
-
-        Set<Reply> replies3 = new HashSet<Reply>();
-        replies3.add(reply3);
 
         Account ae1 = new Account("user1@user.com",bCryptPasswordEncoder.encode("user1"),true,roleEstudiante);
         Account sae1 = accountRepository.save(ae1);
@@ -1007,7 +1007,7 @@ public class DbSeeder implements CommandLineRunner{
                 moment,
                 "aqui va una imagen",
                 category3,
-                null);
+                new ArrayList<Comment>());
 
         Blog bloga = blogRepository.save(blog1);
         Blog blogb = blogRepository.save(blog2);

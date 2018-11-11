@@ -208,7 +208,6 @@ public class BlogController {
     // Crear respuestas para los comentarios del foro
 
 
-
     // Model and View ---------------
 
     protected ModelAndView createModelAndView(BlogForm blogForm) {

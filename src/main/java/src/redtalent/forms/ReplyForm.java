@@ -4,13 +4,14 @@ import org.bson.types.ObjectId;
 
 import javax.validation.constraints.NotBlank;
 
-public class CommentForm {
+public class ReplyForm {
 
     private String title;
     private String text;
     private ObjectId blogId;
     private ObjectId commentId;
     private ObjectId userId;
+    private ObjectId replyId;
 
     @NotBlank
     public String getTitle() {
@@ -52,5 +53,13 @@ public class CommentForm {
 
     public void setCommentId(ObjectId commentId) {
         this.commentId = commentId;
+    }
+
+    public ObjectId getReplyId() {
+        return replyId;
+    }
+
+    public void setReplyId(ObjectId replyId) {
+        this.replyId = replyId;
     }
 }

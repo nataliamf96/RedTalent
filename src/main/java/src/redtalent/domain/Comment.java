@@ -5,7 +5,9 @@ import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 @Document(collection = "Comments")
 public class Comment extends DomainEntity {
@@ -18,12 +20,14 @@ public class Comment extends DomainEntity {
     // Constructors ---------------------------------------------------
     public Comment(){
         super();
+        this.replies = new ArrayList<Reply>();
     }
 
-    public Comment(String title, String text, Date moment){
+    public Comment(String title, String text, Date moment, List<Reply> replies){
         this.title = title;
         this.text = text;
         this.moment = moment;
+        this.replies = replies;
     }
 
     // Getters and setters ---------------------------------------------------
@@ -56,4 +60,15 @@ public class Comment extends DomainEntity {
         this.moment = moment;
     }
 
+    //Relationships --------------
+
+    private List<Reply> replies;
+
+    public List<Reply> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(List<Reply> replies) {
+        this.replies = replies;
+    }
 }

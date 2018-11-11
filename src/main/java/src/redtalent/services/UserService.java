@@ -45,10 +45,14 @@ public class UserService {
         Set<Team> ta = new HashSet<Team>();
         Set<Application> ap = new HashSet<Application>();
         Set<Blog> s = new HashSet<Blog>();
+        Set<Reply> r = new HashSet<Reply>();
+        Set<Comment> c = new HashSet<Comment>();
         result.setApplications(ap);
         result.setTeams(ta);
         result.setProjects(pr);
         result.setBlogs(s);
+        result.setComments(c);
+        result.setReplies(r);
         return result;
     }
 

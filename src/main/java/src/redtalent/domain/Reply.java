@@ -1,12 +1,16 @@
 package src.redtalent.domain;
 
+import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
-public class Reply {
+@Document(collection = "Replies")
+public class Reply extends DomainEntity {
 
     // Attributes ---------------------------------------------------
     private String title;
@@ -53,4 +57,5 @@ public class Reply {
     public void setMoment(Date moment) {
         this.moment = moment;
     }
+
 }

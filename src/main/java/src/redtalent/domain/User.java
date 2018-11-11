@@ -29,6 +29,7 @@ public class User extends DomainEntity{
     private Set<Application> applications;
     private Set<Blog> blogs;
     private Set<Comment> comments;
+    private Set<Reply> replies;
     private String image;
     private Account account;
 
@@ -37,7 +38,7 @@ public class User extends DomainEntity{
         super();
     }
 
-    public User(Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Comment> comments, String image){
+    public User(Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Comment> comments, Set<Reply> replies, String image){
         this.fullname = fullname;
         this.enabled = enabled;
         this.roles = roles;
@@ -46,6 +47,7 @@ public class User extends DomainEntity{
         this.applications = applications;
         this.blogs = blogs;
         this.comments = comments;
+        this.replies = replies;
         this.image = image;
         this.account = account;
     }
@@ -130,4 +132,11 @@ public class User extends DomainEntity{
         this.account = account;
     }
 
+    public Set<Reply> getReplies() {
+        return replies;
+    }
+
+    public void setReplies(Set<Reply> replies) {
+        this.replies = replies;
+    }
 }

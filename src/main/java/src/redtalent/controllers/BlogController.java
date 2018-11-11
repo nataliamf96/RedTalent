@@ -15,6 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.*;
 import src.redtalent.forms.BlogForm;
 import src.redtalent.forms.CommentForm;
+import src.redtalent.forms.ReplyForm;
 import src.redtalent.services.*;
 
 import javax.validation.Valid;
@@ -38,6 +39,9 @@ public class BlogController {
 
     @Autowired
     private CommentService commentService;
+
+    @Autowired
+    private ReplyService replyService;
 
 
     // Constructors -----------------------------------------------------------
@@ -140,6 +144,25 @@ public class BlogController {
         return result;
     }
 
+    // Crear lista de las respuestas de los comentarios
+
+    @RequestMapping(value = "/listReply", method = RequestMethod.GET)
+    public ModelAndView listReplies(@RequestParam ObjectId commentId){
+
+        ModelAndView result;
+        Collection<Reply> replies;
+        Comment comment = commentService.findOne(commentId.toString());
+
+        replies = comment.getReplies();
+
+        result = new ModelAndView("blog/listReply");
+        result.addObject("requestURI", "blog/listReply?commentId="+commentId);
+        result.addObject("replies", replies);
+        result.addObject("commentId", commentId);
+
+        return result;
+    }
+
     // Crear comentarios para el foro
 
     @RequestMapping(value = "/createComment", method = RequestMethod.GET)
@@ -207,6 +230,74 @@ public class BlogController {
 
     // Crear respuestas para los comentarios del foro
 
+    @RequestMapping(value = "/createReply", method = RequestMethod.GET)
+    public ModelAndView createReply(@RequestParam ObjectId commentId, final RedirectAttributes redirectAttrs) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        ReplyForm replyForm = new ReplyForm();
+        replyForm.setCommentId(commentId);
+
+        try {
+            result = new ModelAndView("blog/createReply");
+            result.addObject("replyForm", replyForm);
+            result.addObject("requestURI", "./blog/createReply?commentId=" + commentId);
+            result.addObject("commentId", commentId);
+        } catch (Throwable oops) {
+            result = new ModelAndView("redirect:/blog/list");
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/createReply", method = RequestMethod.POST, params = "save")
+    public ModelAndView saveCreateReply(@Valid ReplyForm replyForm, BindingResult binding, RedirectAttributes redirectAttrs) {
+
+        ModelAndView result;
+        replyForm.setCommentId(replyForm.getCommentId());
+
+        if (binding.hasErrors()) {
+            result = createReplyModelAndView(replyForm);
+        } else {
+            try {
+                Assert.notNull(replyForm, "No puede ser nulo el formulario de Reply");
+
+                Reply reply = replyService.create();
+                reply.setTitle(replyForm.getTitle());
+                reply.setText(replyForm.getText());
+                Reply saved = replyService.save(reply);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                Set<Reply> replies = user.getReplies();
+                replies.add(saved);
+                user.setReplies(replies);
+                userService.saveUser(user);
+
+                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
+                List<Reply> replies1 = comment.getReplies();
+                replies1.add(saved);
+                comment.setReplies(replies1);
+                commentService.save(comment);
+
+                Blog blog = blogService.findBlogByCommentsContaining(comment);
+                List<Comment> comments = blog.getComments();
+                for(Comment c: comments){
+                    c.setReplies(replies1);
+                }
+                blog.setComments(comments);
+                blogService.save(blog);
+
+                result = new ModelAndView("redirect:/blog/listReply?commentId=" +replyForm.getCommentId());
+
+            } catch (Throwable oops) {
+                result = createReplyModelAndView(replyForm, "No se puede crear correctamente las respuestas del comentario");
+
+            }
+        }
+        return result;
+    }
 
     // Model and View ---------------
 
@@ -244,6 +335,26 @@ public class BlogController {
         result = new ModelAndView("blog/createComment");
         result.addObject("commentForm", commentForm);
         result.addObject("blogId", commentForm.getBlogId());
+        result.addObject("userCreated", userCreated);
+        result.addObject("message", message);
+        return result;
+    }
+
+    protected ModelAndView createReplyModelAndView(ReplyForm replyForm) {
+        ModelAndView result;
+        result = createReplyModelAndView(replyForm, null);
+        return result;
+    }
+
+    protected ModelAndView createReplyModelAndView(ReplyForm replyForm, String message) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        result = new ModelAndView("blog/createReply");
+        result.addObject("replyForm", replyForm);
+        result.addObject("commentId", replyForm.getCommentId());
         result.addObject("userCreated", userCreated);
         result.addObject("message", message);
         return result;

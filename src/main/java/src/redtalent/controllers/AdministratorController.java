@@ -7,9 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Administrator;
-import src.redtalent.services.AdministratorService;
-import src.redtalent.services.ProjectService;
-import src.redtalent.services.UtilidadesService;
+import src.redtalent.services.*;
 
 @Controller
 @RequestMapping("/admin")
@@ -21,6 +19,10 @@ public class AdministratorController {
     private UtilidadesService utilidadesService;
     @Autowired
     private ProjectService projectService;
+    @Autowired
+    private UserService userService;
+    @Autowired
+    private TeamService teamService;
 
     public AdministratorController(){
         super();
@@ -35,6 +37,19 @@ public class AdministratorController {
         result = new ModelAndView("admin/index");
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("projects",projectService.findAllByPrivadoFalse());
+        result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
+        return result;
+    }
+
+    @RequestMapping(value = "/dashboardAdmin")
+    public ModelAndView dashboardAdmin() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/dashboardAdmin");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("projects",projectService.findAll());
+        result.addObject("users",userService.findAll());
+        result.addObject("teams",teamService.findAll());
         result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
         return result;
     }

@@ -41,6 +41,9 @@ public class DirectivoController {
 
         result = new ModelAndView("directivo/dashboardDirectivo");
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("proyectosAbiertos",projectService.findAllByPrivadoFalse());
+        result.addObject("proyectosCerrados",projectService.findAllByPrivadoTrue());
+
         return result;
     }
 

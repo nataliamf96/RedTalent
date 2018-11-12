@@ -68,6 +68,9 @@ public class ProjectService {
     public Set<Project> findAllByPrivadoFalse(){
         return projectRepository.findAllByPrivadoFalse();
     }
+    public Set<Project> findAllByPrivadoTrue(){
+        return projectRepository.findAllByPrivadoTrue();
+    }
 
     public Page<Project> findPaginated(Pageable pageable) {
         int pageSize = pageable.getPageSize();

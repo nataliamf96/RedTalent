@@ -347,13 +347,6 @@ public class BlogController {
         Blog b = blogService.findBlogByCommentsContaining(res);
 
         if(user.equals(userCreated)) {
-
-            if(res.getReplies() != null) {
-                for (Reply r : res.getReplies()) {
-                    replyService.remove(r);
-                }
-            }
-
             Set<Comment> comments = user.getComments();
             comments.remove(res);
             user.setComments(comments);
@@ -363,6 +356,11 @@ public class BlogController {
             comments1.remove(res);
             b.setComments(comments1);
             blogService.save(b);
+
+
+            for (Reply r : res.getReplies()) {
+                replyService.remove(r);
+            }
 
             commentService.remove(res);
         }
@@ -387,15 +385,28 @@ public class BlogController {
 
         if(user.equals(userCreated)) {
 
-            Set<Reply> replies = user.getReplies();
-            replies.remove(res);
-            user.setReplies(replies);
-            userService.saveUser(user);
-
             Set<Reply> replies1 = c.getReplies();
             replies1.remove(res);
             c.setReplies(replies1);
             commentService.save(c);
+
+            List<Comment> comments1 = b.getComments();
+            for(Comment com1: comments1){
+                com1.setReplies(replies1);
+            }
+            b.setComments(comments1);
+            blogService.save(b);
+
+
+            Set<Comment> comments = user.getComments();
+            for(Comment com : comments){
+                com.setReplies(replies1);
+            }
+            Set<Reply> replies = user.getReplies();
+            replies.remove(res);
+            user.setReplies(replies);
+            user.setComments(comments);
+            userService.saveUser(user);
 
             replyService.remove(res);
         }

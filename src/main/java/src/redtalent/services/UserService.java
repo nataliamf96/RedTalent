@@ -126,4 +126,12 @@ public class UserService {
         return result;
     }
 
+    public Set<User> findAllByEnabledIsTrue(){
+        return userRepository.findAllByEnabledIsTrue();
+    }
+
+    public Set<User> findAllByEnabledIsFalse(){
+        return userRepository.findAllByEnabledIsFalse();
+    }
+
 }

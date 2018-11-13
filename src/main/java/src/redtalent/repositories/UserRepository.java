@@ -4,6 +4,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import src.redtalent.domain.*;
 
 import java.util.List;
+import java.util.Set;
 
 public interface UserRepository extends MongoRepository<User, String> {
     User findUserByProjectsContains(Project project);
@@ -15,4 +16,6 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findUserByBlogsContains(Blog blog);
     User findUserByRepliesContaining(Reply reply);
     User findUserByCommentsContains(Comment comment);
+    Set<User> findAllByEnabledIsTrue();
+    Set<User> findAllByEnabledIsFalse();
 }

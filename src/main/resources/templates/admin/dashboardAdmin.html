@@ -16,6 +16,7 @@
         document.getElementById("tablaUsuarios").style = "display: none";
         document.getElementById("tablaEquipos").style = "display: block";
         document.getElementById("tablaCategorias").style = "display: none";
+        document.getElementById("textoTitulos").innerHTML = "Tabla de Equipos";
     }
 
         function verTablaProyecto() {
@@ -23,6 +24,7 @@
             document.getElementById("tablaUsuarios").style = "display: none";
             document.getElementById("tablaEquipos").style = "display: none";
             document.getElementById("tablaCategorias").style = "display: none";
+            document.getElementById("textoTitulos").innerHTML = "Tabla de Proyectos";
         }
 
         function verTablaUsuario() {
@@ -30,6 +32,7 @@
             document.getElementById("tablaUsuarios").style = "display: block";
             document.getElementById("tablaEquipos").style = "display: none";
             document.getElementById("tablaCategorias").style = "display: none";
+            document.getElementById("textoTitulos").innerHTML = "Tabla de Usuarios";
         }
 
         function verTablaCategoria() {
@@ -37,6 +40,7 @@
             document.getElementById("tablaUsuarios").style = "display: none";
             document.getElementById("tablaEquipos").style = "display: none";
             document.getElementById("tablaCategorias").style = "display: block";
+            document.getElementById("textoTitulos").innerHTML = "Tabla de Categorías";
         }
     </script>
 </head>
@@ -62,9 +66,9 @@
             </a>
         </li>
         <li class="nav-item dropdown">
-            <a class="nav-link" href="#">
-                <i class="fas fa-fw fa-folder"></i>
-                <span>Pages</span>
+            <a class="nav-link" href="/admin/usersView">
+                <i class="fas fa-user"></i>
+                <span>Usuarios</span>
             </a>
         </li>
         <li class="nav-item">
@@ -85,10 +89,10 @@
 
             <!-- Breadcrumbs-->
             <ol class="breadcrumb">
-                <li class="breadcrumb-item">
-                    <a href="#">Dashboard</a>
+                <li style="color:blue" class="breadcrumb-item">
+                    Dashboard
                 </li>
-                <li class="breadcrumb-item active">Overview</li>
+                <li id="textoTitulos" class="breadcrumb-item active">Tabla de Proyectos</li>
             </ol>
 
             <!-- Icon Cards-->

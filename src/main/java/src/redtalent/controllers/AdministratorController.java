@@ -57,4 +57,15 @@ public class AdministratorController {
         return result;
     }
 
+    @RequestMapping(value = "/usersView")
+    public ModelAndView usersView() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/usersView");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
+        result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+        return result;
+    }
+
 }

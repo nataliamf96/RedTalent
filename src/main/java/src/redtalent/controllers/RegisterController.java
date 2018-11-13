@@ -84,7 +84,7 @@ public class RegisterController {
                 Set<Role> roles = new HashSet<Role>();
                 roles.add(role);
                 a.setRoles(roles);
-                a.setEnabled(true);
+                a.setEnabled(false);
                 Account save = accountRepository.save(a);
                 u.setAccount(save);
                 u.setFullname(userForm.getFullname());

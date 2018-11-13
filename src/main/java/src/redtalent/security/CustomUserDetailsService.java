@@ -41,18 +41,22 @@ public class CustomUserDetailsService implements UserDetailsService {
         Administrator admin = administratorRepository.findByAccount(account);
         Directivo directivo = directivoRepository.findByAccount(account);
 
-        if(user != null) {
-            List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
-            return buildUserForAuthentication(user.getAccount(), authorities);
-        } else if(admin != null){
-            List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
-            return buildAdminForAuthentication(admin.getAccount(), authorities);
-        }else if(directivo != null){
-            List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
-            return buildDirectivoForAuthentication(directivo.getAccount(), authorities);
-        }else{
-            throw new UsernameNotFoundException("Email not found");
-        }
+            if(user != null) {
+                if(!user.getAccount().isEnabled()){
+                    List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
+                    return buildUserForAuthentication(user.getAccount(), authorities);
+                }else{
+                    throw new UsernameNotFoundException("Email not found");
+                }
+            } else if(admin != null){
+                List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
+                return buildAdminForAuthentication(admin.getAccount(), authorities);
+            }else if(directivo != null){
+                List<GrantedAuthority> authorities = getUserAuthority(account.getRoles());
+                return buildDirectivoForAuthentication(directivo.getAccount(), authorities);
+            }else{
+                throw new UsernameNotFoundException("Email not found");
+            }
     }
 
     private List<GrantedAuthority> getUserAuthority(Set<Role> userRoles) {

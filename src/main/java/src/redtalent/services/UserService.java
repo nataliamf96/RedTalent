@@ -127,11 +127,24 @@ public class UserService {
     }
 
     public Set<User> findAllByEnabledIsTrue(){
-        return userRepository.findAllByEnabledIsTrue();
+        Set<User> result = new HashSet<User>();
+        for(User u:userRepository.findAll()){
+            if(u.getAccount().isEnabled()){
+                result.add(u);
+            }
+        }
+        return result;
     }
 
     public Set<User> findAllByEnabledIsFalse(){
-        return userRepository.findAllByEnabledIsFalse();
+        Set<User> result = new HashSet<User>();
+        for(User u:userRepository.findAll()){
+            if(!u.getAccount().isEnabled()){
+                result.add(u);
+            }
+        }
+        return result;
+
     }
 
 }

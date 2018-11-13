@@ -20,8 +20,6 @@ public class User extends DomainEntity{
 
     @NotBlank
     private String fullname;
-    @NotNull
-    private boolean enabled;
     @DBRef
     private Set<Role> roles;
     private Set<Project> projects;
@@ -40,7 +38,6 @@ public class User extends DomainEntity{
 
     public User(Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Comment> comments, Set<Reply> replies, String image){
         this.fullname = fullname;
-        this.enabled = enabled;
         this.roles = roles;
         this.projects = projects;
         this.teams = teams;
@@ -82,14 +79,6 @@ public class User extends DomainEntity{
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
-    }
-
-    public boolean isEnabled() {
-        return enabled;
-    }
-
-    public void setEnabled(boolean enabled) {
-        this.enabled = enabled;
     }
 
     public Set<Role> getRoles() {

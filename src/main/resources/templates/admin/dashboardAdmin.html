@@ -235,8 +235,10 @@
                                 <td th:text="${project.getName()}"></td>
                                 <td><img style="width: 45px" th:src="${project.getImage()}"></td>
                                 <td th:text="${project.getDescription()}"></td>
-                                <td th:text="${project.getPrivado()}"></td>
-                                <td th:text="${project.getEstado()}"></td>
+                                <td th:if="${project.getPrivado()}">Si</td>
+                                <td th:if="${!project.getPrivado()}">No</td>
+                                <td th:if="${project.getEstado()}">Cerrado</td>
+                                <td th:if="${!project.getEstado()}">Abierto</td>
                             </tr>
                             </tbody>
                         </table>
@@ -265,7 +267,8 @@
                                 <td th:text="${user.getFullname()}"></td>
                                 <td><img style="width: 15%" th:src="${user.getImage()}"></td>
                                 <td th:text="${user.getAccount().getEmail()}"></td>
-                                <td th:text="${user.getAccount().isEnabled()}"></td>
+                                <td th:if="${user.getAccount().isEnabled()}">Baneado</td>
+                                <td th:if="${!user.getAccount().isEnabled()}">Acceso al Sistema</td>
                             </tr>
                             </tbody>
                         </table>
@@ -280,7 +283,7 @@
         <footer class="sticky-footer">
             <div class="container my-auto">
                 <div class="copyright text-center my-auto">
-                    <span>Copyright © Your Website 2018</span>
+                    <span>Copyright © Universidad de Sevilla</span>
                 </div>
             </div>
         </footer>
@@ -295,25 +298,6 @@
 <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
 </a>
-
-<!-- Logout Modal-->
-<div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
-                <button class="close" type="button" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">×</span>
-                </button>
-            </div>
-            <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
-            <div class="modal-footer">
-                <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
-                <a class="btn btn-primary" href="login.html">Logout</a>
-            </div>
-        </div>
-    </div>
-</div>
 <!-- Bootstrap core JavaScript-->
 <script src="/js/jquery.min.js"></script>
 <script src="/js/bootstrap.bundle.min.js"></script>

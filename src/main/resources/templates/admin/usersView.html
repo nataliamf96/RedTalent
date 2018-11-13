@@ -124,6 +124,7 @@
                                 <th>Nombre y Apellidos</th>
                                 <th>Imagen</th>
                                 <th>Email</th>
+                                <th>Desbanear</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -131,6 +132,7 @@
                                 <td th:text="${user.getFullname()}"></td>
                                 <td><img style="width: 15%" th:src="${user.getImage()}"></td>
                                 <td th:text="${user.getAccount().getEmail()}"></td>
+                                <td><a onclick="return confirm('¿Esta seguro que desea permitir el acceso al USUARIO?')" th:href="@{/admin/userNoBanned(userId=${user.getId()})}">Desbanear</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -151,6 +153,7 @@
                                 <th>Nombre y Apellidos</th>
                                 <th>Imagen</th>
                                 <th>Email</th>
+                                <th>Banear</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -158,6 +161,7 @@
                                 <td th:text="${user.getFullname()}"></td>
                                 <td><img style="width: 15%" th:src="${user.getImage()}"></td>
                                 <td th:text="${user.getAccount().getEmail()}"></td>
+                                <td><a onclick="return confirm('¿Esta seguro que desea banear al USUARIO?')" th:href="@{/admin/userBanned(userId=${user.getId()})}">Banear</a></td>
                             </tr>
                             </tbody>
                         </table>

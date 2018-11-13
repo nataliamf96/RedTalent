@@ -1,12 +1,17 @@
 package src.redtalent.controllers;
 
+import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import src.redtalent.domain.Account;
 import src.redtalent.domain.Administrator;
+import src.redtalent.domain.User;
+import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
 
 @Controller
@@ -25,6 +30,8 @@ public class AdministratorController {
     private TeamService teamService;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private AccountRepository accountRepository;
 
     public AdministratorController(){
         super();
@@ -60,6 +67,48 @@ public class AdministratorController {
     @RequestMapping(value = "/usersView")
     public ModelAndView usersView() {
         ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/usersView");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
+        result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+        return result;
+    }
+
+    @RequestMapping(value = "/userBanned")
+    public ModelAndView userBanned(@RequestParam String userId) {
+        ModelAndView result;
+
+        User userBanear = userService.findOne(userId);
+        Account accountBanear = userBanear.getAccount();
+
+        accountBanear.setEnabled(true);
+        accountRepository.save(accountBanear);
+
+        userBanear.getAccount().setEnabled(true);
+        userService.saveUser(userBanear);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/usersView");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
+        result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+        return result;
+    }
+
+    @RequestMapping(value = "/userNoBanned")
+    public ModelAndView userNoBanned(@RequestParam String userId) {
+        ModelAndView result;
+
+        User userBanear = userService.findOne(userId);
+        Account accountBanear = userBanear.getAccount();
+
+        accountBanear.setEnabled(false);
+        accountRepository.save(accountBanear);
+
+        userBanear.getAccount().setEnabled(false);
+        userService.saveUser(userBanear);
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         result = new ModelAndView("admin/usersView");
         result.addObject("auth",utilidadesService.actorConectado());

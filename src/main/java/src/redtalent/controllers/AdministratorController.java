@@ -23,6 +23,8 @@ public class AdministratorController {
     private UserService userService;
     @Autowired
     private TeamService teamService;
+    @Autowired
+    private CategoryService categoryService;
 
     public AdministratorController(){
         super();
@@ -50,6 +52,7 @@ public class AdministratorController {
         result.addObject("projects",projectService.findAll());
         result.addObject("users",userService.findAll());
         result.addObject("teams",teamService.findAll());
+        result.addObject("categorias",categoryService.findAll());
         result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
         return result;
     }

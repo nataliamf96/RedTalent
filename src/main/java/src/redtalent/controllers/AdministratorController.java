@@ -10,9 +10,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Account;
 import src.redtalent.domain.Administrator;
+import src.redtalent.domain.Project;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")
@@ -72,6 +78,33 @@ public class AdministratorController {
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
         result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+        return result;
+    }
+
+    @RequestMapping(value = "/estadisticas")
+    public ModelAndView estadisticas() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/estadisticas");
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
+        result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+
+        /*
+         * Crear JSON para recogerlo por JavaScript
+         */
+        Integer primero = 0;
+        String a = "";
+        for(Project project: projectService.findAll()){
+            if(primero == 0){
+                a = a + "\""+project.getName()+"\"";
+                primero = 1;
+            }else{
+                a = a + ","+ "\""+project.getName()+"\"";
+            }
+        }
+        result.addObject("nombreProjects",a);
         return result;
     }
 

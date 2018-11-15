@@ -32,7 +32,7 @@ public class Project extends DomainEntity{
     }
 
     public Project(String name, String image, String description, String requiredProfiles, String attachedFiles,
-                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado){
+                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado, Category categorie){
         this.name = name;
         this.image = image;
         this.description = description;
@@ -44,6 +44,7 @@ public class Project extends DomainEntity{
         this.projectMonitorings = projectMonitorings;
         this.privado = privado;
         this.estado = estado;
+        this.categorie = categorie;
     }
 
     //Getters and setters -----------------------------------------------
@@ -105,6 +106,7 @@ public class Project extends DomainEntity{
     private List<Comment> comments;
     private List<Alert> alerts;
     private List<ProjectMonitoring> projectMonitorings;
+    private Category categorie;
 
     public List<Tag> getTags() {
         return tags;

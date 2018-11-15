@@ -90,21 +90,8 @@ public class AdministratorController {
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
         result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
-
-        /*
-         * Crear JSON para recogerlo por JavaScript
-         */
-        Integer primero = 0;
-        String a = "";
-        for(Project project: projectService.findAll()){
-            if(primero == 0){
-                a = a + "\""+project.getName()+"\"";
-                primero = 1;
-            }else{
-                a = a + ","+ "\""+project.getName()+"\"";
-            }
-        }
-        result.addObject("nombreProjects",a);
+        result.addObject("categoriasNombres",utilidadesService.nombresCategoriasConProyectos());
+        result.addObject("categoriasConNumeroProyectos",utilidadesService.numeroProyectosPorCategorias());
         return result;
     }
 

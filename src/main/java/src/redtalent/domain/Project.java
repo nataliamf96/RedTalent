@@ -147,4 +147,12 @@ public class Project extends DomainEntity{
     public void setEstado(Boolean estado) {
         this.estado = estado;
     }
+
+    public Category getCategorie() {
+        return categorie;
+    }
+
+    public void setCategorie(Category categorie) {
+        this.categorie = categorie;
+    }
 }

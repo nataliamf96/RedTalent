@@ -26,6 +26,8 @@ public class UtilidadesService {
     private TeamService teamService;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private CategoryService categoryService;
 
     public UtilidadesService(){
         super();
@@ -138,4 +140,51 @@ public class UtilidadesService {
 
         return res;
     }
+
+    public String nombreProyectosConComa(){
+        Integer primero = 0;
+        String a = "";
+        for(Project project: projectService.findAll()){
+            if(primero == 0){
+                a = a + "\""+project.getName()+"\"";
+                primero = 1;
+            }else{
+                a = a + ","+ "\""+project.getName()+"\"";
+            }
+        }
+        return a;
+    }
+
+    public String nombresCategoriasConProyectos(){
+        String result = "";
+        Integer primero = 0;
+        for(Category category:categoryService.findAll()){
+            if(projectService.findAllByCategorie(category).size()!=0){
+                if(primero == 0){
+                    result = result + "\""+category.getName()+"\"";
+                    primero = 1;
+                }else{
+                    result = result + ","+ "\""+category.getName()+"\"";
+                }
+            }
+        }
+        return result;
+    }
+
+    public String numeroProyectosPorCategorias(){
+        String result = "";
+        Integer primero = 0;
+        for(Category category:categoryService.findAll()){
+            if(projectService.findAllByCategorie(category).size()!=0){
+                if(primero == 0){
+                    result = result + projectService.findAllByCategorie(category).size();
+                    primero = 1;
+                }else{
+                    result = result + ","+projectService.findAllByCategorie(category).size();
+                }
+            }
+        }
+        return result;
+    }
+
 }

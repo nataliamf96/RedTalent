@@ -10,16 +10,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
+import src.redtalent.domain.Category;
 import src.redtalent.domain.Project;
 import src.redtalent.domain.Team;
 import src.redtalent.domain.User;
 import src.redtalent.forms.ProjectForm;
 import src.redtalent.forms.UserForm;
 import src.redtalent.security.Role;
-import src.redtalent.services.ProjectService;
-import src.redtalent.services.TeamService;
-import src.redtalent.services.UserService;
-import src.redtalent.services.UtilidadesService;
+import src.redtalent.services.*;
 import sun.misc.BASE64Decoder;
 
 import javax.imageio.ImageIO;
@@ -47,6 +45,9 @@ public class ProjectController {
 
     @Autowired
     private TeamService teamService;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public ProjectController(){
         super();
@@ -130,7 +131,7 @@ public class ProjectController {
 
         projectForm = new ProjectForm();
         result = createEditModelAndViewProject(projectForm);
-
+        result.addObject("categories", categoryService.findAll());
         return result;
     }
 
@@ -144,6 +145,7 @@ public class ProjectController {
         result = updateEditModelAndViewProject(projectForm);
         result = new ModelAndView("project/updateProject");
         result.addObject("projectForm",project);
+        result.addObject("categories", categoryService.findAll());
         result.addObject("projectId",project.getId());
         return result;
     }
@@ -163,6 +165,8 @@ public class ProjectController {
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
+                Category cat = categoryService.findOne(projectForm.getCategory().toString());
+                project.setCategorie(cat);
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());
@@ -200,6 +204,8 @@ public class ProjectController {
                 project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
+                Category cat = categoryService.findOne(projectForm.getCategory().toString());
+                project.setCategorie(cat);
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());
@@ -235,6 +241,7 @@ public class ProjectController {
 
         result = new ModelAndView("project/updateProject");
         result.addObject("projectForm", projectForm);
+        result.addObject("categories", categoryService.findAll());
         result.addObject("message", message);
 
         return result;
@@ -251,6 +258,7 @@ public class ProjectController {
 
         result = new ModelAndView("project/createProject");
         result.addObject("projectForm", projectForm);
+        result.addObject("categories", categoryService.findAll());
         result.addObject("message", message);
 
         return result;

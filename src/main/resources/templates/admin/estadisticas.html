@@ -66,8 +66,13 @@
     <div id="content-wrapper">
 
         <div class="container-fluid">
-            <span style="display: none" id="nombreProjects" th:text="${nombreProjects}"></span>
-            <canvas id="myChart" width="50" height="50"></canvas>
+            <div class="row">
+                <div class="col-lg-6 col-sm-12">
+                    <span style="display: none" id="categoriasNombres" th:text="${categoriasNombres}"></span>
+                    <span style="display: none" id="categoriasConNumeroProyectos" th:text="${categoriasConNumeroProyectos}"></span>
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
         </div>
         <!-- /.container-fluid -->
 
@@ -84,28 +89,28 @@
     <!-- /.content-wrapper -->
     <script>
         var ctx = document.getElementById("myChart").getContext('2d');
-        var nombres = document.getElementById('nombreProjects').innerHTML.split(",");
-
-
+        var nombres = document.getElementById('categoriasNombres').innerHTML.split(",");
+        var numeros = document.getElementById('categoriasConNumeroProyectos').innerHTML.split(",");
         var myChart = new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: nombres,
                 datasets: [{
-                    label: '# of Votes',
-                    data: [5,12,2],
-                    borderWidth: 1
+                    label: 'Número de Proyectos',
+                    data: numeros,
+                    borderWidth: 3
                 }]
             },
             options: {
-            scales: {
-                yAxes: [{
-                    ticks: {
-                        beginAtZero:true
-                    }
-                }]
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
+                        }
+                    }]
+                }
             }
-        }
         });
     </script>
 

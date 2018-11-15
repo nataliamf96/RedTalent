@@ -2,6 +2,7 @@ package src.redtalent.forms;
 
 import org.bson.types.ObjectId;
 import org.springframework.format.annotation.DateTimeFormat;
+import src.redtalent.domain.Category;
 
 import javax.validation.constraints.*;
 import java.util.Date;
@@ -14,6 +15,7 @@ public class ProjectForm {
     private String description;
     private String requiredProfiles;
     private String attachedFiles;
+    private String category;
     private Boolean privado;
 
     public ProjectForm(){
@@ -83,14 +85,24 @@ public class ProjectForm {
         this.privado = privado;
     }
 
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
     @Override
     public String toString() {
         return "ProjectForm{" +
-                "name='" + name + '\'' +
+                "id=" + id +
+                ", name='" + name + '\'' +
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
                 ", requiredProfiles='" + requiredProfiles + '\'' +
                 ", attachedFiles='" + attachedFiles + '\'' +
+                ", category=" + category +
                 ", privado=" + privado +
                 '}';
     }

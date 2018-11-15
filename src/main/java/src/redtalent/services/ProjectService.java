@@ -35,7 +35,6 @@ public class ProjectService {
         List<Alert> alerts = new ArrayList<Alert>();
         List<ProjectMonitoring> projectMonitorings = new ArrayList<ProjectMonitoring>();
         List<User> users = new ArrayList<User>();
-        List<Category> categories = new ArrayList<Category>();
         result.setAlerts(alerts);
         result.setTags(tags);
         result.setComments(comments);
@@ -91,6 +90,10 @@ public class ProjectService {
                 = new PageImpl<Project>(list, PageRequest.of(currentPage, pageSize), projects.size());
 
         return bookPage;
+    }
+
+    public Set<Project> findAllByCategorie(Category category){
+        return projectRepository.findAllByCategorie(category);
     }
 
 }

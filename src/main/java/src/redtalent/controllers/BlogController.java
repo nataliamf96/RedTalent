@@ -44,6 +44,9 @@ public class BlogController {
     @Autowired
     private ReplyService replyService;
 
+    @Autowired
+    private CategoryService categoryService;
+
 
     // Constructors -----------------------------------------------------------
     public BlogController() {
@@ -58,12 +61,14 @@ public class BlogController {
 
         ModelAndView result;
         Collection<Blog> blogs;
+        Collection<Category> categories = categoryService.findAll();
 
         blogs = blogService.findAll();
 
         result = new ModelAndView("blog/list");
         result.addObject("requestURI", "blog/list");
         result.addObject("blogs", blogs);
+        result.addObject("categories", categories);
 
         return result;
     }
@@ -81,10 +86,13 @@ public class BlogController {
 
         try {
 
+            Collection<Category> categories = categoryService.findAll();
+
             result = new ModelAndView("blog/create");
             result.addObject("blogForm", blogForm);
             result.addObject("requestURI", "./blog/create");
             result.addObject("userCreated", userCreated);
+            result.addObject("categories", categories);
 
         } catch (Throwable oops) {
             result = new ModelAndView("redirect:/blog/list");
@@ -107,6 +115,7 @@ public class BlogController {
                 blog.setTitle(blogForm.getTitle());
                 blog.setBody(blogForm.getBody());
                 blog.setImage(blogForm.getImage());
+                blog.setCategory(blogForm.getCategory());
                 Blog saved = this.blogService.save(blog);
 
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -325,7 +334,10 @@ public class BlogController {
                 }
             }
 
-            blogService.remove(res);
+            res.setCategory(null);
+            Blog saved = blogService.save(res);
+
+            blogService.remove(saved);
         }
 
         result = new ModelAndView("redirect:/blog/list");
@@ -429,11 +441,13 @@ public class BlogController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
+        Collection<Category> categories = categoryService.findAll();
 
         result = new ModelAndView("blog/create");
         result.addObject("blogForm", blogForm);
         result.addObject("userCreated", userCreated);
         result.addObject("message", message);
+        result.addObject("categories", categories);
         return result;
     }
 

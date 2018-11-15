@@ -3,6 +3,7 @@ package src.redtalent.domain;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -66,6 +67,7 @@ public class Blog extends DomainEntity {
     //Relationships
 
     private Category category;
+
     private List<Comment> comments;
 
     public Category getCategory() {

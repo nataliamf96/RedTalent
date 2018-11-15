@@ -21,6 +21,8 @@
             <span th:text="${blog.getBody()}"></span>
             <h5>Imagen</h5>
             <span th:text="${blog.getImage()}"></span>
+            <h5>Categoría</h5>
+            <span th:text="${blog.getCategory().getName()}"></span>
             <a th:href="@{/blog/delete(blogId=${blog.getId()})}"><i class="far fa-trash-alt"></i></a>
         </div>
     </div>

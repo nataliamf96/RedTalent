@@ -30,6 +30,12 @@
                 <input type="image" class="form-control" id="image" name="image" style="max-width: 350px; max-height: 300px" th:field="*{image}"/>
                 <li th:each="err : ${#fields.errors('image')}" th:text="${err}" />
             </div>
+            <div class="form-group">
+                <label for="category">Categorías</label>
+                <select style="max-width: 350px" id="category"  name="category" class="form-control">
+                    <option th:each="category : ${categories}" th:value="${category.getId()}" th:text="${category.getName()}"></option>
+                </select>
+            </div>
             <input type="submit" class="btn btn-info" name="save" value="Crear" />
         </form>
     </div>

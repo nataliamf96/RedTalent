@@ -1,15 +1,17 @@
 package src.redtalent.forms;
 
 import org.bson.types.ObjectId;
+import src.redtalent.domain.Category;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class BlogForm {
 
     private String title;
     private String body;
     private String image;
-    private ObjectId categoryId;
+    private Category category;
     private ObjectId subjectForumId;
     private ObjectId userId;
 
@@ -39,12 +41,13 @@ public class BlogForm {
         this.image = image;
     }
 
-    public ObjectId getCategoryId() {
-        return categoryId;
+    @NotNull
+    public Category getCategory() {
+        return category;
     }
 
-    public void setCategoryId(ObjectId categoryId) {
-        this.categoryId = categoryId;
+    public void setCategory(Category category) {
+        this.category = category;
     }
 
     public ObjectId getSubjectForumId() {

@@ -12,10 +12,10 @@ import java.util.*;
 
 
 @Component
-public class DbSeeder implements CommandLineRunner{
+public class DbSeeder{
 
     @Autowired
-    AccountRepository accountRepository;
+    private AccountRepository accountRepository;
     @Autowired
     private AdministratorRepository administratorRepository;
     @Autowired
@@ -843,7 +843,7 @@ public class DbSeeder implements CommandLineRunner{
                 "Software");
 
         Category category5 = new Category(
-                "Depotes");
+                "Deportes");
 
         List<Category> categories = Arrays.asList(category4, category5);
         Category cata = categoryRepository.save(category1);

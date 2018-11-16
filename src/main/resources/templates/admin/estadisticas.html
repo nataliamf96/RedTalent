@@ -56,15 +56,25 @@
             <div class="row">
                 <div class="col-lg-6 col-sm-12">
                     <h5>Número de Proyectos según Categorías</h5>
+                    <button onclick="verDBProyectosCategorias1()" style="font-size: 0.6em; color: white" type="button" class="btn btn-warning">Diagrama de Barras</button>
+                    <button onclick="verDBProyectosCategorias2()" style="font-size: 0.6em; color: white" type="button" class="btn btn-danger">Sectores</button>
+                    <button onclick="verDBProyectosCategorias3()" style="font-size: 0.6em; color: white" type="button" class="btn btn-info">Polar</button>
                     <span style="display: none" id="categoriasNombres" th:text="${categoriasNombres}"></span>
                     <span style="display: none" id="categoriasConNumeroProyectos" th:text="${categoriasConNumeroProyectos}"></span>
                     <canvas id="myChart"></canvas>
+                    <canvas style="display: none" id="myChartSect"></canvas>
+                    <canvas style="display: none" id="myChartPolar"></canvas>
                 </div>
                 <div class="col-lg-6 col-sm-12">
                     <h5>Número de Temas de Blog según Categorías</h5>
+                    <button onclick="verDBTBlogsCategorias1()" style="font-size: 0.6em; color: white" type="button" class="btn btn-warning">Diagrama de Barras</button>
+                    <button onclick="verDBTBlogsCategorias2()" style="font-size: 0.6em; color: white" type="button" class="btn btn-danger">Sectores</button>
+                    <button onclick="verDBTBlogsCategorias3()" style="font-size: 0.6em; color: white" type="button" class="btn btn-info">Polar</button>
                     <span style="display: none" id="temasBlogNombres" th:text="${temasBlogNombres}"></span>
                     <span style="display: none" id="categoriasConNumeroTemasBlog" th:text="${categoriasConNumeroTemasBlog}"></span>
                     <canvas id="myChart2"></canvas>
+                    <canvas style="display: none" id="myChart22"></canvas>
+                    <canvas style="display: none" id="myChart222"></canvas>
                 </div>
             </div>
         </div>
@@ -106,6 +116,28 @@
                 }
             }
         });
+        var ctx2 = document.getElementById("myChartSect").getContext('2d');
+        var myChartSect = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: nombres,
+                datasets: [{
+                    label: 'Número de Proyectos',
+                    data: numeros
+                }]
+            }
+        });
+        var ctx3 = document.getElementById("myChartPolar").getContext('2d');
+        new Chart(ctx3, {
+            data: {
+                labels: nombres,
+                datasets: [{
+                    label: 'Número de Proyectos',
+                    data: numeros
+                }]
+            },
+            type: 'polarArea'
+        });
     </script>
     <script>
         var ctx = document.getElementById("myChart2").getContext('2d');
@@ -132,6 +164,60 @@
                 }
             }
         });
+        var ctx2 = document.getElementById("myChart22").getContext('2d');
+        var myChart22 = new Chart(ctx2, {
+            type: 'doughnut',
+            data: {
+                labels: nombres,
+                datasets: [{
+                    label: 'Número de Proyectos',
+                    data: numeros
+                }]
+            }
+        });
+        var ctx3 = document.getElementById("myChart222").getContext('2d');
+        new Chart(ctx3, {
+            data: {
+                labels: nombres,
+                datasets: [{
+                    label: 'Número de Proyectos',
+                    data: numeros
+                }]
+            },
+            type: 'polarArea'
+        });
+    </script>
+    <script>
+        function verDBProyectosCategorias1() {
+            document.getElementById("myChart").style = "display: block";
+            document.getElementById("myChartSect").style = "display: none";
+            document.getElementById("myChartPolar").style = "display: none";
+        }
+        function verDBProyectosCategorias2() {
+            document.getElementById("myChart").style = "display: none";
+            document.getElementById("myChartSect").style = "display: block";
+            document.getElementById("myChartPolar").style = "display: none";
+        }
+        function verDBProyectosCategorias3() {
+            document.getElementById("myChart").style = "display: none";
+            document.getElementById("myChartSect").style = "display: none";
+            document.getElementById("myChartPolar").style = "display: block";
+        }
+        function verDBTBlogsCategorias1() {
+            document.getElementById("myChart2").style = "display: block";
+            document.getElementById("myChart22").style = "display: none";
+            document.getElementById("myChart222").style = "display: none";
+        }
+        function verDBTBlogsCategorias2() {
+            document.getElementById("myChart2").style = "display: none";
+            document.getElementById("myChart22").style = "display: block";
+            document.getElementById("myChart222").style = "display: none";
+        }
+        function verDBTBlogsCategorias3() {
+            document.getElementById("myChart2").style = "display: none";
+            document.getElementById("myChart22").style = "display: none";
+            document.getElementById("myChart222").style = "display: block";
+        }
     </script>
 
 </div>

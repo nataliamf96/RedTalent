@@ -32,7 +32,8 @@ public class Project extends DomainEntity{
     }
 
     public Project(String name, String image, String description, String requiredProfiles, String attachedFiles,
-                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado, Category categorie){
+                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado, Category categorie,
+                   Forum forum){
         this.name = name;
         this.image = image;
         this.description = description;
@@ -45,6 +46,7 @@ public class Project extends DomainEntity{
         this.privado = privado;
         this.estado = estado;
         this.categorie = categorie;
+        this.forum = forum;
     }
 
     //Getters and setters -----------------------------------------------
@@ -107,6 +109,7 @@ public class Project extends DomainEntity{
     private List<Alert> alerts;
     private List<ProjectMonitoring> projectMonitorings;
     private Category categorie;
+    private Forum forum;
 
     public List<Tag> getTags() {
         return tags;
@@ -155,4 +158,8 @@ public class Project extends DomainEntity{
     public void setCategorie(Category categorie) {
         this.categorie = categorie;
     }
+
+    public Forum getForum() { return forum; }
+
+    public void setForum(Forum forum) {this.forum = forum; }
 }

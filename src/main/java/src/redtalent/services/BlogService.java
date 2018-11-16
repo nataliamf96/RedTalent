@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Blog;
+import src.redtalent.domain.Category;
 import src.redtalent.domain.Comment;
 import src.redtalent.repositories.BlogRepository;
 import java.util.Date;
@@ -59,5 +60,9 @@ public class BlogService {
         Assert.notNull(comment, "El comentario es nulo");
         Blog result = blogRepository.findBlogByCommentsContaining(comment);
         return result;
+    }
+
+    public List<Blog> findAllByCategorie(Category category){
+        return blogRepository.findAllByCategory(category);
     }
 }

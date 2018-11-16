@@ -28,6 +28,8 @@ public class UtilidadesService {
     private AccountRepository accountRepository;
     @Autowired
     private CategoryService categoryService;
+    @Autowired
+    private BlogService blogService;
 
     public UtilidadesService(){
         super();
@@ -155,6 +157,22 @@ public class UtilidadesService {
         return a;
     }
 
+    public String nombresCategoriasConTemasBlog(){
+        String result = "";
+        Integer primero = 0;
+        for(Category category:categoryService.findAll()){
+            if(blogService.findAllByCategorie(category).size()!=0){
+                if(primero == 0){
+                    result = result + "\""+category.getName()+"\"";
+                    primero = 1;
+                }else{
+                    result = result + ","+ "\""+category.getName()+"\"";
+                }
+            }
+        }
+        return result;
+    }
+
     public String nombresCategoriasConProyectos(){
         String result = "";
         Integer primero = 0;
@@ -182,6 +200,40 @@ public class UtilidadesService {
                 }else{
                     result = result + ","+projectService.findAllByCategorie(category).size();
                 }
+            }
+        }
+        return result;
+    }
+
+    public String numeroTemasBlogPorCategorias(){
+        String result = "";
+        Integer primero = 0;
+        for(Category category:categoryService.findAll()){
+            if(blogService.findAllByCategorie(category).size()!=0){
+                if(primero == 0){
+                    result = result + blogService.findAllByCategorie(category).size();
+                    primero = 1;
+                }else{
+                    result = result + ","+blogService.findAllByCategorie(category).size();
+                }
+            }
+        }
+        return result;
+    }
+
+    public List<Double> evaluationsTeam(){
+        List<Double> result = new ArrayList<Double>();
+        for(Team t:teamService.findAll()){
+            Double sum = 0.0;
+            Double media = 0.0;
+            if(t.getEvaluations().size()==0){
+                result.add(0.0);
+            }else{
+                for(Evaluation evaluation:t.getEvaluations()){
+                    sum += evaluation.getRate();
+                }
+                media = sum/t.getEvaluations().size();
+                result.add(media);
             }
         }
         return result;

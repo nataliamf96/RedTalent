@@ -175,13 +175,15 @@
                             <tr>
                                 <th>Nombre</th>
                                 <th>Descripción</th>
+                                <th>Nota Media</th>
                                 <th>Proyecto Asociado</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="team : ${teams}">
+                            <tr th:each="team,iter : ${teams}">
                                 <td th:text="${team.getName()}"></td>
                                 <td th:text="${team.getDescription()}"></td>
+                                <td th:text="${evaluationsTeam.get(iter.index)}"></td>
                                 <td th:text="${team.getProjects().get(0).getName()}"></td>
                             </tr>
                             </tbody>

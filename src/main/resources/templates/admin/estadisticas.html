@@ -60,6 +60,12 @@
                     <span style="display: none" id="categoriasConNumeroProyectos" th:text="${categoriasConNumeroProyectos}"></span>
                     <canvas id="myChart"></canvas>
                 </div>
+                <div class="col-lg-6 col-sm-12">
+                    <h5>Número de Temas de Blog según Categorías</h5>
+                    <span style="display: none" id="temasBlogNombres" th:text="${temasBlogNombres}"></span>
+                    <span style="display: none" id="categoriasConNumeroTemasBlog" th:text="${categoriasConNumeroTemasBlog}"></span>
+                    <canvas id="myChart2"></canvas>
+                </div>
             </div>
         </div>
         <!-- /.container-fluid -->
@@ -85,6 +91,32 @@
                 labels: nombres,
                 datasets: [{
                     label: 'Número de Proyectos',
+                    data: numeros,
+                    borderWidth: 3
+                }]
+            },
+            options: {
+                scales: {
+                    yAxes: [{
+                        ticks: {
+                            beginAtZero: true,
+                            callback: function(value) {if (value % 1 === 0) {return value;}}
+                        }
+                    }]
+                }
+            }
+        });
+    </script>
+    <script>
+        var ctx = document.getElementById("myChart2").getContext('2d');
+        var nombres = document.getElementById('temasBlogNombres').innerHTML.split(",");
+        var numeros = document.getElementById('categoriasConNumeroTemasBlog').innerHTML.split(",");
+        var myChart = new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: nombres,
+                datasets: [{
+                    label: 'Número de Temas de Blog',
                     data: numeros,
                     borderWidth: 3
                 }]

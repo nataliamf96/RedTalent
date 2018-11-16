@@ -65,6 +65,7 @@ public class AdministratorController {
         result.addObject("projects",projectService.findAll());
         result.addObject("users",userService.findAll());
         result.addObject("teams",teamService.findAll());
+        result.addObject("evaluationsTeam",utilidadesService.evaluationsTeam());
         result.addObject("categorias",categoryService.findAll());
         result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
         return result;
@@ -92,6 +93,8 @@ public class AdministratorController {
         result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
         result.addObject("categoriasNombres",utilidadesService.nombresCategoriasConProyectos());
         result.addObject("categoriasConNumeroProyectos",utilidadesService.numeroProyectosPorCategorias());
+        result.addObject("temasBlogNombres",utilidadesService.nombresCategoriasConTemasBlog());
+        result.addObject("categoriasConNumeroTemasBlog",utilidadesService.numeroTemasBlogPorCategorias());
         return result;
     }
 

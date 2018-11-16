@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Creación de Proyecto</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-light">
+<div th:replace="masterpage/headerUser :: nav"></div>
+<br />
+<br />
+<div class="container py-4">
+    <h3 class="my-4">
+        Crea un nuevo tema para el foro
+    </h3>
+    <div class="container-fluid">
+        <form th:action="@{/forum/create(projectId=${projectId})}" th:object="${forumForm}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="title">Título</label>:
+                <input type="text" class="form-control" id="title" name="title" style="max-width: 350px" th:field="*{title}"/>
+                <li th:each="err : ${#fields.errors('title')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="body">Asunto</label>:
+                <textarea type="textarea" class="form-control" id="body" name="body" style="max-width: 350px; max-height: 300px" th:field="*{body}"/>
+                <li th:each="err : ${#fields.errors('body')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="image">Imagen</label>:
+                <input type="image" class="form-control" id="image" name="image" style="max-width: 350px; max-height: 300px" th:field="*{image}"/>
+                <li th:each="err : ${#fields.errors('image')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="category">Categorías</label>
+                <select style="max-width: 350px" id="category"  name="category" class="form-control">
+                    <option th:each="category : ${categories}" th:value="${category.getId()}" th:text="${category.getName()}"></option>
+                </select>
+            </div>
+            <input type="submit" class="btn btn-info" name="save" value="Crear" />
+        </form>
+    </div>
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

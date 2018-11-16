@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Foro</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="masterpage/headerUser :: nav"></div>
+<div class="container">
+    <br />
+    <br />
+    <h3>Blog</h3>
+    <div style="margin-top: 20px" class="row">
+        <div th:each="forum : ${forums}" class="col-12 portfolio-item">
+            <h5>Título</h5>
+            <span th:text="${forum.getTitle()}"></span></a>
+            <h5>Descripción</h5>
+            <span th:text="${forum.getBody()}"></span>
+            <h5>Imagen</h5>
+            <span th:text="${forum.getImage()}"></span>
+            <h5>Categoría</h5>
+            <span th:text="${forum.getCategory().getName()}"></span>
+        </div>
+    </div>
+    <button type="submit" class="btn btn-info"><a style="color: white" th:href="@{/forum/create(projectId=${projectId})}">Nuevo tema </a></button>
+</div>
+<br />
+<br />
+<br />
+<br />
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

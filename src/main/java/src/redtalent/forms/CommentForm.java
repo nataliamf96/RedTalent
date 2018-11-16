@@ -11,6 +11,8 @@ public class CommentForm {
     private ObjectId blogId;
     private ObjectId commentId;
     private ObjectId userId;
+    private ObjectId forumId;
+    private ObjectId projectId;
 
     @NotBlank
     public String getTitle() {
@@ -53,4 +55,21 @@ public class CommentForm {
     public void setCommentId(ObjectId commentId) {
         this.commentId = commentId;
     }
+
+    public ObjectId getForumId() {
+        return forumId;
+    }
+
+    public void setForumId(ObjectId forumId) {
+        this.forumId = forumId;
+    }
+
+    public ObjectId getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(ObjectId projectId) {
+        this.projectId = projectId;
+    }
+
 }

@@ -51,6 +51,9 @@ public class ForumController {
     @Autowired
     private ForumService forumService;
 
+    @Autowired
+    private TeamService teamService;
+
     // Constructors -----------------------------------------------------------
     public ForumController() {
         super();
@@ -62,27 +65,37 @@ public class ForumController {
     @RequestMapping(value="/list", method = RequestMethod.GET)
     public ModelAndView list(@RequestParam ObjectId projectId) {
 
-        ModelAndView result;
+        ModelAndView result = new ModelAndView("redirect:/403");
         Project project = projectService.findOne(projectId.toString());
         List<Forum> forums = project.getForums();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+        Collection<Team> teams = teamService.findAll();
         Collection<Category> categories = categoryService.findAll();
 
-        result = new ModelAndView("forum/list");
-        result.addObject("requestURI", "forum/list?projectId=" + projectId);
-        result.addObject("forums", forums);
-        result.addObject("projectId", projectId);
-        result.addObject("categories", categories);
+        for(Team t: teams) {
+            if (t.getProjects().contains(project)) {
+                List<User> users = utilidadesService.usuariosDelEquipo(t);
+                if (users.contains(userCreated)) {
+                    result = new ModelAndView("forum/list");
+                    result.addObject("requestURI", "forum/list?projectId=" + projectId);
+                    result.addObject("forums", forums);
+                    result.addObject("projectId", projectId);
+                    result.addObject("categories", categories);
+                }
+            }
+        }
 
         return result;
     }
 
 
-    // Crear Blog -------------
+    // Crear Foro -------------
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView create(@RequestParam ObjectId projectId, final RedirectAttributes redirectAttrs) {
-        ModelAndView result;
+        ModelAndView result = new ModelAndView("redirect:/403");
         ForumForm forumForm = new ForumForm();
 
         forumForm.setProjectId(projectId);
@@ -90,19 +103,23 @@ public class ForumController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
 
-        try {
+        Project project = projectService.findOne(projectId.toString());
+        Collection<Team> teams = teamService.findAll();
+        Collection<Category> categories = categoryService.findAll();
 
-            Collection<Category> categories = categoryService.findAll();
+        for(Team t: teams) {
+            if (t.getProjects().contains(project)) {
+                List<User> users = utilidadesService.usuariosDelEquipo(t);
+                if (users.contains(userCreated)) {
+                    result = new ModelAndView("forum/create");
+                    result.addObject("forumForm", forumForm);
+                    result.addObject("projectId", projectId);
+                    result.addObject("requestURI", "./forum/create?projectId=" + projectId);
+                    result.addObject("userCreated", userCreated);
+                    result.addObject("categories", categories);
 
-            result = new ModelAndView("forum/create");
-            result.addObject("forumForm", forumForm);
-            result.addObject("projectId", projectId);
-            result.addObject("requestURI", "./forum/create?projectId=" + projectId);
-            result.addObject("userCreated", userCreated);
-            result.addObject("categories", categories);
-
-        } catch (Throwable oops) {
-            result = new ModelAndView("redirect:/forum/list?projectId=" +projectId);
+                }
+            }
         }
         return result;
     }
@@ -149,6 +166,119 @@ public class ForumController {
         return result;
     }
 
+    // Crear lista de comentarios para el foro
+
+    @RequestMapping(value = "/listComment", method = RequestMethod.GET)
+    public ModelAndView listComments(@RequestParam ObjectId forumId, @RequestParam Object projectId){
+
+        ModelAndView result = new ModelAndView("redirect:/403");
+        Collection<Comment> comments;
+        Forum forum = forumService.findOne(forumId.toString());
+
+        comments = forum.getComments();
+        Collection<Team> teams = teamService.findAll();
+
+        Project project = projectService.findOne(projectId.toString());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        for(Team t: teams) {
+            if (t.getProjects().contains(project)) {
+                List<User> users = utilidadesService.usuariosDelEquipo(t);
+                if (users.contains(userCreated)) {
+                    result = new ModelAndView("forum/listComment");
+                    result.addObject("requestURI", "forum/listComment?forumId=" + forumId + "&projectId=" + projectId);
+                    result.addObject("comments", comments);
+                    result.addObject("forumId", forumId);
+                    result.addObject("projectId", projectId);
+
+                }
+            }
+        }
+        return result;
+    }
+
+    // Crear comentarios para el foro
+
+    @RequestMapping(value = "/createComment", method = RequestMethod.GET)
+    public ModelAndView createComment(@RequestParam ObjectId forumId, @RequestParam ObjectId projectId, final RedirectAttributes redirectAttrs) {
+
+        ModelAndView result = new ModelAndView("redirect:/403");
+        CommentForm commentForm = new CommentForm();
+        commentForm.setForumId(forumId);
+        commentForm.setProjectId(projectId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        Project project = projectService.findOne(projectId.toString());
+        Collection<Team> teams = teamService.findAll();
+        for(Team t: teams){
+            if(t.getProjects().contains(project)){
+                List<User> users = utilidadesService.usuariosDelEquipo(t);
+                if(users.contains(userCreated)){
+                    result = new ModelAndView("forum/createComment");
+                    result.addObject("commentForm", commentForm);
+                    result.addObject("forumId", forumId);
+                    result.addObject("projectId", projectId);
+                    result.addObject("requestURI", "./forum/createComment?forumId=" +forumId+ "&projectId=" + projectId);
+                    result.addObject("userCreated", userCreated);
+
+                }
+            }
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/createComment", method = RequestMethod.POST, params = "save")
+    public ModelAndView saveCreate(@Valid CommentForm commentForm, BindingResult binding, RedirectAttributes redirectAttrs) {
+
+        ModelAndView result;
+        commentForm.setProjectId(commentForm.getBlogId());
+        commentForm.setForumId(commentForm.getForumId());
+
+        if (binding.hasErrors()) {
+            result = createCommentModelAndView(commentForm);
+        } else {
+            try {
+                Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
+
+                Comment comment = commentService.create();
+                comment.setTitle(commentForm.getTitle());
+                comment.setText(commentForm.getText());
+                Comment saved = commentService.save(comment);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                Set<Comment> comments = user.getComments();
+                comments.add(saved);
+                user.setComments(comments);
+                userService.saveUser(user);
+
+                Forum forum = forumService.findOne(commentForm.getBlogId().toString());
+                List<Comment> comments1 = forum.getComments();
+                comments1.add(saved);
+                forum.setComments(comments1);
+                forumService.save(forum);
+
+                Project project = projectService.findOne(commentForm.getProjectId().toString());
+                List<Forum> forums = project.getForums();
+                for(Forum f: forums){
+                    f.setComments(comments1);
+                }
+                project.setForums(forums);
+                projectService.save(project);
+
+                result = new ModelAndView("redirect:/blog/listComment?forumId=" +commentForm.getBlogId()+ "&projectId=" +commentForm.getProjectId());
+
+            } catch (Throwable oops) {
+                result = createCommentModelAndView(commentForm, "No se puede crear correctamente los comentarios del blog");
+
+            }
+        }
+        return result;
+    }
+
     // Model and View ---------------
 
     protected ModelAndView createModelAndView(ForumForm forumForm) {
@@ -185,9 +315,10 @@ public class ForumController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
 
-        result = new ModelAndView("blog/createComment");
+        result = new ModelAndView("forum/createComment");
         result.addObject("commentForm", commentForm);
-        result.addObject("blogId", commentForm.getBlogId());
+        result.addObject("forumId", commentForm.getForumId());
+        result.addObject("projectId", commentForm.getProjectId());
         result.addObject("userCreated", userCreated);
         result.addObject("message", message);
         return result;

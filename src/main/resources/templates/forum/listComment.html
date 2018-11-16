@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Foro</title>
+    <title>Comentarios</title>
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
@@ -14,18 +14,16 @@
     <br />
     <h3>Blog</h3>
     <div style="margin-top: 20px" class="row">
-        <div th:each="forum : ${forums}" class="col-12 portfolio-item">
+        <div th:each="comment : ${comments}" class="col-12 portfolio-item">
             <h5>Título</h5>
-            <a style="color:black" th:href="@{/forum/listComment(forumId=${forum.getId()}, projectId=${projectId})}"><span th:text="${forum.getTitle()}"></span></a>
-            <h5>Descripción</h5>
-            <span th:text="${forum.getBody()}"></span>
-            <h5>Imagen</h5>
-            <span th:text="${forum.getImage()}"></span>
-            <h5>Categoría</h5>
-            <span th:text="${forum.getCategory().getName()}"></span>
+            <span th:text="${comment.getTitle()}" />
+            <h5>Cuerpo</h5>
+            <span th:text="${comment.getText()}"></span>
+            <h5>Momento de publicación</h5>
+            <span th:text="${comment.getMoment()}"></span>
         </div>
     </div>
-    <button type="submit" class="btn btn-info"><a style="color: white" th:href="@{/forum/create(projectId=${projectId})}">Nuevo tema </a></button>
+    <button type="submit" class="btn btn-info"><a style="color: white" th:href="@{/forum/createComment(forumId=${forumId}, projectId=${projectId})}">Nuevo comentario</a></button>
 </div>
 <br />
 <br />

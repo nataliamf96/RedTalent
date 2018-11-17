@@ -30,7 +30,7 @@ public class DirectivoController {
         ModelAndView result;
 
         result = new ModelAndView("directivo/index");
-        result.addObject("projects",projectService.findAllByPrivadoFalse());
+        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         return result;
     }
@@ -41,7 +41,7 @@ public class DirectivoController {
 
         result = new ModelAndView("directivo/dashboardDirectivo");
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("proyectosAbiertos",projectService.findAllByPrivadoFalse());
+        result.addObject("proyectosAbiertos",projectService.findAllByPrivadoFalseAndEstadoFalse());
         result.addObject("proyectosCerrados",projectService.findAllByPrivadoTrue());
 
         return result;

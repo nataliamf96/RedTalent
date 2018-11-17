@@ -9,7 +9,7 @@ import java.util.Set;
 
 public interface ProjectRepository extends MongoRepository<Project, String> {
 
-    Set<Project> findAllByPrivadoFalse();
+    Set<Project> findAllByPrivadoFalseAndEstadoFalse();
     Set<Project> findAllByPrivadoTrue();
     Set<Project> findAllByCategorie(Category category);
 

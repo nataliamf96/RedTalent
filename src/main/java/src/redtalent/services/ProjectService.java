@@ -59,8 +59,8 @@ public class ProjectService {
         return result;
     }
 
-    public Set<Project> findAllByPrivadoFalse(){
-        return projectRepository.findAllByPrivadoFalse();
+    public Set<Project> findAllByPrivadoFalseAndEstadoFalse(){
+        return projectRepository.findAllByPrivadoFalseAndEstadoFalse();
     }
 
     public Set<Project> findAllByPrivadoTrue(){

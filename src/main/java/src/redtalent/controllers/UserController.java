@@ -67,7 +67,7 @@ public class UserController {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         result = new ModelAndView("user/index");
-        result.addObject("projects",projectService.findAllByPrivadoFalse());
+        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",utilidadesService.userConectado(authentication.getName()));
         result.addObject("ultimosCincoUsers", utilidadesService.ultimosCincoUsuariosRegistrados());

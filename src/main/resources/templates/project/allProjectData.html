@@ -98,10 +98,11 @@
             <span th:text="${team.getDescription()}"></span>
         </div>
     </div>
-    <div th:if="${userConnect.getProjects().contains(project)}" class="row">
+    <div th:if="${userConnect.getProjects().contains(project) && project.getEstado() == false}" class="row">
         <div class="col-12 portfolio-item">
             <a type="button" class="btn btn-info" th:href="@{/project/updateProject(projectId=${project.getId()})}">Cambiar Datos del Proyecto</a>
             <a th:if="${team == null}" type="button" class="btn btn-info" th:href="@{/team/create(projectId=${project.getId()})}">Añadir Equipo</a>
+            <a onclick="return confirm('¿Esta seguro que desea Borrar el Proyecto?')" type="button" class="btn btn-info" th:href="@{/project/cerrarProyecto(projectId=${project.getId()})}">Borrar Proyecto</a>
         </div>
     </div>
 </div>

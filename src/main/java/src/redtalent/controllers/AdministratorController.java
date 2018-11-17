@@ -51,7 +51,7 @@ public class AdministratorController {
 
         result = new ModelAndView("admin/index");
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("projects",projectService.findAllByPrivadoFalse());
+        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
         result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
         return result;
     }

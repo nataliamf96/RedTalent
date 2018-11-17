@@ -61,7 +61,7 @@ public class LoginController {
     public ModelAndView home() {
         ModelAndView modelAndView = new ModelAndView();
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        Collection<Project> projects = projectService.findAllByPrivadoFalse();
+        Collection<Project> projects = projectService.findAllByPrivadoFalseAndEstadoFalse();
         modelAndView.setViewName("home");
         modelAndView.addObject("projects",projects);
         modelAndView.addObject("auth",utilidadesService.actorConectado());

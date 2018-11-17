@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -183,19 +184,20 @@ public class ProjectController {
                 for(Team team:user.getTeams()){
                     if(team.getProjects().contains(savee)){
                         tt = team;
+                        List<Project> projectsS = new ArrayList<Project>();
+                        projectsS.addAll(tt.getProjects());
+                        projectsS.remove(projectService.findOne(projectId));
+                        projectsS.add(savee);
+                        tt.setProjects(projectsS);
+                        Team ttSave = teamService.save(tt);
+
+                        Set<Team> listaEquiposUser = user.getTeams();
+                        listaEquiposUser.remove(tt);
+                        listaEquiposUser.add(ttSave);
+                        user.setTeams(listaEquiposUser);
                     }
                 }
-                List<Project> projectsS = new ArrayList<Project>();
-                projectsS.addAll(tt.getProjects());
-                projectsS.remove(projectService.findOne(projectId));
-                projectsS.add(savee);
-                tt.setProjects(projectsS);
-                Team ttSave = teamService.save(tt);
 
-                Set<Team> listaEquiposUser = user.getTeams();
-                listaEquiposUser.remove(tt);
-                listaEquiposUser.add(ttSave);
-                user.setTeams(listaEquiposUser);
 
                 userService.saveUser(user);
 
@@ -220,6 +222,73 @@ public class ProjectController {
             } catch (Throwable oops) {
                 result = updateEditModelAndViewProject(projectForm, "ERROR AL ACTUALIZAR EL PROYECTO");
             }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/cerrarProyecto", method = RequestMethod.GET)
+    public ModelAndView cerrarProyecto(@RequestParam String projectId) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        try{
+            Assert.isTrue(user.getProjects().contains(projectService.findOne(projectId)),"El usuario creador no es el conectado.");
+
+            Project project = projectService.findOne(projectId);
+            project.setEstado(true);
+
+            Project savee = projectService.save(project);
+
+            Set<Project> pp = new HashSet<Project>();
+            pp.addAll(user.getProjects());
+            pp.remove(projectService.findOne(projectId));
+            pp.add(savee);
+            user.setProjects(pp);
+
+            Team tt = null;
+            for(Team team:user.getTeams()){
+                if(team.getProjects().contains(savee)){
+                    tt = team;
+                    List<Project> projectsS = new ArrayList<Project>();
+                    projectsS.addAll(tt.getProjects());
+                    projectsS.remove(projectService.findOne(projectId));
+                    projectsS.add(savee);
+                    tt.setProjects(projectsS);
+                    Team ttSave = teamService.save(tt);
+
+                    Set<Team> listaEquiposUser = user.getTeams();
+                    listaEquiposUser.remove(tt);
+                    listaEquiposUser.add(ttSave);
+                    user.setTeams(listaEquiposUser);
+                }
+            }
+
+
+            userService.saveUser(user);
+
+            Team team = null;
+            for(Team teamm:teamService.findAll()){
+                if(teamm.getProjects().contains(savee)){
+                    team = teamm;
+                }
+            }
+
+            if(team != null){
+                List<Project> ppp = new ArrayList<Project>();
+                ppp.addAll(team.getProjects());
+                ppp.remove(projectService.findOne(projectId));
+                ppp.add(savee);
+                team.setProjects(ppp);
+                teamService.save(team);
+            }
+
+            result = new ModelAndView("redirect:/user/index");
+            result.addObject("auth",utilidadesService.actorConectado());
+        }catch (Throwable oops){
+            result = new ModelAndView("redirect:/403");
+        }
 
         return result;
     }

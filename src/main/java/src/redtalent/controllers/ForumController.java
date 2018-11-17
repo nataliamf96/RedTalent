@@ -13,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.*;
-import src.redtalent.forms.BlogForm;
 import src.redtalent.forms.CommentForm;
 import src.redtalent.forms.ForumForm;
 import src.redtalent.forms.ReplyForm;
@@ -159,7 +158,7 @@ public class ForumController {
                 result = new ModelAndView("redirect:/forum/list?projectId=" + forumForm.getProjectId());
 
             } catch (Throwable oops) {
-                result = createModelAndView(forumForm, "No se puede crear correctamente los temas del blog");
+                result = createModelAndView(forumForm, "No se puede crear correctamente los temas del foro");
 
             }
         }
@@ -234,7 +233,7 @@ public class ForumController {
     public ModelAndView saveCreate(@Valid CommentForm commentForm, BindingResult binding, RedirectAttributes redirectAttrs) {
 
         ModelAndView result;
-        commentForm.setProjectId(commentForm.getBlogId());
+        commentForm.setProjectId(commentForm.getProjectId());
         commentForm.setForumId(commentForm.getForumId());
 
         if (binding.hasErrors()) {
@@ -255,7 +254,7 @@ public class ForumController {
                 user.setComments(comments);
                 userService.saveUser(user);
 
-                Forum forum = forumService.findOne(commentForm.getBlogId().toString());
+                Forum forum = forumService.findOne(commentForm.getForumId().toString());
                 List<Comment> comments1 = forum.getComments();
                 comments1.add(saved);
                 forum.setComments(comments1);
@@ -269,15 +268,272 @@ public class ForumController {
                 project.setForums(forums);
                 projectService.save(project);
 
-                result = new ModelAndView("redirect:/blog/listComment?forumId=" +commentForm.getBlogId()+ "&projectId=" +commentForm.getProjectId());
+                result = new ModelAndView("redirect:/forum/listComment?forumId=" +commentForm.getForumId()+ "&projectId=" +commentForm.getProjectId());
 
             } catch (Throwable oops) {
-                result = createCommentModelAndView(commentForm, "No se puede crear correctamente los comentarios del blog");
+                result = createCommentModelAndView(commentForm, "No se puede crear correctamente los comentarios del foro");
 
             }
         }
         return result;
     }
+
+    // Lista de respuestas
+
+    @RequestMapping(value = "/listReply", method = RequestMethod.GET)
+    public ModelAndView listReplies(@RequestParam ObjectId forumId, @RequestParam ObjectId projectId, @RequestParam ObjectId commentId) {
+
+        ModelAndView result = new ModelAndView("redirect:/403");
+        Collection<Reply> replies;
+        Comment comment = commentService.findOne(commentId.toString());
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        replies = comment.getReplies();
+        Project project = projectService.findOne(projectId.toString());
+        Collection<Team> teams = teamService.findAll();
+        for (Team t : teams) {
+            if (t.getProjects().contains(project)) {
+                List<User> users = utilidadesService.usuariosDelEquipo(t);
+                if (users.contains(userCreated)) {
+                    result = new ModelAndView("forum/listReply");
+                    result.addObject("requestURI", "forum/listReply?forumId=" + forumId + "&projectId=" + projectId + "&commentId=" + commentId);
+                    result.addObject("replies", replies);
+                    result.addObject("commentId", commentId);
+                    result.addObject("forumId", forumId);
+                    result.addObject("projectId", projectId);
+                }
+            }
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/createReply", method = RequestMethod.GET)
+    public ModelAndView createReply(@RequestParam ObjectId forumId, @RequestParam ObjectId projectId, @RequestParam ObjectId commentId, final RedirectAttributes redirectAttrs) {
+        ModelAndView result = new ModelAndView("redirect:/403");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        ReplyForm replyForm = new ReplyForm();
+        replyForm.setCommentId(commentId);
+        replyForm.setForumId(forumId);
+        replyForm.setProjectId(projectId);
+
+        Project project = projectService.findOne(projectId.toString());
+        Collection<Team> teams = teamService.findAll();
+        for(Team t: teams) {
+            if (t.getProjects().contains(project)) {
+                List<User> users = utilidadesService.usuariosDelEquipo(t);
+                if (users.contains(userCreated)) {
+                    result = new ModelAndView("forum/createReply");
+                    result.addObject("replyForm", replyForm);
+                    result.addObject("requestURI", "./forum/createReply?forumId=" + forumId + "&projectId=" + projectId + "&commentId=" + commentId);
+                    result.addObject("commentId", commentId);
+                    result.addObject("forumId", forumId);
+                    result.addObject("projectId", projectId);
+                }
+            }
+        }
+        return result;
+    }
+
+    @RequestMapping(value = "/createReply", method = RequestMethod.POST, params = "save")
+    public ModelAndView saveCreateReply(@Valid ReplyForm replyForm, BindingResult binding, RedirectAttributes redirectAttrs) {
+
+        ModelAndView result;
+        replyForm.setCommentId(replyForm.getCommentId());
+        replyForm.setProjectId(replyForm.getProjectId());
+        replyForm.setForumId(replyForm.getForumId());
+
+        if (binding.hasErrors()) {
+            result = createReplyModelAndView(replyForm);
+        } else {
+            try {
+                Assert.notNull(replyForm, "No puede ser nulo el formulario de Reply");
+
+                Reply reply = replyService.create();
+                reply.setTitle(replyForm.getTitle());
+                reply.setText(replyForm.getText());
+                Reply saved = replyService.save(reply);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                Set<Reply> replies = user.getReplies();
+                replies.add(saved);
+                user.setReplies(replies);
+                userService.saveUser(user);
+
+                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
+                Set<Reply> replies1 = comment.getReplies();
+                replies1.add(saved);
+                comment.setReplies(replies1);
+                commentService.save(comment);
+
+                Forum forum = forumService.findOne(replyForm.getForumId().toString());
+                List<Comment> comments = forum.getComments();
+                for(Comment c: comments){
+                    c.setReplies(replies1);
+                }
+                forum.setComments(comments);
+                forumService.save(forum);
+
+                Project project = projectService.findOne(replyForm.getProjectId().toString());
+                List<Forum> forums = project.getForums();
+                for(Forum f: forums){
+                    f.setComments(comments);
+                }
+                project.setForums(forums);
+                projectService.save(project);
+
+                result = new ModelAndView("redirect:/forum/listReply?forumId=" + replyForm.getForumId() + "&projectId=" +replyForm.getProjectId() +"&commentId=" +replyForm.getCommentId());
+
+            } catch (Throwable oops) {
+                result = createReplyModelAndView(replyForm, "No se puede crear correctamente las respuestas del comentario");
+
+            }
+        }
+        return result;
+    }
+
+    //Eliminar un tema
+
+    @RequestMapping(value = "/delete", method = RequestMethod.GET)
+    public ModelAndView delete(@RequestParam ObjectId forumId) {
+        ModelAndView result;
+
+        Assert.notNull(forumService.findOne(forumId.toString()), "La id no puede ser nula");
+        Forum res = forumService.findOne(forumId.toString());
+        Project project = projectService.findProjectByForumsContains(res);
+
+        User user = userService.findUserByForumsContains(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        if(user.equals(userCreated)) {
+            for (Comment c : res.getComments()) {
+                commentService.remove(c);
+                for (Reply r : c.getReplies()) {
+                    replyService.remove(r);
+                }
+            }
+
+            Set<Forum> forums = user.getForums();
+            forums.remove(res);
+            user.setForums(forums);
+            userService.saveUser(user);
+
+            List<Forum> forums1 = project.getForums();
+            forums1.remove(res);
+            project.setForums(forums1);
+            projectService.save(project);
+
+            res.setCategory(null);
+            Forum saved = forumService.save(res);
+
+            forumService.remove(saved);
+        }
+
+        result = new ModelAndView("redirect:/forum/list?projectId=" + project.getId());
+        return result;
+    }
+
+    //Eliminar un comentario
+
+    @RequestMapping(value = "/deleteComment", method = RequestMethod.GET)
+    public ModelAndView deleteComment(@RequestParam ObjectId commentId) {
+        ModelAndView result;
+        Assert.notNull(commentService.findOne(commentId.toString()), "La id no puede ser nula");
+
+        Comment res = commentService.findOne(commentId.toString());
+        User user = userService.findUserByCommentsContains(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+        Forum f = forumService.findForumByCommentsContaining(res);
+        Project project = projectService.findProjectByForumsContains(f);
+
+        if(user.equals(userCreated)) {
+            Set<Comment> comments = user.getComments();
+            comments.remove(res);
+            user.setComments(comments);
+            userService.saveUser(user);
+
+            List<Comment> comments1 = f.getComments();
+            comments1.remove(res);
+            f.setComments(comments1);
+            forumService.save(f);
+
+            List<Forum> forums = project.getForums();
+            for(Forum forum: forums){
+                forum.setComments(comments1);
+            }
+            project.setForums(forums);
+            projectService.save(project);
+
+            for (Reply r : res.getReplies()) {
+                replyService.remove(r);
+            }
+
+            commentService.remove(res);
+        }
+
+        result = new ModelAndView("redirect:/forum/listComment?forumId=" +f.getId() + "&projectId=" + project.getId());
+        return result;
+    }
+
+    //Eliminar reply
+
+    @RequestMapping(value = "/deleteReply", method = RequestMethod.GET)
+    public ModelAndView deleteReply(@RequestParam ObjectId replyId) {
+        ModelAndView result;
+        Assert.notNull(replyService.findOne(replyId.toString()), "La id no puede ser nula");
+
+        Reply res = replyService.findOne(replyId.toString());
+        User user = userService.findUserByRepliesContaining(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+        Comment c = commentService.findCommentByRepliesContaining(res);
+        Forum f = forumService.findForumByCommentsContaining(c);
+        Project p = projectService.findProjectByForumsContains(f);
+
+        if(user.equals(userCreated)) {
+
+            Set<Reply> replies1 = c.getReplies();
+            replies1.remove(res);
+            c.setReplies(replies1);
+            commentService.save(c);
+
+            List<Comment> comments1 = f.getComments();
+            for(Comment com1: comments1){
+                com1.setReplies(replies1);
+            }
+            f.setComments(comments1);
+            forumService.save(f);
+
+            List<Forum> forums = p.getForums();
+            for(Forum forum: forums){
+                forum.setComments(comments1);
+            }
+            p.setForums(forums);
+            projectService.save(p);
+
+            Set<Comment> comments = user.getComments();
+            for(Comment com : comments){
+                com.setReplies(replies1);
+            }
+            Set<Reply> replies = user.getReplies();
+            replies.remove(res);
+            user.setReplies(replies);
+            user.setComments(comments);
+            userService.saveUser(user);
+
+            replyService.remove(res);
+        }
+
+        result = new ModelAndView("redirect:/forum/listReply?forumId=" +f.getId() + "&projectId=" + p.getId() + "&commentId=" + c.getId());
+        return result;
+    }
+
 
     // Model and View ---------------
 
@@ -336,13 +592,13 @@ public class ForumController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
 
-        result = new ModelAndView("blog/createReply");
+        result = new ModelAndView("forum/createReply");
         result.addObject("replyForm", replyForm);
-        result.addObject("blogId", replyForm.getBlogId());
+        result.addObject("forumId", replyForm.getForumId());
         result.addObject("commentId", replyForm.getCommentId());
+        result.addObject("projectId", replyForm.getProjectId());
         result.addObject("userCreated", userCreated);
         result.addObject("message", message);
         return result;
     }
-
 }

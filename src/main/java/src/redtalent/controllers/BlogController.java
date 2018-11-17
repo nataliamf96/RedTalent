@@ -333,6 +333,10 @@ public class BlogController {
                     replyService.remove(r);
                 }
             }
+            Set<Blog> blogs = user.getBlogs();
+            blogs.remove(res);
+            user.setBlogs(blogs);
+            userService.saveUser(user);
 
             res.setCategory(null);
             Blog saved = blogService.save(res);

@@ -114,6 +114,12 @@ public class UserService {
         return result;
     }
 
+    public User findUserByForumsContains(Forum forum){
+        Assert.notNull(forum, "Forum null");
+        User result = userRepository.findUserByForumsContains(forum);
+        return result;
+    }
+
     public User findUserByRepliesContaining(Reply reply){
         Assert.notNull(reply, "Reply null");
         User result = userRepository.findUserByRepliesContaining(reply);

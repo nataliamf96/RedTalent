@@ -1,16 +1,10 @@
 package src.redtalent.domain;
 
-import org.springframework.data.mongodb.core.index.IndexDirection;
-import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import src.redtalent.security.Role;
 
 import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 @Document(collection = "Users")
@@ -31,14 +25,18 @@ public class User extends DomainEntity{
     private String image;
     private Account account;
     private Set<Forum> forums;
+    private Set<Tag> tags;
+    private Curriculum curriculum;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Reply> replies, String image){
+    public User(Curriculum curriculum,Set<Tag> tags,Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Reply> replies, String image){
         this.fullname = fullname;
+        this.curriculum = curriculum;
+        this.tags = tags;
         this.roles = roles;
         this.projects = projects;
         this.teams = teams;
@@ -137,5 +135,21 @@ public class User extends DomainEntity{
 
     public void setForums(Set<Forum> forums) {
         this.forums = forums;
+    }
+
+    public Set<Tag> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<Tag> tags) {
+        this.tags = tags;
+    }
+
+    public Curriculum getCurriculum() {
+        return curriculum;
+    }
+
+    public void setCurriculum(Curriculum curriculum) {
+        this.curriculum = curriculum;
     }
 }

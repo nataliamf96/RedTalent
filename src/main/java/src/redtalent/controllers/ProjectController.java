@@ -178,7 +178,42 @@ public class ProjectController {
                 pp.remove(projectService.findOne(projectId));
                 pp.add(savee);
                 user.setProjects(pp);
+
+                Team tt = null;
+                for(Team team:user.getTeams()){
+                    if(team.getProjects().contains(savee)){
+                        tt = team;
+                    }
+                }
+                List<Project> projectsS = new ArrayList<Project>();
+                projectsS.addAll(tt.getProjects());
+                projectsS.remove(projectService.findOne(projectId));
+                projectsS.add(savee);
+                tt.setProjects(projectsS);
+                Team ttSave = teamService.save(tt);
+
+                Set<Team> listaEquiposUser = user.getTeams();
+                listaEquiposUser.remove(tt);
+                listaEquiposUser.add(ttSave);
+                user.setTeams(listaEquiposUser);
+
                 userService.saveUser(user);
+
+                Team team = null;
+                for(Team teamm:teamService.findAll()){
+                        if(teamm.getProjects().contains(savee)){
+                            team = teamm;
+                        }
+                }
+
+                if(team != null){
+                    List<Project> ppp = new ArrayList<Project>();
+                    ppp.addAll(team.getProjects());
+                    ppp.remove(projectService.findOne(projectId));
+                    ppp.add(savee);
+                    team.setProjects(ppp);
+                    teamService.save(team);
+                }
 
                 result = new ModelAndView("redirect:/user/index");
 

@@ -30,13 +30,12 @@ public class ProjectService {
 
     public Project create(){
         Project result = new Project();
-        List<Tag> tags = new ArrayList<Tag>();
         List<Comment> comments = new ArrayList<Comment>();
         List<Alert> alerts = new ArrayList<Alert>();
         List<ProjectMonitoring> projectMonitorings = new ArrayList<ProjectMonitoring>();
         List<User> users = new ArrayList<User>();
         result.setAlerts(alerts);
-        result.setTags(tags);
+        result.setCerrado(false);
         result.setComments(comments);
         result.setProjectMonitorings(projectMonitorings);
         result.setEstado(false);
@@ -60,36 +59,12 @@ public class ProjectService {
         return result;
     }
 
-    public void remove(Project project){
-        Assert.notNull(project,"Project Service : Objeto null");
-        projectRepository.delete(project);
-    }
-
     public Set<Project> findAllByPrivadoFalse(){
         return projectRepository.findAllByPrivadoFalse();
     }
+
     public Set<Project> findAllByPrivadoTrue(){
         return projectRepository.findAllByPrivadoTrue();
-    }
-
-    public Page<Project> findPaginated(Pageable pageable) {
-        int pageSize = pageable.getPageSize();
-        int currentPage = pageable.getPageNumber();
-        int startItem = currentPage * pageSize;
-        List<Project> list;
-        List<Project> projects = projectRepository.findAll();
-
-        if (projects.size() < startItem) {
-            list = Collections.emptyList();
-        } else {
-            int toIndex = Math.min(startItem + pageSize, projects.size());
-            list = projects.subList(startItem, toIndex);
-        }
-
-        Page<Project> bookPage
-                = new PageImpl<Project>(list, PageRequest.of(currentPage, pageSize), projects.size());
-
-        return bookPage;
     }
 
     public Set<Project> findAllByCategorie(Category category){

@@ -20,12 +20,12 @@ public class Project extends DomainEntity{
     private String attachedFiles;
     private Boolean privado;
     private Boolean estado;
+    private Boolean cerrado;
 
     //Constructors -----------------------------------------------
 
     public Project(){
         super();
-        this.tags = new ArrayList<>();
         this.comments = new ArrayList<>();
         this.alerts = new ArrayList<>();
         this.projectMonitorings = new ArrayList<>();
@@ -33,14 +33,14 @@ public class Project extends DomainEntity{
     }
 
     public Project(String name, String image, String description, String requiredProfiles, String attachedFiles,
-                   List<Tag> tags, List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado, Category categorie,
-                   List<Forum> forums){
+                   List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado, Category categorie,
+                   List<Forum> forums,Boolean cerrado){
         this.name = name;
+        this.cerrado = cerrado;
         this.image = image;
         this.description = description;
         this.requiredProfiles = requiredProfiles;
         this.attachedFiles = attachedFiles;
-        this.tags = tags;
         this.comments = comments;
         this.alerts = alerts;
         this.projectMonitorings = projectMonitorings;
@@ -105,20 +105,11 @@ public class Project extends DomainEntity{
 
     //Relationships -----------------------------------------------
 
-    private List<Tag> tags;
     private List<Comment> comments;
     private List<Alert> alerts;
     private List<ProjectMonitoring> projectMonitorings;
     private Category categorie;
     private List<Forum> forums;
-
-    public List<Tag> getTags() {
-        return tags;
-    }
-
-    public void setTags(List<Tag> tags) {
-        this.tags = tags;
-    }
 
     public List<Comment> getComments() {
         return comments;
@@ -166,5 +157,13 @@ public class Project extends DomainEntity{
 
     public void setForums(List<Forum> forums) {
         this.forums = forums;
+    }
+
+    public Boolean getCerrado() {
+        return cerrado;
+    }
+
+    public void setCerrado(Boolean cerrado) {
+        this.cerrado = cerrado;
     }
 }

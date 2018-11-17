@@ -2,6 +2,8 @@ package src.redtalent.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+
 @Document(collection = "Tags")
 public class Tag extends DomainEntity {
 
@@ -20,6 +22,7 @@ public class Tag extends DomainEntity {
 
     // Getters and setters ---------------------------------------------------
 
+    @NotBlank
     public String getName() {
         return name;
     }

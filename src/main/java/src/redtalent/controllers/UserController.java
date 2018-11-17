@@ -13,20 +13,15 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-import src.redtalent.domain.Account;
-import src.redtalent.domain.Project;
-import src.redtalent.domain.Team;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 import src.redtalent.forms.EditPasswordForm;
 import src.redtalent.forms.UpdateUserForm;
 import src.redtalent.forms.UserForm;
 import src.redtalent.repositories.AccountRepository;
-import src.redtalent.services.ProjectService;
-import src.redtalent.services.TeamService;
-import src.redtalent.services.UserService;
-import src.redtalent.services.UtilidadesService;
+import src.redtalent.services.*;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
 import java.util.Set;
@@ -50,13 +45,13 @@ public class UserController {
     private TeamService teamService;
 
     @Autowired
+    private TagService tagService;
+
+    @Autowired
     private BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @Autowired
     private AccountRepository accountRepository;
-
-    private static int currentPage = 1;
-    private static int pageSize = 5;
 
     public UserController(){
         super();
@@ -70,7 +65,6 @@ public class UserController {
         result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",utilidadesService.userConectado(authentication.getName()));
-        result.addObject("ultimosCincoUsers", utilidadesService.ultimosCincoUsuariosRegistrados());
         return result;
     }
 
@@ -145,6 +139,28 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/updateTags", method = RequestMethod.GET)
+    public ModelAndView updateTags() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+        result = new ModelAndView("user/updateTags");
+        result.addObject("userId",user.getId());
+
+        String etiquetas = "";
+        Integer primero = 0;
+        for(Tag t:user.getTags()){
+            if(primero == 0){
+                etiquetas = etiquetas + t.getName();
+                primero = 1;
+            }else{
+                etiquetas = etiquetas + "," + t.getName();
+            }
+        }
+        result.addObject("etiquetas",etiquetas);
+        return result;
+    }
+
     @RequestMapping(value = "/updateUser", method = RequestMethod.POST, params = "saveModUser")
     public ModelAndView updateUser(@Valid UpdateUserForm updateUserForm, BindingResult binding) {
         ModelAndView result;
@@ -157,6 +173,32 @@ public class UserController {
                 User user = utilidadesService.userConectado(authentication.getName());
                 user.setFullname(updateUserForm.getFullname());
                 user.setImage(updateUserForm.getImage());
+
+                /* Etiquetas */
+                Set<Tag> tagsUser = new HashSet<Tag>();
+                for(String nombreTag : updateUserForm.getEtiquetas().split(",")){
+                    Tag tt = null;
+                    for(Tag t:tagService.findAll()){
+                        if(t.getName().equals(nombreTag)){
+                            tt = t;
+                        }
+                    }
+                    if(tt == null){
+                        tt = tagService.create();
+                        tt.setName(nombreTag);
+                        Tag save = tagService.save(tt);
+                        tagsUser.add(save);
+                    }else{
+                        tagsUser.add(tt);
+                    }
+                }
+                for(Tag tagg:user.getTags()){
+                    if(!tagsUser.contains(tagg)){
+                        tagsUser.add(tagg);
+                    }
+                }
+                user.setTags(tagsUser);
+
                 userService.saveUser(user);
                 result = new ModelAndView("redirect:/user/index");
 

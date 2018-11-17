@@ -14,6 +14,7 @@ public class UserForm {
     private String role;
     private Boolean terms;
     private String image;
+    private String etiquetas;
 
     public UserForm(){
         super();
@@ -74,6 +75,11 @@ public class UserForm {
         this.role = role;
     }
 
+    public String getEtiquetas() {
+        return etiquetas;
+    }
 
-
+    public void setEtiquetas(String etiquetas) {
+        this.etiquetas = etiquetas;
+    }
 }

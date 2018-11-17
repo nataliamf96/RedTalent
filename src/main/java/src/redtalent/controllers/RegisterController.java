@@ -1,7 +1,5 @@
 package src.redtalent.controllers;
 
-import java.util.Base64;
-//import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -10,17 +8,17 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Account;
+import src.redtalent.domain.Tag;
 import src.redtalent.domain.User;
 import src.redtalent.forms.UserForm;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.repositories.RoleRepository;
 import src.redtalent.security.Role;
+import src.redtalent.services.TagService;
 import src.redtalent.services.UserService;
 import src.redtalent.services.UtilidadesService;
 
 import javax.validation.Valid;
-import java.io.File;
-import java.util.Base64;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -42,6 +40,9 @@ public class RegisterController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private TagService tagService;
 
     public RegisterController(){
         super();
@@ -85,6 +86,29 @@ public class RegisterController {
                 roles.add(role);
                 a.setRoles(roles);
                 a.setEnabled(false);
+
+                /* Etiquetas */
+                if(!userForm.getEtiquetas().isEmpty()){
+                    Set<Tag> tagsUser = new HashSet<Tag>();
+                    for(String nombreTag : userForm.getEtiquetas().split(",")){
+                        Tag tt = null;
+                        for(Tag t:tagService.findAll()){
+                            if(t.getName().equals(nombreTag)){
+                                tt = t;
+                            }
+                        }
+                        if(tt == null){
+                            tt = tagService.create();
+                            tt.setName(nombreTag);
+                            Tag save = tagService.save(tt);
+                            tagsUser.add(save);
+                        }else{
+                            tagsUser.add(tt);
+                        }
+                    }
+                    u.setTags(tagsUser);
+                }
+
                 Account save = accountRepository.save(a);
                 u.setAccount(save);
                 u.setFullname(userForm.getFullname());

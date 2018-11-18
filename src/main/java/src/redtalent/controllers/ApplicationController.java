@@ -28,6 +28,8 @@ public class ApplicationController{
     private ProjectService projectService;
     @Autowired
     private UserService userService;
+    @Autowired
+    private AlertService alertService;
 
     public ApplicationController(){
         super();
@@ -179,8 +181,12 @@ public class ApplicationController{
         userCrea.setApplications(appUserCrea);
         userService.saveUser(userCrea);
 
+
+
         Project p = projectService.findOne(projectId.toString());
+
         Team t = teamService.teamByProjectId(p);
+
         List<Application> appUser = new ArrayList<Application>();
         appUser.addAll(t.getApplications());
         appUser.remove(a);
@@ -193,6 +199,16 @@ public class ApplicationController{
         teams.add(saveTeam);
         user.setTeams(teams);
         userService.saveUser(user);
+
+        List<Alert> listaAlertas = p.getAlerts();
+        Alert newAlert = alertService.create();
+        String alerta = "[code:as]El Usuario "+userCrea.getFullname()+" se ha unido al Equipo "+ t.getName() + " para trabajar en el proyecto "+p.getName()+".";
+        newAlert.setText(alerta);
+        Alert alertSave = alertService.save(newAlert);
+        listaAlertas.add(alertSave);
+        p.setAlerts(listaAlertas);
+        Project psave = projectService.save(p);
+        projectService.saveAll(psave);
 
         result = new ModelAndView("redirect:/user/index");
 

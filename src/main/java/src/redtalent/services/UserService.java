@@ -159,4 +159,13 @@ public class UserService {
 
     }
 
+
+    public Set<User> findAllByTagsContains(Set<Tag> listaTags){
+        return userRepository.findAllByTagsContains(listaTags);
+    }
+
+    public Set<User> findAllByFullnameContains(String texto){
+        return userRepository.findAllByFullnameContains(texto);
+    }
+
 }

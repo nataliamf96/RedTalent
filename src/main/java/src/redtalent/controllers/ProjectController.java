@@ -11,10 +11,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import src.redtalent.domain.Category;
-import src.redtalent.domain.Project;
-import src.redtalent.domain.Team;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 import src.redtalent.forms.ProjectForm;
 import src.redtalent.forms.UserForm;
 import src.redtalent.security.Role;
@@ -49,6 +46,9 @@ public class ProjectController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private AlertService alertService;
 
     public ProjectController(){
         super();
@@ -239,50 +239,17 @@ public class ProjectController {
             Project project = projectService.findOne(projectId);
             project.setEstado(true);
 
+            List<Alert> listaAlertas = project.getAlerts();
+            Alert newAlert = alertService.create();
+            String alerta = "[code:cp]El proyecto " +project.getName()+ " ha sido cerrado.";
+            newAlert.setText(alerta);
+            Alert alertSave = alertService.save(newAlert);
+            listaAlertas.add(alertSave);
+            project.setAlerts(listaAlertas);
+
             Project savee = projectService.save(project);
 
-            Set<Project> pp = new HashSet<Project>();
-            pp.addAll(user.getProjects());
-            pp.remove(projectService.findOne(projectId));
-            pp.add(savee);
-            user.setProjects(pp);
-
-            Team tt = null;
-            for(Team team:user.getTeams()){
-                if(team.getProjects().contains(savee)){
-                    tt = team;
-                    List<Project> projectsS = new ArrayList<Project>();
-                    projectsS.addAll(tt.getProjects());
-                    projectsS.remove(projectService.findOne(projectId));
-                    projectsS.add(savee);
-                    tt.setProjects(projectsS);
-                    Team ttSave = teamService.save(tt);
-
-                    Set<Team> listaEquiposUser = user.getTeams();
-                    listaEquiposUser.remove(tt);
-                    listaEquiposUser.add(ttSave);
-                    user.setTeams(listaEquiposUser);
-                }
-            }
-
-
-            userService.saveUser(user);
-
-            Team team = null;
-            for(Team teamm:teamService.findAll()){
-                if(teamm.getProjects().contains(savee)){
-                    team = teamm;
-                }
-            }
-
-            if(team != null){
-                List<Project> ppp = new ArrayList<Project>();
-                ppp.addAll(team.getProjects());
-                ppp.remove(projectService.findOne(projectId));
-                ppp.add(savee);
-                team.setProjects(ppp);
-                teamService.save(team);
-            }
+            projectService.saveAll(savee);
 
             result = new ModelAndView("redirect:/user/index");
             result.addObject("auth",utilidadesService.actorConectado());

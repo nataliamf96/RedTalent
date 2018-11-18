@@ -6,6 +6,8 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.*;
@@ -23,6 +25,15 @@ public class ProjectService {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private UtilidadesService utilidadesService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private UserService userService;
 
     public ProjectService(){
         super();
@@ -45,6 +56,58 @@ public class ProjectService {
     public Project save(Project project){
         Assert.notNull(project,"Project Service : Objeto null");
         return projectRepository.save(project);
+    }
+
+    public void saveAll(Project project){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        Project savee = save(project);
+
+        Set<Project> pp = new HashSet<Project>();
+        pp.addAll(user.getProjects());
+        pp.remove(findOne(project.getId()));
+        pp.add(savee);
+        user.setProjects(pp);
+
+        Team tt = null;
+        for(Team team:user.getTeams()){
+            if(team.getProjects().contains(savee)){
+                tt = team;
+                List<Project> projectsS = new ArrayList<Project>();
+                projectsS.addAll(tt.getProjects());
+                projectsS.remove(findOne(project.getId()));
+                projectsS.add(savee);
+                tt.setProjects(projectsS);
+                Team ttSave = teamService.save(tt);
+
+                Set<Team> listaEquiposUser = user.getTeams();
+                listaEquiposUser.remove(tt);
+                listaEquiposUser.add(ttSave);
+                user.setTeams(listaEquiposUser);
+            }
+        }
+
+
+        userService.saveUser(user);
+
+        Team team = null;
+        for(Team teamm:teamService.findAll()){
+            if(teamm.getProjects().contains(savee)){
+                team = teamm;
+            }
+        }
+
+        if(team != null){
+            List<Project> ppp = new ArrayList<Project>();
+            ppp.addAll(team.getProjects());
+            ppp.remove(findOne(project.getId()));
+            ppp.add(savee);
+            team.setProjects(ppp);
+            teamService.save(team);
+        }
+
     }
 
     public Project findOne(String projectId){

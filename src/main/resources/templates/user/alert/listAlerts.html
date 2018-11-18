@@ -39,11 +39,18 @@
 <div style="margin-top: -25px" class="container py-4">
     <h1 class="my-4">Notificaciones
     </h1>
+    <div th:if="${user.getProjects().size()!=0}" class="row">
+        <div class="col-12">
+            <a type="button" class="btn btn-info" href="/user/alert/createAlert">Crear Notificacion</a>
+        </div>
+    </div>
     <div class="row">
         <div th:each="alerta : ${alertas}" class="col-12 portfolio-item">
             <div th:if="${alerta.getText().substring(0,9).equals('[code:as]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-success" role="alert">
             </div>
             <div th:if="${alerta.getText().substring(0,9).equals('[code:cp]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-danger" role="alert">
+            </div>
+            <div th:if="${alerta.getText().substring(0,9).equals('[code:nc]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-warning" role="alert">
             </div>
         </div>
     </div>

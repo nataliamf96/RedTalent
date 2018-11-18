@@ -132,6 +132,12 @@ public class UserService {
         return result;
     }
 
+    public User findUserByCommentsReceivedContains(Comment comment){
+        Assert.notNull(comment, "Comment null");
+        User result = userRepository.findUserByCommentsReceivedContains(comment);
+        return result;
+    }
+
     public Set<User> findAllByEnabledIsTrue(){
         Set<User> result = new HashSet<User>();
         for(User u:userRepository.findAll()){

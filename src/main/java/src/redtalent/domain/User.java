@@ -27,13 +27,14 @@ public class User extends DomainEntity{
     private Set<Forum> forums;
     private Set<Tag> tags;
     private Curriculum curriculum;
+    private Set<Comment> commentsReceived;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(Curriculum curriculum,Set<Tag> tags,Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Reply> replies, String image){
+    public User(Curriculum curriculum,Set<Tag> tags,Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Comment> commentsReceived, Set<Reply> replies, String image){
         this.fullname = fullname;
         this.curriculum = curriculum;
         this.tags = tags;
@@ -47,6 +48,7 @@ public class User extends DomainEntity{
         this.replies = replies;
         this.image = image;
         this.account = account;
+        this.commentsReceived = commentsReceived;
     }
 
     public Set<Project> getProjects() {
@@ -151,5 +153,13 @@ public class User extends DomainEntity{
 
     public void setCurriculum(Curriculum curriculum) {
         this.curriculum = curriculum;
+    }
+
+    public Set<Comment> getCommentsReceived() {
+        return commentsReceived;
+    }
+
+    public void setCommentsReceived(Set<Comment> commentsReceived) {
+        this.commentsReceived = commentsReceived;
     }
 }

@@ -17,4 +17,5 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findUserByRepliesContaining(Reply reply);
     User findUserByCommentsContains(Comment comment);
     User findUserByForumsContains(Forum forum);
+    User findUserByCommentsReceivedContains(Comment comment);
 }

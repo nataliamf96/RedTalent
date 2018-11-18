@@ -12,6 +12,8 @@ public class ReplyForm {
     private ObjectId commentId;
     private ObjectId userId;
     private ObjectId replyId;
+    private ObjectId forumId;
+    private ObjectId projectId;
 
     @NotBlank
     public String getTitle() {
@@ -61,5 +63,21 @@ public class ReplyForm {
 
     public void setReplyId(ObjectId replyId) {
         this.replyId = replyId;
+    }
+
+    public ObjectId getForumId() {
+        return forumId;
+    }
+
+    public void setForumId(ObjectId forumId) {
+        this.forumId = forumId;
+    }
+
+    public ObjectId getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(ObjectId projectId) {
+        this.projectId = projectId;
     }
 }

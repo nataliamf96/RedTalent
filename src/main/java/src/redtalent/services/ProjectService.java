@@ -71,4 +71,9 @@ public class ProjectService {
         return projectRepository.findAllByCategorie(category);
     }
 
+    public Project findProjectByForumsContains(Forum forum){
+        Project result = projectRepository.findProjectByForumsContains(forum);
+        return result;
+    }
+
 }

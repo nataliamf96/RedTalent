@@ -8,16 +8,14 @@ public class Evaluation extends DomainEntity {
 
     // Attributes ---------------------------------------------------
     private Integer rate;
-    private String description;
 
     // Constructors ---------------------------------------------------
     public Evaluation(){
         super();
     }
 
-    public Evaluation(Integer rate, String description){
+    public Evaluation(Integer rate){
         this.rate = rate;
-        this.description = description;
     }
 
     // Getters and setters ---------------------------------------------------
@@ -29,14 +27,6 @@ public class Evaluation extends DomainEntity {
 
     public void setRate(Integer rate) {
         this.rate = rate;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
     }
 
     // Relationships ---------------------------------------------------

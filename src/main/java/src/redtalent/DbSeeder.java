@@ -824,24 +824,19 @@ public class DbSeeder implements CommandLineRunner{
         // Evaluations -----------------------------------------
 
         Evaluation evaluation1 = new Evaluation(
-                1,
-                "No me ha gustado nada la coordinación de este equipo.");
+                1);
 
         Evaluation evaluation2 = new Evaluation(
-                5,
-                "Equipazo para trabajar. ¡Sois increíbles!");
+                5);
 
         Evaluation evaluation3 = new Evaluation(
-                4,
-                "Me encantó participar en este equipo.");
+                4);
 
         Evaluation evaluation4 = new Evaluation(
-                2,
-                "Creo que las participaciones del equipo no han sido equitativas.");
+                2);
 
         Evaluation evaluation5 = new Evaluation(
-                3,
-                "Se puede mejorar");
+                3);
 
         List<Evaluation> evaluations = Arrays.asList(evaluation1, evaluation2, evaluation3, evaluation4, evaluation5);
         evaluationRepository.saveAll(evaluations);

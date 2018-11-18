@@ -42,6 +42,10 @@
                 <li th:each="err : ${#fields.errors('fullname')}" th:text="${err}" />
             </div>
             <div class="form-group">
+                <label for="etiquetas">Etiquetas</label>:
+                <input type="text" class="form-control" id="etiquetas" name="etiquetas" style="max-width: 350px" th:value="${etiquetas}"/>
+            </div>
+            <div class="form-group">
                 <label for="image">Fotografía del Proyecto</label>
                 <input type="file" onchange="previewFile()" class="form-control-file">
                 <input type="text" style="display: none" id="image" name="image" th:value="${updateUserForm.getImage()}">

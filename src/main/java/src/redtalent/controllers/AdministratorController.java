@@ -1,6 +1,5 @@
 package src.redtalent.controllers;
 
-import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -9,16 +8,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Account;
-import src.redtalent.domain.Administrator;
-import src.redtalent.domain.Project;
 import src.redtalent.domain.User;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
 
 @Controller
 @RequestMapping("/admin")

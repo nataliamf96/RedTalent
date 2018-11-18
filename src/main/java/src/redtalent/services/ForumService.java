@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.Blog;
+import src.redtalent.domain.Category;
 import src.redtalent.domain.Comment;
 import src.redtalent.domain.Forum;
 import src.redtalent.repositories.ForumRepository;
@@ -60,6 +61,12 @@ public class ForumService {
     public Forum findForumByCommentsContaining(Comment comment){
         Assert.notNull(comment, "El comentario es nulo");
         Forum result = forumRepository.findForumByCommentsContaining(comment);
+        return result;
+    }
+
+    public List<Forum> findAllByCategory(Category category){
+        Assert.notNull(category, "La categoría es nula");
+        List<Forum> result = forumRepository.findAllByCategory(category);
         return result;
     }
 }

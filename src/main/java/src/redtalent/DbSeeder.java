@@ -841,45 +841,6 @@ public class DbSeeder implements CommandLineRunner{
         List<Evaluation> evaluations = Arrays.asList(evaluation1, evaluation2, evaluation3, evaluation4, evaluation5);
         evaluationRepository.saveAll(evaluations);
 
-        // Project Monitorings -----------------------------------------
-
-        ProjectMonitoring projectMonitoring1 = new ProjectMonitoring(
-                "Primer seguimiento",
-                "Primer seguimiento del proyecto",
-                moment,
-                "Document1"
-        );
-
-        ProjectMonitoring projectMonitoring2 = new ProjectMonitoring(
-                "Segundo seguimiento",
-                "Segundo seguimiento del proyecto",
-                moment,
-                "Document1"
-        );
-
-        ProjectMonitoring projectMonitoring3 = new ProjectMonitoring(
-                "Tercer seguimiento",
-                "Tercer seguimiento del proyecto",
-                moment,
-                "Document1"
-        );
-
-        ProjectMonitoring projectMonitoring4 = new ProjectMonitoring(
-                "Primer seguimiento",
-                "Primer seguimiento del proyecto",
-                moment,
-                "Document1"
-        );
-        ProjectMonitoring projectMonitoring5 = new ProjectMonitoring(
-                "Segundo seguimiento",
-                "Segundo seguimiento del proyecto",
-                moment,
-                "Document1"
-        );
-
-        List<ProjectMonitoring> projectMonitorings = Arrays.asList(projectMonitoring1, projectMonitoring2, projectMonitoring3, projectMonitoring4, projectMonitoring5);
-        projectMonitoringRepository.saveAll(projectMonitorings);
-
         //Category
 
         Category category1 = new Category(
@@ -959,10 +920,8 @@ public class DbSeeder implements CommandLineRunner{
                 imagea+""+imageb,
                 "Este proyecto consiste en hacer un robot en El Cubo",
                 "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
-                "Document1",
                 Arrays.asList(comment1),
-                Arrays.asList(alert1),
-                Arrays.asList(projectMonitoring1, projectMonitoring2)
+                Arrays.asList(alert1)
                 ,egr1,false,false,cata,
                 Arrays.asList(forum1, forum2, forum3),false);
 
@@ -974,10 +933,8 @@ public class DbSeeder implements CommandLineRunner{
                 imagec+""+imaged,
                 "Este proyecto consiste en hacer el juego del Tetrix mediante programación",
                 "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
-                "Document1",
                 Arrays.asList(comment2),
-                Arrays.asList(alert2),
-                Arrays.asList(projectMonitoring3, projectMonitoring4)
+                Arrays.asList(alert2)
                 ,pro1,true,false,catb,
                 Arrays.asList(),false);
 
@@ -989,10 +946,8 @@ public class DbSeeder implements CommandLineRunner{
                 imagee+""+imagef,
                 "Se basa en detectar los sentimientos del ser humano trabajando con arduinos",
                 "Se requiere un Ingeniero Informático, un Ingeniero Industrial, un Ingeniero en Robótica y un Ingeniero de Telecomunicaciones",
-                "Document1",
                 Arrays.asList(comment3),
-                Arrays.asList(alert3),
-                Arrays.asList(projectMonitoring5)
+                Arrays.asList(alert3)
                 ,est1,false,false,catc,
                 Arrays.asList(),
                 false);

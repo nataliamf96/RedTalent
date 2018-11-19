@@ -14,7 +14,6 @@ public class ProjectForm {
     private String image;
     private String description;
     private String requiredProfiles;
-    private String attachedFiles;
     private String category;
     private Boolean privado;
 
@@ -69,14 +68,6 @@ public class ProjectForm {
         this.requiredProfiles = requiredProfiles;
     }
 
-    public String getAttachedFiles() {
-        return attachedFiles;
-    }
-
-    public void setAttachedFiles(String attachedFiles) {
-        this.attachedFiles = attachedFiles;
-    }
-
     public Boolean getPrivado() {
         return privado;
     }
@@ -101,7 +92,6 @@ public class ProjectForm {
                 ", image='" + image + '\'' +
                 ", description='" + description + '\'' +
                 ", requiredProfiles='" + requiredProfiles + '\'' +
-                ", attachedFiles='" + attachedFiles + '\'' +
                 ", category=" + category +
                 ", privado=" + privado +
                 '}';

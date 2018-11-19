@@ -140,14 +140,26 @@ public class ProjectController {
     @RequestMapping(value = "/updateProject", method = RequestMethod.GET)
     public ModelAndView updateProject(@RequestParam String projectId) {
         ModelAndView result;
-        Project project = projectService.findOne(projectId);
-        ProjectForm projectForm;
-        projectForm = new ProjectForm();
-        result = updateEditModelAndViewProject(projectForm);
-        result = new ModelAndView("project/updateProject");
-        result.addObject("projectForm",project);
-        result.addObject("categories", categoryService.findAll());
-        result.addObject("projectId",project.getId());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userConnect = utilidadesService.userConectado(authentication.getName());
+
+        try{
+            Assert.notNull(projectService.findOne(projectId),"El proyecto no existe");
+            Assert.isTrue(userConnect.getProjects().contains(projectService.findOne(projectId.toString())),"El proyecto es de otro usuario.");
+            Project project = projectService.findOne(projectId);
+            ProjectForm projectForm;
+            projectForm = new ProjectForm();
+            result = updateEditModelAndViewProject(projectForm);
+            result = new ModelAndView("project/updateProject");
+            result.addObject("projectForm",project);
+            result.addObject("categories", categoryService.findAll());
+            result.addObject("projectId",project.getId());
+        }catch (Throwable oops) {
+            result = new ModelAndView("redirect:/403");
+        }
+
+
         return result;
     }
 
@@ -163,7 +175,6 @@ public class ProjectController {
                 project.setDescription(projectForm.getDescription());
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
-                project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
                 Category cat = categoryService.findOne(projectForm.getCategory().toString());
@@ -272,7 +283,6 @@ public class ProjectController {
                 project.setDescription(projectForm.getDescription());
                 project.setName(projectForm.getName());
                 project.setImage(projectForm.getImage());
-                project.setAttachedFiles(projectForm.getAttachedFiles());
                 project.setRequiredProfiles(projectForm.getRequiredProfiles());
                 project.setPrivado(projectForm.getPrivado());
                 Category cat = categoryService.findOne(projectForm.getCategory().toString());

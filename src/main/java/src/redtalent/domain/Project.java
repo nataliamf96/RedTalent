@@ -17,7 +17,6 @@ public class Project extends DomainEntity{
     private String image;
     private String description;
     private String requiredProfiles;
-    private String attachedFiles;
     private Boolean privado;
     private Boolean estado;
     private Boolean cerrado;
@@ -28,22 +27,19 @@ public class Project extends DomainEntity{
         super();
         this.comments = new ArrayList<>();
         this.alerts = new ArrayList<>();
-        this.projectMonitorings = new ArrayList<>();
         this.forums = new ArrayList<>();
     }
 
-    public Project(String name, String image, String description, String requiredProfiles, String attachedFiles,
-                   List<Comment> comments, List<Alert> alerts, List<ProjectMonitoring> projectMonitorings, User userCreated, Boolean privado, Boolean estado, Category categorie,
+    public Project(String name, String image, String description, String requiredProfiles,
+                   List<Comment> comments, List<Alert> alerts, User userCreated, Boolean privado, Boolean estado, Category categorie,
                    List<Forum> forums,Boolean cerrado){
         this.name = name;
         this.cerrado = cerrado;
         this.image = image;
         this.description = description;
         this.requiredProfiles = requiredProfiles;
-        this.attachedFiles = attachedFiles;
         this.comments = comments;
         this.alerts = alerts;
-        this.projectMonitorings = projectMonitorings;
         this.privado = privado;
         this.estado = estado;
         this.categorie = categorie;
@@ -95,19 +91,10 @@ public class Project extends DomainEntity{
         this.requiredProfiles = requiredProfiles;
     }
 
-    public String getAttachedFiles() {
-        return attachedFiles;
-    }
-
-    public void setAttachedFiles(String attachedFiles) {
-        this.attachedFiles = attachedFiles;
-    }
-
     //Relationships -----------------------------------------------
 
     private List<Comment> comments;
     private List<Alert> alerts;
-    private List<ProjectMonitoring> projectMonitorings;
     private Category categorie;
     private List<Forum> forums;
 
@@ -125,14 +112,6 @@ public class Project extends DomainEntity{
 
     public void setAlerts(List<Alert> alerts) {
         this.alerts = alerts;
-    }
-
-    public List<ProjectMonitoring> getProjectMonitorings() {
-        return projectMonitorings;
-    }
-
-    public void setProjectMonitorings(List<ProjectMonitoring> projectMonitorings) {
-        this.projectMonitorings = projectMonitorings;
     }
 
     public Boolean getEstado() {

@@ -43,12 +43,10 @@ public class ProjectService {
         Project result = new Project();
         List<Comment> comments = new ArrayList<Comment>();
         List<Alert> alerts = new ArrayList<Alert>();
-        List<ProjectMonitoring> projectMonitorings = new ArrayList<ProjectMonitoring>();
         List<User> users = new ArrayList<User>();
         result.setAlerts(alerts);
         result.setCerrado(false);
         result.setComments(comments);
-        result.setProjectMonitorings(projectMonitorings);
         result.setEstado(false);
         return result;
     }

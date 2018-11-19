@@ -22,7 +22,7 @@
             <h5>Momento de publicación</h5>
             <span th:text="${comment.getMoment()}"></span>
             <a style="color: black" th:href="@{/forum/listReply(forumId=${forumId}, projectId=${projectId}, commentId=${comment.getId()})}">Respuestas</a>
-            <a th:href="@{/forum/deleteComment(commentId=${comment.getId()})}"><i class="far fa-trash-alt"></i></a>
+            <a th:if="${userCreated.getComments().contains(comment)}" th:href="@{/forum/deleteComment(commentId=${comment.getId()})}"><i class="far fa-trash-alt"></i></a>
         </div>
     </div>
     <button type="submit" class="btn btn-info"><a style="color: white" th:href="@{/forum/createComment(forumId=${forumId}, projectId=${projectId})}">Nuevo comentario</a></button>

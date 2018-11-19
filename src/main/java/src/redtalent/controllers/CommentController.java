@@ -56,12 +56,16 @@ public class CommentController {
         ModelAndView result;
         User user = userService.findOne(userId.toString());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
         Set<Comment> comments = user.getCommentsReceived();
 
         result = new ModelAndView("comment/list");
         result.addObject("requestURI", "comment/list?userId=" +userId);
         result.addObject("comments", comments);
         result.addObject("userId", userId);
+        result.addObject("userCreated",userCreated);
 
         return result;
     }

@@ -82,6 +82,7 @@ public class ForumController {
                     result.addObject("forums", forums);
                     result.addObject("projectId", projectId);
                     result.addObject("categories", categories);
+                    result.addObject("userCreated", userCreated);
                 }
             }
         }
@@ -181,6 +182,7 @@ public class ForumController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
 
+
         for(Team t: teams) {
             if (t.getProjects().contains(project)) {
                 List<User> users = utilidadesService.usuariosDelEquipo(t);
@@ -190,6 +192,7 @@ public class ForumController {
                     result.addObject("comments", comments);
                     result.addObject("forumId", forumId);
                     result.addObject("projectId", projectId);
+                    result.addObject("userCreated", userCreated);
 
                 }
             }
@@ -302,6 +305,7 @@ public class ForumController {
                     result.addObject("commentId", commentId);
                     result.addObject("forumId", forumId);
                     result.addObject("projectId", projectId);
+                    result.addObject("userCreated", userCreated);
                 }
             }
         }

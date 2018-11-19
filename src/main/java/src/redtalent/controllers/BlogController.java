@@ -63,12 +63,15 @@ public class BlogController {
         Collection<Blog> blogs;
         Collection<Category> categories = categoryService.findAll();
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
         blogs = blogService.findAll();
 
         result = new ModelAndView("blog/list");
         result.addObject("requestURI", "blog/list");
         result.addObject("blogs", blogs);
         result.addObject("categories", categories);
+        result.addObject("userCreated", userCreated);
 
         return result;
     }
@@ -144,12 +147,16 @@ public class BlogController {
         Collection<Comment> comments;
         Blog blog = blogService.findOne(blogId.toString());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
         comments = blog.getComments();
 
         result = new ModelAndView("blog/listComment");
         result.addObject("requestURI", "blog/listComment?blogId="+blogId);
         result.addObject("comments", comments);
         result.addObject("blogId", blogId);
+        result.addObject("userCreated", userCreated);
 
         return result;
     }
@@ -163,6 +170,9 @@ public class BlogController {
         Collection<Reply> replies;
         Comment comment = commentService.findOne(commentId.toString());
 
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
         replies = comment.getReplies();
 
         result = new ModelAndView("blog/listReply");
@@ -170,6 +180,7 @@ public class BlogController {
         result.addObject("replies", replies);
         result.addObject("commentId", commentId);
         result.addObject("blogId", blogId);
+        result.addObject("userCreated", userCreated);
 
         return result;
     }

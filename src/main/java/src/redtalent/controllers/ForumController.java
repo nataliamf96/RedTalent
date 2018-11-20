@@ -365,13 +365,14 @@ public class ForumController {
                 Assert.notNull(replyForm, "No puede ser nulo el formulario de Reply");
                 Forum forum = forumService.findOne(replyForm.getForumId().toString());
                 User userSaved = userService.findUserByForumsContains(forum);
+                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
+                User saved2 = userService.findUserByCommentsContains(comment);
 
                 Reply reply = replyService.create();
                 reply.setTitle(replyForm.getTitle());
                 reply.setText(replyForm.getText());
                 Reply saved = replyService.save(reply);
 
-                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
                 Set<Reply> replies1 = comment.getReplies();
                 replies1.add(saved);
                 comment.setReplies(replies1);
@@ -382,7 +383,7 @@ public class ForumController {
                 Set<Reply> replies = user.getReplies();
                 replies.add(saved);
                 user.setReplies(replies);
-                User saved2 = userService.saveUser(user);
+                userService.saveUser(user);
 
                 Set<Forum> forums1 = userSaved.getForums();
                 for(Forum f1: forums1){

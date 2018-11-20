@@ -150,16 +150,16 @@ public class TeamController {
             Team team = teamService.findOne(teamId.toString());
 
             Assert.notNull(teamService.findOne(teamId.toString()),"El Equipo no existe.");
-            Assert.isTrue(!teamService.findOne(teamId.toString()).isClosed(),"El proyecto ya está cerrado.");
+            Assert.isTrue(teamService.findOne(teamId.toString()).isClosed(),"El proyecto ya está cerrado.");
             Assert.isTrue(principal.getTeams().contains(team),"El usuario no ha creado el Equipo.");
 
             /*El Equipo ha sido creado por el Usuario logueado*/
 
             UpdateTeamForm updateTeamForm;
             updateTeamForm = new UpdateTeamForm();
-            updateTeamForm.setTeamId(teamId);
             result = createEditModelAndViewTeam(updateTeamForm);
-
+            result.addObject("updateTeamForm",team);
+            result.addObject("teamId",team.getId());
         }catch (Throwable oops) {
             result = new ModelAndView("redirect:/user/index");
         }
@@ -168,7 +168,7 @@ public class TeamController {
     }
 
     @RequestMapping(value = "/updateTeam", method = RequestMethod.POST, params = "saveModTeam")
-    public ModelAndView save(@Valid UpdateTeamForm updateTeamForm, BindingResult binding) {
+    public ModelAndView updateTeam(@Valid UpdateTeamForm updateTeamForm,@RequestParam String teamId, BindingResult binding) {
         ModelAndView result;
 
         if (binding.hasErrors())
@@ -179,11 +179,17 @@ public class TeamController {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());
 
-                Team team = teamService.findOne(updateTeamForm.getTeamId().toString());
+                Team team = teamService.findOne(teamId);
                 team.setName(updateTeamForm.getName());
-                team.setDescription(updateTeamForm.getDescripcion());
+                team.setDescription(updateTeamForm.getDescription());
                 team.setImage(updateTeamForm.getImage());
                 Team teamSave = teamService.save(team);
+
+                Set<Team> listaTeams = user.getTeams();
+                listaTeams.remove(team);
+                listaTeams.add(teamSave);
+                user.setTeams(listaTeams);
+                userService.saveUser(user);
 
                 result = new ModelAndView("redirect:/user/index");
 

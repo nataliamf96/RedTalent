@@ -6,7 +6,7 @@ import javax.validation.constraints.NotBlank;
 
 public class UpdateTeamForm {
     private String name;
-    private String descripcion;
+    private String description;
     private String image;
     private ObjectId teamId;
 
@@ -24,12 +24,12 @@ public class UpdateTeamForm {
     }
 
     @NotBlank
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public String getImage() {

@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Crear Equipo de Trabajo</title>
+    <link rel="icon" href="/images/us.ico">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script>
+        function previewFile() {
+            var preview = document.getElementById("imagenPreview");
+            var imageSend = document.getElementById("image");
+            document.getElementById("imagenPreview").style = "display:block; max-width: 200px";
+            document.getElementById("imagenPreview2").style = "display:none";
+            var file    = document.querySelector('input[type=file]').files[0];
+            var reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+                imageSend.value = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</head>
+<body class="bg-light">
+<div th:replace="masterpage/headerUser :: nav"></div>
+<br />
+<br />
+<div class="container py-4">
+    <h3 class="my-4">
+        ¡Ponle nombre a tu equipo!
+    </h3>
+    <div class="container-fluid">
+        <form th:action="@{/team/updateTeam(teamId=${teamId})}" th:object="${updateTeamForm}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="name">Nombre</label>:
+                <input type="text" class="form-control" id="name" name="name" style="max-width: 350px" th:field="*{name}"/>
+                <li th:each="err : ${#fields.errors('name')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="description">Descripción</label>:
+                <input type="text" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
+                <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="image">Fotografía del Equipo</label>
+                <input type="file" onchange="previewFile()" class="form-control-file">
+                <input type="text" style="display: none" id="image" name="image" th:value="${updateTeamForm.getImage()}">
+                <img src="" id="imagenPreview" style="max-height: 300px; max-height: 300px; display: none" alt="Image preview...">
+                <img th:src="${updateTeamForm.getImage()}" id="imagenPreview2" style="max-height: 300px; max-height: 300px; display: block">
+            </div>
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
+            <input type="submit" class="btn btn-info" name="saveModTeam" value="Actualizar" />
+        </form>
+    </div>
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

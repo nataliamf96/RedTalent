@@ -19,6 +19,7 @@ public class Administrator extends DomainEntity{
     //Attributes -----------------------------------------------
     @NotBlank
     private String fullname;
+    private String image;
     private Account account;
 
     //Constructors -----------------------------------------------
@@ -27,9 +28,10 @@ public class Administrator extends DomainEntity{
         this.grades = new ArrayList<>();
     }
 
-    public Administrator(Account account,String fullname){
+    public Administrator(Account account,String fullname,String image){
         this.fullname = fullname;
         this.account = account;
+        this.image = image;
     }
 
     public String getFullname() {
@@ -38,6 +40,14 @@ public class Administrator extends DomainEntity{
 
     public void setFullname(String fullname) {
         this.fullname = fullname;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     //Relationships -----------------------------------------------

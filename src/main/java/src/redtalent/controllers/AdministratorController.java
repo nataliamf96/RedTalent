@@ -4,13 +4,19 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Account;
+import src.redtalent.domain.Administrator;
 import src.redtalent.domain.User;
+import src.redtalent.forms.UpdateAdminForm;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
+
+import javax.validation.Valid;
 
 @Controller
 @RequestMapping("/admin")
@@ -129,6 +135,60 @@ public class AdministratorController {
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
         result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+        return result;
+    }
+
+    @RequestMapping(value = "/updateAdmin", method = RequestMethod.GET)
+    public ModelAndView updateAdmin() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Administrator admin = utilidadesService.adminConectado(authentication.getName());
+        UpdateAdminForm updateAdminForm;
+        updateAdminForm = new UpdateAdminForm();
+        result = updateEditModelAndViewAdmin(updateAdminForm);
+
+        result = new ModelAndView("admin/updateAdmin");
+        result.addObject("updateAdminForm",admin);
+        result.addObject("userId",admin.getId());
+        return result;
+    }
+
+    @RequestMapping(value = "/updateAdmin", method = RequestMethod.POST, params = "saveModAdmin")
+    public ModelAndView updateAdmin(@Valid UpdateAdminForm updateAdminForm, BindingResult binding){
+        ModelAndView result;
+
+        if (binding.hasErrors())
+            result = updateEditModelAndViewAdmin(updateAdminForm);
+        else
+            try {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                Administrator admin = utilidadesService.adminConectado(authentication.getName());
+                admin.setFullname(updateAdminForm.getFullname());
+                admin.setImage(updateAdminForm.getImage());
+                administratorService.save(admin);
+                result = new ModelAndView("redirect:/admin/index");
+
+            } catch (Throwable oops) {
+                result = updateEditModelAndViewAdmin(updateAdminForm, "ERROR AL ACTUALIZAR EL DIRECTIVO");
+            }
+
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewAdmin(UpdateAdminForm updateAdminForm) {
+        ModelAndView result;
+        result = updateEditModelAndViewAdmin(updateAdminForm, null);
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewAdmin(UpdateAdminForm updateAdminForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("admin/updateAdmin");
+        result.addObject("updateAdminForm", updateAdminForm);
+        result.addObject("message", message);
+        result.addObject("auth",utilidadesService.actorConectado());
+
         return result;
     }
 

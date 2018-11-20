@@ -37,7 +37,7 @@ public class AdministratorService {
         return result;
     }
 
-    public Administrator saveUser(Administrator administrator){
+    public Administrator save(Administrator administrator){
         Assert.notNull(administrator,"Administrator Service : Objeto null");
         administratorRepository.save(administrator);
         return administrator;

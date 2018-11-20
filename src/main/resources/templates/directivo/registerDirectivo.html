@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Registro de Directivo</title>
+    <link rel="icon" href="/images/us.ico">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script>
+        function previewFile() {
+            var preview = document.getElementById("imagenPreview");
+            var imageSend = document.getElementById("image");
+            alert(imageSend.size);
+            var tam = imageSend.size;
+            document.getElementById("imagenPreview").style = "display:block; max-width: 200px";
+            var file    = document.querySelector('input[type=file]').files[0];
+            var reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+                imageSend.value = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
+</head>
+<body class="bg-light">
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<br />
+<br />
+<div class="container py-4">
+    <h3 class="my-4">
+        Registro de Directivo
+    </h3>
+    <div class="container-fluid">
+        <form th:action="@{/directivo/registerDirectivo}" th:object="${directivoForm}" method="post">
+            <h3>Datos del Directivo</h3>
+            <div class="form-group">
+                <label for="name">Nombre y Apellidos</label>:
+                <input type="text" class="form-control" id="name" name="name" style="max-width: 350px" th:field="*{fullname}"/>
+                <li th:each="err : ${#fields.errors('fullname')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="image">Foto de Perfil</label>
+                <input type="file" onchange="previewFile()" class="form-control-file">
+                <input type="text" style="display: none" id="image" name="image">
+                <img src="" id="imagenPreview" style="max-height: 200px; max-height: 200px; display: none" alt="Image preview...">
+            </div>
+            <div class="form-group">
+                <label for="email">Email</label>:
+                <input type="text" class="form-control" id="email" name="email" style="max-width: 350px" th:field="*{email}" />
+                <li th:each="err : ${#fields.errors('email')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="password">Contraseña</label>:
+                <input type="password" class="form-control" id="password" name="password" style="max-width: 350px" />
+                <li th:each="err : ${#fields.errors('password')}" th:text="${err}" />
+            </div>
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
+            <input type="submit" class="btn btn-info" name="saveDirectivo" value="Registrarse" />
+        </form>
+    </div>
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

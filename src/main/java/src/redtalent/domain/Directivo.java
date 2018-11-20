@@ -12,20 +12,23 @@ import javax.validation.constraints.Size;
 import java.util.Set;
 
 @Document(collection = "Directivos")
-public class Directivo {
+public class Directivo extends DomainEntity{
     @NotBlank
     private String fullname;
     private Account account;
+    private String image;
 
     public Directivo(){
         super();
     }
 
-    public Directivo( Account account,String fullname){
+    public Directivo( Account account,String fullname, String image){
         this.fullname = fullname;
         this.account = account;
+        this.image = image;
     }
 
+    @NotBlank
     public String getFullname() {
         return fullname;
     }
@@ -34,11 +37,20 @@ public class Directivo {
         this.fullname = fullname;
     }
 
+    @NotNull
     public Account getAccount() {
         return account;
     }
 
     public void setAccount(Account account) {
         this.account = account;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

@@ -4,6 +4,7 @@ import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import src.redtalent.domain.Directivo;
+import src.redtalent.repositories.AccountRepository;
 import src.redtalent.repositories.DirectivoRepository;
 
 import java.util.Collection;
@@ -15,8 +16,15 @@ public class DirectivoService {
     @Autowired
     private DirectivoRepository directivoRepository;
 
+    @Autowired
+    private AccountRepository accountRepository;
+
     public DirectivoService(){
         super();
+    }
+
+    public Directivo create(){
+        return new Directivo();
     }
 
     public Directivo findOne(String directivoId){
@@ -31,7 +39,7 @@ public class DirectivoService {
         return result;
     }
 
-    public Directivo saveUser(Directivo directivo){
+    public Directivo save(Directivo directivo){
         Assert.notNull(directivo,"Ocurrió un error al guardar el Directivo");
         Directivo result = directivoRepository.save(directivo);
         return result;
@@ -40,6 +48,12 @@ public class DirectivoService {
     public void remove(Directivo directivo){
         Assert.notNull(directivo,"Ocurrió un error al borrar el directivo");
         directivoRepository.delete(directivo);
+    }
+
+    public Directivo findByEmail(String email){
+        Assert.notNull("email","Email NULL");
+        Directivo result = directivoRepository.findByAccount(accountRepository.findByEmail(email));
+        return result;
     }
 
 }

@@ -124,6 +124,11 @@ public class UtilidadesService {
         return result;
     }
 
+    public Directivo directivoConectado(String email){
+        Directivo result = directivoService.findByEmail(email);
+        return result;
+    }
+
     public String actorConectado(){
         String res = "";
         //Para saber quién está authenticado

@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Modificar Datos de Usuario</title>
+    <title>Modificar Datos de Directivo</title>
     <link rel="icon" href="/images/us.ico">
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
@@ -26,36 +26,32 @@
     </script>
 </head>
 <body class="bg-light">
-<div th:replace="masterpage/headerUser :: nav"></div>
+<div th:replace="masterpage/headerDirectivo :: nav"></div>
 <br />
 <br />
 <div class="container py-4">
     <h3 class="my-4">
-        Formulario de Usuario
+        Formulario de Directivo
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/user/updateUser}" th:object="${updateUserForm}" method="post" enctype="multipart/form-data">
-            <h3>Datos del Usuario</h3>
+        <form th:action="@{/directivo/updateDirectivo}" th:object="${updateDirectivoForm}" method="post" enctype="multipart/form-data">
+            <h3>Datos del Directivo</h3>
             <div class="form-group">
                 <label for="name">Nombre</label>:
                 <input type="text" class="form-control" id="name" name="name" style="max-width: 350px" th:field="*{fullname}"/>
                 <li th:each="err : ${#fields.errors('fullname')}" th:text="${err}" />
             </div>
             <div class="form-group">
-                <label for="etiquetas">Etiquetas</label>:
-                <input type="text" class="form-control" id="etiquetas" name="etiquetas" style="max-width: 350px" th:value="${etiquetas}"/>
-            </div>
-            <div class="form-group">
-                <label for="image">Fotografía del Usuario</label>
+                <label for="image">Fotografía del Perfil</label>
                 <input type="file" onchange="previewFile()" class="form-control-file">
-                <input type="text" style="display: none" id="image" name="image" th:value="${updateUserForm.getImage()}">
+                <input type="text" style="display: none" id="image" name="image" th:value="${updateDirectivoForm.getImage()}">
                 <img src="" id="imagenPreview" style="max-height: 300px; max-height: 300px; display: none" alt="Image preview...">
-                <img th:src="${updateUserForm.getImage()}" id="imagenPreview2" style="max-height: 300px; max-height: 300px; display: block">
+                <img th:src="${updateDirectivoForm.getImage()}" id="imagenPreview2" style="max-height: 300px; max-height: 300px; display: block">
             </div>
             <b style="color: red" th:text="${message}" />
             <br />
             <br />
-            <input type="submit" class="btn btn-info" name="saveModUser" value="Actualizar" />
+            <input type="submit" class="btn btn-info" name="saveModDirectivo" value="Actualizar" />
         </form>
     </div>
     <br />

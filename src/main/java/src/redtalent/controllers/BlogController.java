@@ -232,13 +232,20 @@ public class BlogController {
                 Set<Comment> comments = user.getComments();
                 comments.add(saved);
                 user.setComments(comments);
-                userService.saveUser(user);
+                User userSaved = userService.saveUser(user);
 
                 Blog blog = blogService.findOne(commentForm.getBlogId().toString());
                 List<Comment> comments1 = blog.getComments();
                 comments1.add(saved);
                 blog.setComments(comments1);
                 blogService.save(blog);
+
+                Set<Blog> blogs = userSaved.getBlogs();
+                for(Blog b: blogs){
+                    b.setComments(comments1);
+                }
+                userSaved.setBlogs(blogs);
+                userService.saveUser(userSaved);
 
                 result = new ModelAndView("redirect:/blog/listComment?blogId=" +commentForm.getBlogId());
 
@@ -298,7 +305,7 @@ public class BlogController {
                 Set<Reply> replies = user.getReplies();
                 replies.add(saved);
                 user.setReplies(replies);
-                userService.saveUser(user);
+                User userSaved = userService.saveUser(user);
 
                 Comment comment = commentService.findOne(replyForm.getCommentId().toString());
                 Set<Reply> replies1 = comment.getReplies();
@@ -313,6 +320,22 @@ public class BlogController {
                 }
                 blog.setComments(comments);
                 blogService.save(blog);
+
+                Set<Blog> blogs = userSaved.getBlogs();
+                for(Blog b: blogs){
+                    for(Comment c1: b.getComments()){
+                        c1.setReplies(replies1);
+                    }
+                }
+                userSaved.setBlogs(blogs);
+                User saved2 = userService.saveUser(userSaved);
+
+                Set<Comment> comments1 = saved2.getComments();
+                for(Comment c: comments1){
+                    c.setReplies(replies1);
+                }
+                saved2.setComments(comments1);
+                userService.saveUser(saved2);
 
                 result = new ModelAndView("redirect:/blog/listReply?blogId=" + replyForm.getBlogId() + "&commentId=" +replyForm.getCommentId());
 

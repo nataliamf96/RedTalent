@@ -279,7 +279,7 @@ public class DbSeeder implements CommandLineRunner{
 
         Account ae1 = new Account("user1@user.com",bCryptPasswordEncoder.encode("user1"),false,roleEstudiante);
         Account sae1 = accountRepository.save(ae1);
-        Account ae2 = new Account("user2@user.com",bCryptPasswordEncoder.encode("user2"),true,roleEstudiante);
+        Account ae2 = new Account("user2@user.com",bCryptPasswordEncoder.encode("user2"),false,roleEstudiante);
         Account sae2 = accountRepository.save(ae2);
         Account ae3 = new Account("user3@user.com",bCryptPasswordEncoder.encode("user3"),false,roleEstudiante);
         Account sae3 = accountRepository.save(ae3);

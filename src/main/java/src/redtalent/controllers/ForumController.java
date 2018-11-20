@@ -244,6 +244,8 @@ public class ForumController {
         } else {
             try {
                 Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
+                Forum forum = forumService.findOne(commentForm.getForumId().toString());
+                User userSaved = userService.findUserByForumsContains(forum);
 
                 Comment comment = commentService.create();
                 comment.setTitle(commentForm.getTitle());
@@ -255,9 +257,8 @@ public class ForumController {
                 Set<Comment> comments = user.getComments();
                 comments.add(saved);
                 user.setComments(comments);
-                User userSaved = userService.saveUser(user);
+                userService.saveUser(user);
 
-                Forum forum = forumService.findOne(commentForm.getForumId().toString());
                 List<Comment> comments1 = forum.getComments();
                 comments1.add(saved);
                 forum.setComments(comments1);
@@ -362,24 +363,26 @@ public class ForumController {
         } else {
             try {
                 Assert.notNull(replyForm, "No puede ser nulo el formulario de Reply");
+                Forum forum = forumService.findOne(replyForm.getForumId().toString());
+                User userSaved = userService.findUserByForumsContains(forum);
 
                 Reply reply = replyService.create();
                 reply.setTitle(replyForm.getTitle());
                 reply.setText(replyForm.getText());
                 Reply saved = replyService.save(reply);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Reply> replies = user.getReplies();
-                replies.add(saved);
-                user.setReplies(replies);
-                User userSaved = userService.saveUser(user);
-
                 Comment comment = commentService.findOne(replyForm.getCommentId().toString());
                 Set<Reply> replies1 = comment.getReplies();
                 replies1.add(saved);
                 comment.setReplies(replies1);
                 commentService.save(comment);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                Set<Reply> replies = user.getReplies();
+                replies.add(saved);
+                user.setReplies(replies);
+                User saved2 = userService.saveUser(user);
 
                 Set<Forum> forums1 = userSaved.getForums();
                 for(Forum f1: forums1){
@@ -388,7 +391,7 @@ public class ForumController {
                     }
                 }
                 userSaved.setForums(forums1);
-                User saved2 = userService.saveUser(userSaved);
+                userService.saveUser(userSaved);
 
                 Set<Comment> comments1 = saved2.getComments();
                 for(Comment c: comments1){
@@ -397,7 +400,6 @@ public class ForumController {
                 saved2.setComments(comments1);
                 userService.saveUser(saved2);
 
-                Forum forum = forumService.findOne(replyForm.getForumId().toString());
                 List<Comment> comments = forum.getComments();
                 for(Comment c: comments){
                     c.setReplies(replies1);

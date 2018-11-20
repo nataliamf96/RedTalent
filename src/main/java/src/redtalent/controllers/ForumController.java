@@ -255,13 +255,20 @@ public class ForumController {
                 Set<Comment> comments = user.getComments();
                 comments.add(saved);
                 user.setComments(comments);
-                userService.saveUser(user);
+                User userSaved = userService.saveUser(user);
 
                 Forum forum = forumService.findOne(commentForm.getForumId().toString());
                 List<Comment> comments1 = forum.getComments();
                 comments1.add(saved);
                 forum.setComments(comments1);
                 forumService.save(forum);
+
+                Set<Forum> forums1 = userSaved.getForums();
+                for(Forum f1: forums1){
+                    f1.setComments(comments1);
+                }
+                userSaved.setForums(forums1);
+                userService.saveUser(userSaved);
 
                 Project project = projectService.findOne(commentForm.getProjectId().toString());
                 List<Forum> forums = project.getForums();
@@ -366,13 +373,29 @@ public class ForumController {
                 Set<Reply> replies = user.getReplies();
                 replies.add(saved);
                 user.setReplies(replies);
-                userService.saveUser(user);
+                User userSaved = userService.saveUser(user);
 
                 Comment comment = commentService.findOne(replyForm.getCommentId().toString());
                 Set<Reply> replies1 = comment.getReplies();
                 replies1.add(saved);
                 comment.setReplies(replies1);
                 commentService.save(comment);
+
+                Set<Forum> forums1 = userSaved.getForums();
+                for(Forum f1: forums1){
+                    for(Comment c1: f1.getComments()){
+                        c1.setReplies(replies1);
+                    }
+                }
+                userSaved.setForums(forums1);
+                User saved2 = userService.saveUser(userSaved);
+
+                Set<Comment> comments1 = saved2.getComments();
+                for(Comment c: comments1){
+                    c.setReplies(replies1);
+                }
+                saved2.setComments(comments1);
+                userService.saveUser(saved2);
 
                 Forum forum = forumService.findOne(replyForm.getForumId().toString());
                 List<Comment> comments = forum.getComments();
@@ -460,12 +483,19 @@ public class ForumController {
             Set<Comment> comments = user.getComments();
             comments.remove(res);
             user.setComments(comments);
-            userService.saveUser(user);
+            User saved = userService.saveUser(user);
 
             List<Comment> comments1 = f.getComments();
             comments1.remove(res);
             f.setComments(comments1);
             forumService.save(f);
+
+            Set<Forum> forums1 = saved.getForums();
+            for(Forum f1: forums1){
+                f1.setComments(comments1);
+            }
+            saved.setForums(forums1);
+            userService.saveUser(saved);
 
             List<Forum> forums = project.getForums();
             for(Forum forum: forums){
@@ -529,7 +559,17 @@ public class ForumController {
             replies.remove(res);
             user.setReplies(replies);
             user.setComments(comments);
-            userService.saveUser(user);
+            User saved = userService.saveUser(user);
+
+            Set<Forum> forums1 = saved.getForums();
+            for(Forum f1: forums1){
+                for(Comment c1: f1.getComments()){
+                    c1.setReplies(replies1);
+                }
+                f1.setComments(comments1);
+            }
+            saved.setForums(forums1);
+            userService.saveUser(saved);
 
             replyService.remove(res);
         }

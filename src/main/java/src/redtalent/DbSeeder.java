@@ -39,8 +39,6 @@ public class DbSeeder implements CommandLineRunner{
     @Autowired
     private PhaseRepository phaseRepository;
     @Autowired
-    private ProjectMonitoringRepository projectMonitoringRepository;
-    @Autowired
     private ProjectRepository projectRepository;
     @Autowired
     private TagRepository tagRepository;
@@ -66,7 +64,7 @@ public class DbSeeder implements CommandLineRunner{
     // Constructor -------------------------------------------------
     public DbSeeder(CurriculumRepository curriculumRepository,DirectivoRepository directivoRepository, AcademicProfileRepository academicProfileRepository, AdministratorRepository administratorRepository, AlertRepository alertRepository, ApplicationRepository applicationRepository,
                     CommentRepository commentRepository, EvaluationRepository evaluationRepository, GradeRepository gradeRepository, PhaseRepository phaseRepository,
-                    ProjectRepository projectRepository, ProjectMonitoringRepository projectMonitoringRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository,
+                    ProjectRepository projectRepository, TagRepository tagRepository, TeamRepository teamRepository, UserRepository userRepository,
                     RoleRepository roleRepository, AccountRepository accountRepository, BlogRepository blogRepository, CategoryRepository categoryRepository, ReplyRepository replyRepository,
                     ForumRepository forumRepository){
         this.curriculumRepository = curriculumRepository;
@@ -84,7 +82,6 @@ public class DbSeeder implements CommandLineRunner{
         this.tagRepository = tagRepository;
         this.teamRepository = teamRepository;
         this.userRepository = userRepository;
-        this.projectMonitoringRepository = projectMonitoringRepository;
         this.accountRepository = accountRepository;
         this.blogRepository = blogRepository;
         this.categoryRepository = categoryRepository;
@@ -106,7 +103,6 @@ public class DbSeeder implements CommandLineRunner{
         evaluationRepository.deleteAll();
         gradeRepository.deleteAll();
         phaseRepository.deleteAll();
-        projectMonitoringRepository.deleteAll();
         tagRepository.deleteAll();
         teamRepository.deleteAll();
         projectRepository.deleteAll();
@@ -895,20 +891,12 @@ public class DbSeeder implements CommandLineRunner{
         Forum forumb = forumRepository.save(forum2);
         Forum forumc = forumRepository.save(forum3);
 
-        Set<Forum> sa = gg.getForums();
-        sa.add(foruma);
-        gg.setForums(sa);
-        userRepository.save(gg);
+        List<Forum> forums = Arrays.asList(foruma, forumb, forumc);
 
-        Set<Forum> sb = hh.getForums();
-        sb.add(forumb);
-        hh.setForums(sb);
-        userRepository.save(hh);
-
-        Set<Forum> sc = ii.getForums();
-        sc.add(forumc);
-        ii.setForums(sc);
-        userRepository.save(ii);
+        Set<Forum> sa = aa.getForums();
+        sa.addAll(forums);
+        aa.setForums(sa);
+        userRepository.save(aa);
 
         // Projects -----------------------------------------
 

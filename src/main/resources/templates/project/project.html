@@ -74,7 +74,7 @@
             <div style="margin-top: -12px" class='card card-profile text-center'>
                 <img alt='' class='card-img-top' th:src="@{/images/color-img2.jpg}">
                 <div class='card-block'>
-                    <img alt='' class='card-img-profile2' th:src="@{https://www.unistudio.design/wp-content/uploads/2017/01/Team-Unistudio-site-web-300x140.jpg}">
+                    <img alt='' class='card-img-profile2' th:src="${team.getImage()}">
                     <h4 style="margin-top: -23px" class='card-title'>
                         <i th:if="${team.getName() != null}" th:text="${team.getName()}" />
                         <small th:if="${team.getName() != null}" th:text="${team.getDescription()}" />

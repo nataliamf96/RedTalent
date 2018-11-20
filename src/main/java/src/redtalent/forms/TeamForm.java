@@ -1,8 +1,9 @@
 package src.redtalent.forms;
 
 import org.bson.types.ObjectId;
-import src.redtalent.domain.Application;
 import src.redtalent.domain.User;
+
+import javax.validation.constraints.NotBlank;
 
 public class TeamForm {
 
@@ -12,6 +13,7 @@ public class TeamForm {
     private String description;
     private boolean closed;
     private User userCreated;
+    private String image;
 
     public String getTeamId() {
         return teamId;
@@ -29,6 +31,7 @@ public class TeamForm {
         this.projectId = projectId;
     }
 
+    @NotBlank
     public String getName() {
         return name;
     }
@@ -37,6 +40,7 @@ public class TeamForm {
         this.name = name;
     }
 
+    @NotBlank
     public String getDescription() {
         return description;
     }
@@ -59,5 +63,13 @@ public class TeamForm {
 
     public void setUserCreated(User userCreated) {
         this.userCreated = userCreated;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

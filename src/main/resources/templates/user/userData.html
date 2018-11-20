@@ -91,7 +91,7 @@
             <div style="margin-top: -12px" class='card card-profile text-center'>
                 <img class="card-img-top" th:src="@{/images/color-img2.jpg}">
                 <div class='card-block'>
-                    <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img alt='' class='card-img-profile2' th:src="@{https://www.unistudio.design/wp-content/uploads/2017/01/Team-Unistudio-site-web-300x140.jpg}"></a>
+                    <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img alt='' class='card-img-profile2' th:src="${team.getImage()}"></a>
                     <h4 style="margin-top: -23px" class='card-title'>
                         <a th:href="@{/team/teamData(teamId=${team.getId()})}"><i th:text="${team.getName()}" /></a>
                         <small th:text="${team.getDescription()}"></small>

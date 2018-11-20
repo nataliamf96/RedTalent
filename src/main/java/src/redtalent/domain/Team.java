@@ -2,6 +2,8 @@ package src.redtalent.domain;
 
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ public class Team extends DomainEntity {
     //Attributes -----------------------------------------------
     private String name;
     private String description;
+    private String image;
     private boolean closed;
 
     //Constructors -----------------------------------------------
@@ -22,7 +25,7 @@ public class Team extends DomainEntity {
         this.projects = new ArrayList<>();
     }
 
-    public Team(String name, String description, boolean closed, List<Application> applications, List<Evaluation> evaluations, List<Comment> comments, List<Project> projects){
+    public Team(String name, String description, boolean closed, List<Application> applications, List<Evaluation> evaluations, List<Comment> comments, List<Project> projects, String image){
         this.name = name;
         this.description = description;
         this.closed = closed;
@@ -30,10 +33,12 @@ public class Team extends DomainEntity {
         this.evaluations = evaluations;
         this.comments = comments;
         this.projects = projects;
+        this.image = image;
     }
 
     //Getters and setters -----------------------------------------------
 
+    @NotBlank
     public String getName() {
         return name;
     }
@@ -42,6 +47,7 @@ public class Team extends DomainEntity {
         this.name = name;
     }
 
+    @NotBlank
     public String getDescription() {
         return description;
     }
@@ -50,12 +56,21 @@ public class Team extends DomainEntity {
         this.description = description;
     }
 
+    @NotNull
     public boolean isClosed() {
         return closed;
     }
 
     public void setClosed(boolean closed) {
         this.closed = closed;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     //Relationships -----------------------------------------------

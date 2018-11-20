@@ -3,6 +3,7 @@ package src.redtalent.controllers;
 import com.mysema.commons.lang.Assert;
 import org.bson.types.ObjectId;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.mongodb.core.query.Update;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -13,9 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.*;
-import src.redtalent.forms.AreaForm;
-import src.redtalent.forms.GradeForm;
-import src.redtalent.forms.TeamForm;
+import src.redtalent.forms.*;
 import src.redtalent.services.ProjectService;
 import src.redtalent.services.TeamService;
 import src.redtalent.services.UserService;
@@ -112,11 +111,12 @@ public class TeamController {
             result = createModelAndView(teamForm);
         } else {
             try {
-                Assert.notNull(teamForm, "No puede ser nulo el areaForm");
+                Assert.notNull(teamForm, "No puede ser nulo el Formulario");
 
                 Team team = teamService.create();
                 team.setName(teamForm.getName());
                 team.setDescription(teamForm.getDescription());
+                team.setImage(teamForm.getImage());
                 Project project = projectService.findOne(teamForm.getProjectId().toString());
                 List<Project> projects = new ArrayList<Project>();
                 projects.add(project);
@@ -139,61 +139,58 @@ public class TeamController {
         return result;
     }
 
-    // Actualizar equipo -----------------------
-
-    @RequestMapping(value = "/edit", method = RequestMethod.GET)
-    public ModelAndView edit(@RequestParam ObjectId teamId, final RedirectAttributes redirectAttrs) {
+    @RequestMapping(value = "/updateTeam", method = RequestMethod.GET)
+    public ModelAndView updateTeam(@RequestParam ObjectId teamId) {
         ModelAndView result;
-        TeamForm teamForm;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User principal = utilidadesService.userConectado(authentication.getName());
-
-        try {
+        try{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User principal = utilidadesService.userConectado(authentication.getName());
 
             Team team = teamService.findOne(teamId.toString());
 
-            teamForm = new TeamForm();
-            teamForm.setTeamId(team.getId());
-            teamForm.setName(team.getName());
-            teamForm.setDescription(team.getDescription());
+            Assert.notNull(teamService.findOne(teamId.toString()),"El Equipo no existe.");
+            Assert.isTrue(!teamService.findOne(teamId.toString()).isClosed(),"El proyecto ya está cerrado.");
+            Assert.isTrue(principal.getTeams().contains(team),"El usuario no ha creado el Equipo.");
 
-            Assert.isTrue(principal.equals(teamForm.getUserCreated()), "Usted no tiene acceso a experiencias laborales que no son suyas");
+            /*El Equipo ha sido creado por el Usuario logueado*/
 
-            result = new ModelAndView("team/edit");
-            result.addObject("teamForm", teamForm);
-            result.addObject("requestURI", "./team/edit.do?teamId=" + teamId);
-        } catch (Throwable oops) {
-            result = new ModelAndView("redirect:/home/index");
+            UpdateTeamForm updateTeamForm;
+            updateTeamForm = new UpdateTeamForm();
+            updateTeamForm.setTeamId(teamId);
+            result = createEditModelAndViewTeam(updateTeamForm);
+
+        }catch (Throwable oops) {
+            result = new ModelAndView("redirect:/user/index");
         }
 
         return result;
     }
 
-    @RequestMapping(value = "/edit", method = RequestMethod.POST, params = "save")
-    public ModelAndView save(@Valid TeamForm teamForm, BindingResult binding, RedirectAttributes redirectAttrs) {
-
+    @RequestMapping(value = "/updateTeam", method = RequestMethod.POST, params = "saveModTeam")
+    public ModelAndView save(@Valid UpdateTeamForm updateTeamForm, BindingResult binding) {
         ModelAndView result;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User principal = utilidadesService.userConectado(authentication.getName());
-
-        if (binding.hasErrors()) {
-            result = editModelAndView(teamForm);
-        } else {
+        if (binding.hasErrors())
+            result = createEditModelAndViewTeam(updateTeamForm);
+        else
             try {
-                Assert.notNull(teamForm, "El equipo no puede ser nulo");
 
-                Team team = teamService.findOne(teamForm.getTeamId());
-                team.setName(teamForm.getName());
-                team.setDescription(teamForm.getDescription());
-                teamService.save(team);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
 
-                result = new ModelAndView("redirect:/home/index");
+                Team team = teamService.findOne(updateTeamForm.getTeamId().toString());
+                team.setName(updateTeamForm.getName());
+                team.setDescription(updateTeamForm.getDescripcion());
+                team.setImage(updateTeamForm.getImage());
+                Team teamSave = teamService.save(team);
+
+                result = new ModelAndView("redirect:/user/index");
+
             } catch (Throwable oops) {
-                result = editModelAndView(teamForm, "Error");
+                result = createEditModelAndViewTeam(updateTeamForm, "Error al actualizar el Equipo");
             }
-        }
+
         return result;
     }
 
@@ -205,33 +202,28 @@ public class TeamController {
         return result;
     }
 
+    protected ModelAndView createEditModelAndViewTeam(UpdateTeamForm updateTeamForm) {
+        ModelAndView result;
+        result = createEditModelAndViewTeam(updateTeamForm, null);
+        return result;
+    }
+
+    protected ModelAndView createEditModelAndViewTeam(UpdateTeamForm updateTeamForm, String message) {
+        ModelAndView result;
+        result = new ModelAndView("team/updateTeam");
+        result.addObject("updateTeamForm", updateTeamForm);
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("message", message);
+        return result;
+    }
+
     protected ModelAndView createModelAndView(TeamForm teamForm, String message) {
         ModelAndView result;
-
-
         result = new ModelAndView("team/create");
         result.addObject("teamForm", teamForm);
         result.addObject("projectId", teamForm.getProjectId());
         result.addObject("message", message);
         return result;
     }
-
-    protected ModelAndView editModelAndView(TeamForm teamForm) {
-        ModelAndView result;
-        result = createModelAndView(teamForm, null);
-        return result;
-    }
-
-    protected ModelAndView editModelAndView(TeamForm teamForm, String message) {
-        ModelAndView result;
-
-
-        result = new ModelAndView("team/edit");
-        result.addObject("teamForm", teamForm);
-        result.addObject("projectId", teamForm.getProjectId());
-        result.addObject("message", message);
-        return result;
-    }
-
 
 }

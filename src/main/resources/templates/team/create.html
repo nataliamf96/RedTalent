@@ -1,10 +1,29 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Nuevo grado</title>
+    <title>Crear Equipo de Trabajo</title>
     <link rel="icon" href="/images/us.ico">
     <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+    <script>
+        function previewFile() {
+            var preview = document.getElementById("imagenPreview");
+            var imageSend = document.getElementById("image");
+            var tam = imageSend.size;
+            document.getElementById("imagenPreview").style = "display:block; max-width: 200px";
+            var file    = document.querySelector('input[type=file]').files[0];
+            var reader  = new FileReader();
+
+            reader.addEventListener("load", function () {
+                preview.src = reader.result;
+                imageSend.value = reader.result;
+            }, false);
+
+            if (file) {
+                reader.readAsDataURL(file);
+            }
+        }
+    </script>
 </head>
 <body class="bg-light">
 <div th:replace="masterpage/headerUser :: nav"></div>
@@ -25,6 +44,12 @@
                 <label for="description">Descripción</label>:
                 <input type="text" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
                 <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="image">Foto de Equipo</label>
+                <input type="file" onchange="previewFile()" class="form-control-file">
+                <input type="text" style="display: none" id="image" name="image">
+                <img src="" id="imagenPreview" style="max-height: 200px; max-height: 200px; display: none" alt="Image preview...">
             </div>
             <b style="color: red" th:text="${message}" />
             <br />

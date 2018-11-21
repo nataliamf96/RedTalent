@@ -63,6 +63,16 @@ public class ProjectController {
         return result;
     }
 
+    @RequestMapping(value = "/projects")
+    public ModelAndView projects() {
+        ModelAndView result;
+
+        result = new ModelAndView("project/projects");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
+        return result;
+    }
+
     @RequestMapping(value = "/project", method = RequestMethod.GET)
     public ModelAndView projectDataList2(@RequestParam ObjectId projectId) {
         ModelAndView result;

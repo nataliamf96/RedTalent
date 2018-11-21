@@ -46,6 +46,16 @@ public class TeamController {
 
     //Listing -------------
 
+    @RequestMapping(value = "/teams")
+    public ModelAndView teams() {
+        ModelAndView result;
+
+        result = new ModelAndView("team/teams");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("teams",teamService.findAll());
+        return result;
+    }
+
     @RequestMapping(value="/byProject", method = RequestMethod.GET)
     public ModelAndView display(@RequestParam ObjectId projectId) {
 

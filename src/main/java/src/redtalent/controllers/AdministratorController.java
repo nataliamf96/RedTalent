@@ -11,12 +11,15 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Account;
 import src.redtalent.domain.Administrator;
+import src.redtalent.domain.Tag;
 import src.redtalent.domain.User;
 import src.redtalent.forms.UpdateAdminForm;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
 
 import javax.validation.Valid;
+import java.util.List;
+import java.util.Set;
 
 @Controller
 @RequestMapping("/admin")
@@ -36,6 +39,8 @@ public class AdministratorController {
     private CategoryService categoryService;
     @Autowired
     private AccountRepository accountRepository;
+    @Autowired
+    private TagService tagService;
 
     public AdministratorController(){
         super();
@@ -80,6 +85,16 @@ public class AdministratorController {
         return result;
     }
 
+    @RequestMapping(value = "/verTags")
+    public ModelAndView verTags() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/verTags");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("tags",tagService.findAll());
+        return result;
+    }
+
     @RequestMapping(value = "/estadisticas")
     public ModelAndView estadisticas() {
         ModelAndView result;
@@ -114,6 +129,30 @@ public class AdministratorController {
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
         result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+        return result;
+    }
+
+    @RequestMapping(value = "/deleteTag")
+    public ModelAndView deleteTag(@RequestParam String tagId) {
+        ModelAndView result;
+
+        Tag tag = tagService.findOne(tagId);
+        for(User u:userService.findAll()){
+            if(u.getTags().contains(tag)){
+                Set<Tag> t = u.getTags();
+                t.remove(tag);
+                u.setTags(t);
+                userService.saveUser(u);
+            }
+        }
+
+        tagService.remove(tag);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/verTags");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("tags",tagService.findAll());
+
         return result;
     }
 
@@ -152,6 +191,8 @@ public class AdministratorController {
         result.addObject("userId",admin.getId());
         return result;
     }
+
+
 
     @RequestMapping(value = "/updateAdmin", method = RequestMethod.POST, params = "saveModAdmin")
     public ModelAndView updateAdmin(@Valid UpdateAdminForm updateAdminForm, BindingResult binding){

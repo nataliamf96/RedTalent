@@ -64,6 +64,16 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/users")
+    public ModelAndView users() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("user/users");
+        result.addObject("users",userService.findAll());
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
     @RequestMapping(value = "/cambiarContraseña")
     public ModelAndView cambiarContraseña(){
         ModelAndView result;

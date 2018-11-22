@@ -10,12 +10,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import src.redtalent.domain.Account;
-import src.redtalent.domain.Project;
-import src.redtalent.domain.Tag;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 import src.redtalent.forms.EditPasswordForm;
-import src.redtalent.forms.EtiquetasUser;
 import src.redtalent.forms.UpdateUserForm;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
@@ -48,6 +44,9 @@ public class UserController {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private CategoryService categoryService;
 
     public UserController(){
         super();
@@ -197,6 +196,24 @@ public class UserController {
 
             return result;
         }
+
+
+    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "tag", defaultValue = "") String tag) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("user/filtrarProyectosCategorias");
+
+        if(tag.isEmpty()){
+            result.addObject("projects",projectService.findAll());
+        }else{
+            result.addObject("projects",projectService.findProjectsByCategorie_Name(tag));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
 
 
         protected ModelAndView updateEditModelAndViewUser(UpdateUserForm updateUserForm) {

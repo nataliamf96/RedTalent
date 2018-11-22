@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Home</title>
+    <link rel="icon" href="/images/us.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div style="margin-top: -25px" class="container py-4">
+    <h1 class="my-4">Filtrado
+        <small>Proyectos por Categorías</small>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <form id="formulario">
+                <div class="form-group">
+                    <label>Nombre de la Categoría</label>:
+                    <input type="text" class="form-control" id="text" name="text" style="max-width: 350px"/>
+                </div>
+                <script>
+                    var formulario = document.getElementById('formulario');
+                    var text = document.getElementById('text');
+
+                    formulario.onsubmit = function(e){
+                        location = "/user/filtrarProyectosCategorias?tag=" + encodeURIComponent(text.value);
+                        return false;
+                    }</script>
+                <input type="submit" class="btn btn-info" value="Buscar" />
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div th:each="project : ${projects}" class="col-lg-3 col-sm-6 portfolio-item">
+            <div class="card h-100">
+                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                    </h4>
+                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer" />
+</body>
+</html>

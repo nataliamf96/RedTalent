@@ -137,4 +137,8 @@ public class ProjectService {
         return result;
     }
 
+    public Set<Project> findProjectsByCategorie_Name(String category){
+        return projectRepository.findProjectsByCategorie_Name(category);
+    }
+
 }

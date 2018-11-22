@@ -14,5 +14,6 @@ public interface ProjectRepository extends MongoRepository<Project, String> {
     Set<Project> findAllByPrivadoTrue();
     Set<Project> findAllByCategorie(Category category);
     Project findProjectByForumsContains(Forum Forum);
-
+    Set<Project> findAllByCategorieName(String category);
+    Set<Project> findProjectsByCategorie_Name(String text);
 }

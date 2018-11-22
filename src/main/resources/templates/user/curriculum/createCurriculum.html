@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Curriculum</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-light">
+<div th:replace="masterpage/headerUser :: nav"></div>
+<br />
+<br />
+<div class="container py-4">
+    <h3 class="my-4">
+        Nuevo Curriculum
+    </h3>
+    <div class="container-fluid">
+        <form th:action="@{/user/curriculum/createCurriculum}" th:object="${curriculumForm}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+            <label for="urlLinkedin">URL Linkedin</label>:
+            <input type="text" class="form-control" id="urlLinkedin" name="urlLinkedin" style="max-width: 350px" th:field="*{urlLinkedin}"/>
+            <li th:each="err : ${#fields.errors('urlLinkedin')}" th:text="${err}" />
+        </div>
+            <div class="form-group">
+                <label for="area">Area</label>:
+                <select style="max-width: 350px" id="area" name="area" class="form-control">
+                    <option value="0">Seleccione una Area</option>
+                    <option th:each="area : ${areas}" th:value="${area.getId()}" th:text="${area.getArea()}" th:field="*{area}" th:with="varArea=${area}"></option>
+                </select>
+                <li th:each="err : ${#fields.errors('area')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="escuela">Facultad</label>:
+                <select style="max-width: 350px" id="escuela" name="escuela" class="form-control">
+                    <option value="0">Seleccione una Facultad</option>
+                    <option th:each="department : ${departments}" th:value="${department.getId()}" th:text="${department.getDepartment()}" th:field="*{escuela}"></option>
+                </select>
+                <li th:each="err : ${#fields.errors('escuela')}" th:text="${err}" />
+            </div>
+            <div class="form-group">
+                <label for="grado">Grado</label>:
+                <select style="max-width: 350px" id="grado" name="grado" class="form-control">
+                    <option value="0">Seleccione un Grado</option>
+                    <option th:each="grade : ${grades}" th:value="${grade.getId()}" th:text="${grade.getName()}" th:field="*{grado}"></option>
+                </select>
+                <li th:each="err : ${#fields.errors('grado')}" th:text="${err}" />
+            </div>
+            <b style="color: red" th:text="${message}" />
+            <br />
+            <br />
+            <input type="submit" class="btn btn-info" name="createCurriculum" value="Actualizar" />
+        </form>
+    </div>
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

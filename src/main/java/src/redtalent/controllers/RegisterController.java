@@ -87,28 +87,6 @@ public class RegisterController {
                 a.setRoles(roles);
                 a.setEnabled(false);
 
-                /* Etiquetas */
-                if(!userForm.getEtiquetas().isEmpty()){
-                    Set<Tag> tagsUser = new HashSet<Tag>();
-                    for(String nombreTag : userForm.getEtiquetas().split(",")){
-                        Tag tt = null;
-                        for(Tag t:tagService.findAll()){
-                            if(t.getName().equals(nombreTag)){
-                                tt = t;
-                            }
-                        }
-                        if(tt == null){
-                            tt = tagService.create();
-                            tt.setName(nombreTag);
-                            Tag save = tagService.save(tt);
-                            tagsUser.add(save);
-                        }else{
-                            tagsUser.add(tt);
-                        }
-                    }
-                    u.setTags(tagsUser);
-                }
-
                 Account save = accountRepository.save(a);
                 u.setAccount(save);
                 u.setFullname(userForm.getFullname());

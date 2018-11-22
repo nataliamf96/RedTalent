@@ -3,6 +3,9 @@ package src.redtalent.domain;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+
 @Document(collection = "Curriculum")
 public class Curriculum extends DomainEntity{
 
@@ -17,6 +20,7 @@ public class Curriculum extends DomainEntity{
     }
 
     @URL
+    @NotBlank
     public String getUrlLinkedin() {
         return urlLinkedin;
     }
@@ -24,4 +28,5 @@ public class Curriculum extends DomainEntity{
     public void setUrlLinkedin(String urlLinkedin) {
         this.urlLinkedin = urlLinkedin;
     }
+
 }

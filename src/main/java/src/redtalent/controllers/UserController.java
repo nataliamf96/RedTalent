@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.*;
+import src.redtalent.forms.CurriculumForm;
 import src.redtalent.forms.EditPasswordForm;
 import src.redtalent.forms.UpdateUserForm;
 import src.redtalent.repositories.AccountRepository;
@@ -47,6 +48,18 @@ public class UserController {
 
     @Autowired
     private CategoryService categoryService;
+
+    @Autowired
+    private CurriculumService curriculumService;
+
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private GradeService gradeService;
 
     public UserController(){
         super();
@@ -199,19 +212,109 @@ public class UserController {
 
 
     @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "tag", defaultValue = "") String tag) {
+    public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
         result = new ModelAndView("user/filtrarProyectosCategorias");
 
-        if(tag.isEmpty()){
+        if(category.isEmpty()){
             result.addObject("projects",projectService.findAll());
         }else{
-            result.addObject("projects",projectService.findProjectsByCategorie_Name(tag));
+            result.addObject("projects",projectService.findProjectsByCategorie_Name(category));
         }
 
         result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilesPorEtiquetas", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilesPorEtiquetas(@RequestParam(value = "tag", defaultValue = "") String tag) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("user/filtrarPerfilesPorEtiquetas");
+
+        /* Etiquetas */
+        Set<Tag> tagsUser = new HashSet<Tag>();
+        for(String nombreTag : tag.replace(" ","").split(",")){
+            for(Tag t:tagService.findAll()){
+                if(t.getName().toUpperCase().equals(nombreTag.toUpperCase())){
+                    tagsUser.add(t);
+                }
+            }
+        }
+
+        if(tag.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else if(tagsUser.size() == 0){
+            result.addObject("users",new HashSet<User>());
+        }else{
+            result.addObject("users",userService.findAllByTagsContains(tagsUser));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/curriculum/createCurriculum")
+    public ModelAndView createCurriculum(){
+        ModelAndView result;
+        CurriculumForm curriculumForm;
+        curriculumForm = new CurriculumForm();
+
+        result = new ModelAndView("user/curriculum/createCurriculum");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("areas",areaService.findAll());
+        result.addObject("departments",departmentService.findAll());
+        result.addObject("grades",gradeService.findAll());
+        result.addObject("curriculumForm",curriculumForm);
+        return result;
+    }
+
+    @RequestMapping(value = "/curriculum/createCurriculum", method = RequestMethod.POST, params = "createCurriculum")
+    public ModelAndView createCurriculum(@Valid CurriculumForm curriculumForm, BindingResult binding){
+        ModelAndView result;
+
+        if (binding.hasErrors())
+            result = createEditModelAndViewUserCurriculum(curriculumForm);
+        else
+            try {
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+
+                Curriculum curriculum = new Curriculum();
+
+                curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
+
+                Curriculum csave = curriculumService.save(curriculum);
+
+                user.setCurriculum(csave);
+                userService.saveUser(user);
+
+                result = new ModelAndView("redirect:/user/index");
+
+            } catch (Throwable oops) {
+                result = createEditModelAndViewUserCurriculum(curriculumForm, "ERROR AL CREAR EL CURRICULUM");
+            }
+
+        return result;
+    }
+
+    protected ModelAndView createEditModelAndViewUserCurriculum(CurriculumForm curriculumForm) {
+        ModelAndView result;
+        result = createEditModelAndViewUserCurriculum(curriculumForm, null);
+        return result;
+    }
+
+    protected ModelAndView createEditModelAndViewUserCurriculum(CurriculumForm curriculumForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/curriculum/createCurriculum");
+        result.addObject("curriculumForm", curriculumForm);
+        result.addObject("message", message);
+        result.addObject("auth",utilidadesService.actorConectado());
+
         return result;
     }
 

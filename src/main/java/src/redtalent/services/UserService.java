@@ -47,7 +47,9 @@ public class UserService {
         Set<Blog> s = new HashSet<Blog>();
         Set<Reply> r = new HashSet<Reply>();
         Set<Comment> c = new HashSet<Comment>();
+        Set<Tag> tags = new HashSet<Tag>();
         result.setApplications(ap);
+        result.setTags(tags);
         result.setTeams(ta);
         result.setProjects(pr);
         result.setBlogs(s);

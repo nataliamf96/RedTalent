@@ -223,30 +223,45 @@ public class BlogController {
                 Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
                 Blog blog = blogService.findOne(commentForm.getBlogId().toString());
                 User userSaved = userService.findUserByBlogsContains(blog);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
 
                 Comment comment = commentService.create();
                 comment.setTitle(commentForm.getTitle());
                 comment.setText(commentForm.getText());
                 Comment saved = commentService.save(comment);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Comment> comments = user.getComments();
+                List<Comment> comments = blog.getComments();
                 comments.add(saved);
-                user.setComments(comments);
-                userService.saveUser(user);
-
-                List<Comment> comments1 = blog.getComments();
-                comments1.add(saved);
-                blog.setComments(comments1);
+                blog.setComments(comments);
                 blogService.save(blog);
 
-                Set<Blog> blogs = userSaved.getBlogs();
-                for(Blog b: blogs){
-                    b.setComments(comments1);
+                if(userSaved.equals(user)){
+                    Set<Comment> comments1 = userSaved.getComments();
+                    comments1.add(saved);
+                    userSaved.setComments(comments1);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for(Blog b: blogs){
+                        b.setComments(comments);
+                    }
+                    userSaved.setBlogs(blogs);
+                    userService.saveUser(userSaved);
+
+                } else {
+
+                    Set<Comment> comments3 = user.getComments();
+                    comments3.add(saved);
+                    user.setComments(comments3);
+                    userService.saveUser(user);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for (Blog b : blogs) {
+                        b.setComments(comments);
+                    }
+                    userSaved.setBlogs(blogs);
+                    userService.saveUser(userSaved);
                 }
-                userSaved.setBlogs(blogs);
-                userService.saveUser(userSaved);
 
                 result = new ModelAndView("redirect:/blog/listComment?blogId=" +commentForm.getBlogId());
 
@@ -317,6 +332,13 @@ public class BlogController {
                 comment.setReplies(replies1);
                 commentService.save(comment);
 
+                Set<Comment> comments1 = saved2.getComments();
+                for(Comment c: comments1){
+                    c.setReplies(replies1);
+                }
+                saved2.setComments(comments1);
+                userService.saveUser(saved2);
+
                 List<Comment> comments = blog.getComments();
                 for(Comment c: comments){
                     c.setReplies(replies1);
@@ -330,15 +352,12 @@ public class BlogController {
                         c1.setReplies(replies1);
                     }
                 }
+                if(userSaved.equals(user) && userSaved.equals(saved2)){
+                    userSaved.setComments(comments1);
+                    userSaved.setReplies(replies);
+                }
                 userSaved.setBlogs(blogs);
                 userService.saveUser(userSaved);
-
-                Set<Comment> comments1 = saved2.getComments();
-                for(Comment c: comments1){
-                    c.setReplies(replies1);
-                }
-                saved2.setComments(comments1);
-                userService.saveUser(saved2);
 
                 result = new ModelAndView("redirect:/blog/listReply?blogId=" + replyForm.getBlogId() + "&commentId=" +replyForm.getCommentId());
 
@@ -401,22 +420,38 @@ public class BlogController {
         User user1 = userService.findUserByBlogsContains(b);
 
         if(user.equals(userCreated)) {
-            Set<Comment> comments = user.getComments();
-            comments.remove(res);
-            user.setComments(comments);
-            userService.saveUser(user);
 
             List<Comment> comments1 = b.getComments();
             comments1.remove(res);
             b.setComments(comments1);
             blogService.save(b);
 
-            Set<Blog> blogs = user1.getBlogs();
-            for(Blog bl: blogs){
-                bl.setComments(comments1);
+            if(user.equals(user1)){
+                Set<Comment> comments = user.getComments();
+                comments.remove(res);
+                user.setComments(comments);
+
+                Set<Blog> blogs = user.getBlogs();
+                for(Blog bl: blogs){
+                    bl.setComments(comments1);
+                }
+                user.setBlogs(blogs);
+
+                userService.saveUser(user);
+            } else {
+
+                Set<Comment> comments = user.getComments();
+                comments.remove(res);
+                user.setComments(comments);
+                userService.saveUser(user);
+
+                Set<Blog> blogs = user1.getBlogs();
+                for (Blog bl : blogs) {
+                    bl.setComments(comments1);
+                }
+                user1.setBlogs(blogs);
+                userService.saveUser(user1);
             }
-            user1.setBlogs(blogs);
-            userService.saveUser(user1);
 
             for (Reply r : res.getReplies()) {
                 replyService.remove(r);

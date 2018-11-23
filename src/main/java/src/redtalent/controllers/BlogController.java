@@ -295,6 +295,10 @@ public class BlogController {
         } else {
             try {
                 Assert.notNull(replyForm, "No puede ser nulo el formulario de Reply");
+                Blog blog = blogService.findOne(replyForm.getBlogId().toString());
+                User userSaved = userService.findUserByBlogsContains(blog);
+                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
+                User saved2 = userService.findUserByCommentsContains(comment);
 
                 Reply reply = replyService.create();
                 reply.setTitle(replyForm.getTitle());
@@ -306,15 +310,13 @@ public class BlogController {
                 Set<Reply> replies = user.getReplies();
                 replies.add(saved);
                 user.setReplies(replies);
-                User userSaved = userService.saveUser(user);
+                userService.saveUser(user);
 
-                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
                 Set<Reply> replies1 = comment.getReplies();
                 replies1.add(saved);
                 comment.setReplies(replies1);
                 commentService.save(comment);
 
-                Blog blog = blogService.findOne(replyForm.getBlogId().toString());
                 List<Comment> comments = blog.getComments();
                 for(Comment c: comments){
                     c.setReplies(replies1);
@@ -329,7 +331,7 @@ public class BlogController {
                     }
                 }
                 userSaved.setBlogs(blogs);
-                User saved2 = userService.saveUser(userSaved);
+                userService.saveUser(userSaved);
 
                 Set<Comment> comments1 = saved2.getComments();
                 for(Comment c: comments1){

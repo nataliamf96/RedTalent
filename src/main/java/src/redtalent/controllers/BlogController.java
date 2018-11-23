@@ -221,6 +221,8 @@ public class BlogController {
         } else {
             try {
                 Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
+                Blog blog = blogService.findOne(commentForm.getBlogId().toString());
+                User userSaved = userService.findUserByBlogsContains(blog);
 
                 Comment comment = commentService.create();
                 comment.setTitle(commentForm.getTitle());
@@ -232,9 +234,8 @@ public class BlogController {
                 Set<Comment> comments = user.getComments();
                 comments.add(saved);
                 user.setComments(comments);
-                User userSaved = userService.saveUser(user);
+                userService.saveUser(user);
 
-                Blog blog = blogService.findOne(commentForm.getBlogId().toString());
                 List<Comment> comments1 = blog.getComments();
                 comments1.add(saved);
                 blog.setComments(comments1);
@@ -395,6 +396,7 @@ public class BlogController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
         Blog b = blogService.findBlogByCommentsContaining(res);
+        User user1 = userService.findUserByBlogsContains(b);
 
         if(user.equals(userCreated)) {
             Set<Comment> comments = user.getComments();
@@ -407,6 +409,12 @@ public class BlogController {
             b.setComments(comments1);
             blogService.save(b);
 
+            Set<Blog> blogs = user1.getBlogs();
+            for(Blog bl: blogs){
+                bl.setComments(comments1);
+            }
+            user1.setBlogs(blogs);
+            userService.saveUser(user1);
 
             for (Reply r : res.getReplies()) {
                 replyService.remove(r);

@@ -15,10 +15,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import src.redtalent.domain.*;
 import src.redtalent.forms.CommentForm;
 import src.redtalent.forms.ForumForm;
-import src.redtalent.services.CommentService;
-import src.redtalent.services.ReplyService;
-import src.redtalent.services.UserService;
-import src.redtalent.services.UtilidadesService;
+import src.redtalent.services.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
@@ -41,6 +38,12 @@ public class CommentController {
 
     @Autowired
     private ReplyService replyService;
+
+    @Autowired
+    private ProjectService projectService;
+
+    @Autowired
+    private TeamService teamService;
 
 
     // Constructors -----------------------------------------------------------
@@ -70,7 +73,51 @@ public class CommentController {
         return result;
     }
 
-    // Crear Comentario -------------
+    //Lista comment de projects
+
+    @RequestMapping(value="/project/list", method = RequestMethod.GET)
+    public ModelAndView listProject(@RequestParam ObjectId projectId) {
+
+        ModelAndView result;
+        Project project = projectService.findOne(projectId.toString());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        List<Comment> comments = project.getComments();
+
+        result = new ModelAndView("comment/listp");
+        result.addObject("requestURI", "comment/project/list?projectId=" +projectId);
+        result.addObject("comments", comments);
+        result.addObject("projectId", projectId);
+        result.addObject("userCreated",userCreated);
+
+        return result;
+    }
+
+    //Lista comment de teams
+
+    @RequestMapping(value="/team/list", method = RequestMethod.GET)
+    public ModelAndView listTeam(@RequestParam ObjectId teamId) {
+
+        ModelAndView result;
+        Team team = teamService.findOne(teamId.toString());
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        List<Comment> comments = team.getComments();
+
+        result = new ModelAndView("comment/listt");
+        result.addObject("requestURI", "comment/team/list?teamId=" +teamId);
+        result.addObject("comments", comments);
+        result.addObject("teamId", teamId);
+        result.addObject("userCreated",userCreated);
+
+        return result;
+    }
+
+    // Crear comentarios a personas
 
     @RequestMapping(value = "/create", method = RequestMethod.GET)
     public ModelAndView create(@RequestParam ObjectId userId, final RedirectAttributes redirectAttrs) {
@@ -134,6 +181,150 @@ public class CommentController {
         return result;
     }
 
+    //Crear comentarios a proyectos
+
+    @RequestMapping(value = "/project/create", method = RequestMethod.GET)
+    public ModelAndView createProject(@RequestParam ObjectId projectId, final RedirectAttributes redirectAttrs) {
+        ModelAndView result;
+        CommentForm commentForm = new CommentForm();
+        commentForm.setProjectId(projectId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        Project res = projectService.findOne(projectId.toString());
+
+        result = new ModelAndView("comment/createp");
+        result.addObject("commentForm", commentForm);
+        result.addObject("projectId", projectId);
+        result.addObject("requestURI", "./comment/project/create?projectId=" +projectId);
+        result.addObject("userCreated", userCreated);
+
+        return result;
+    }
+
+    @RequestMapping(value = "/project/create", method = RequestMethod.POST, params = "save")
+    public ModelAndView saveCreateProject(@Valid CommentForm commentForm, BindingResult binding, RedirectAttributes redirectAttrs) {
+
+        ModelAndView result;
+        commentForm.setProjectId(commentForm.getProjectId());
+
+        if (binding.hasErrors()) {
+            result = createCommentPModelAndView(commentForm);
+        } else {
+            try {
+                Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
+                Project project = projectService.findOne(commentForm.getProjectId().toString());
+                User user = userService.findUserByProjectsContains(project);
+
+                Comment comment = commentService.create();
+                comment.setTitle(commentForm.getTitle());
+                comment.setText(commentForm.getText());
+                Comment saved = commentService.save(comment);
+
+                List<Comment> comments = project.getComments();
+                comments.add(saved);
+                project.setComments(comments);
+                Project projectSaved = projectService.save(project);
+                projectService.saveAll(projectSaved);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User userCreated = utilidadesService.userConectado(authentication.getName());
+                Set<Comment> comments1 = userCreated.getComments();
+                comments1.add(saved);
+                userCreated.setComments(comments1);
+                userService.saveUser(userCreated);
+
+                if(!userCreated.equals(user)){
+                    Set<Project> projects = user.getProjects();
+                    for(Project p: projects){
+                        p.setComments(comments);
+                    }
+                    user.setProjects(projects);
+                    userService.saveUser(user);
+                }
+
+                result = new ModelAndView("redirect:/comment/project/list?projectId=" +commentForm.getProjectId());
+
+            } catch (Throwable oops) {
+                result = createCommentPModelAndView(commentForm, "No se puede crear correctamente los comentarios");
+
+            }
+        }
+        return result;
+    }
+
+    // Crear comentarios a equipos
+
+    @RequestMapping(value = "/team/create", method = RequestMethod.GET)
+    public ModelAndView createTeam(@RequestParam ObjectId teamId, final RedirectAttributes redirectAttrs) {
+        ModelAndView result;
+        CommentForm commentForm = new CommentForm();
+        commentForm.setTeamId(teamId);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        Team res = teamService.findOne(teamId.toString());
+
+        result = new ModelAndView("comment/createt");
+        result.addObject("commentForm", commentForm);
+        result.addObject("teamId", teamId);
+        result.addObject("requestURI", "./comment/team/create?teamId=" +teamId);
+        result.addObject("userCreated", userCreated);
+
+        return result;
+    }
+
+    @RequestMapping(value = "/team/create", method = RequestMethod.POST, params = "save")
+    public ModelAndView saveCreateTeam(@Valid CommentForm commentForm, BindingResult binding, RedirectAttributes redirectAttrs) {
+
+        ModelAndView result;
+        commentForm.setProjectId(commentForm.getTeamId());
+
+        if (binding.hasErrors()) {
+            result = createCommentTModelAndView(commentForm);
+        } else {
+            try {
+                Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
+                Team team = teamService.findOne(commentForm.getTeamId().toString());
+                User user = userService.findUserByTeamsConstains(team);
+
+                Comment comment = commentService.create();
+                comment.setTitle(commentForm.getTitle());
+                comment.setText(commentForm.getText());
+                Comment saved = commentService.save(comment);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User userCreated = utilidadesService.userConectado(authentication.getName());
+                Set<Comment> comments1 = userCreated.getComments();
+                comments1.add(saved);
+                userCreated.setComments(comments1);
+                userService.saveUser(userCreated);
+
+                List<Comment> comments = team.getComments();
+                comments.add(saved);
+                team.setComments(comments);
+                Team teamSaved = teamService.save(team);
+
+                Set<Team> teams = user.getTeams();
+                for(Team t: teams){
+                    t.setComments(comments);
+                }
+                user.setComments(comments1);
+                user.setTeams(teams);
+                userService.saveUser(user);
+
+                result = new ModelAndView("redirect:/comment/team/list?teamId=" +commentForm.getTeamId());
+
+            } catch (Throwable oops) {
+                result = createCommentTModelAndView(commentForm, "No se puede crear correctamente los comentarios");
+
+            }
+        }
+        return result;
+    }
+
     //Eliminar un comentario
 
     @RequestMapping(value = "/delete", method = RequestMethod.GET)
@@ -185,6 +376,52 @@ public class CommentController {
         result = new ModelAndView("comment/create");
         result.addObject("commentForm", commentForm);
         result.addObject("userId", commentForm.getUserId());
+        result.addObject("projectId", commentForm.getProjectId());
+        result.addObject("teamId", commentForm.getTeamId());
+        result.addObject("userCreated", userCreated);
+        result.addObject("message", message);
+        return result;
+    }
+
+    protected ModelAndView createCommentPModelAndView(CommentForm commentForm) {
+        ModelAndView result;
+        result = createCommentModelAndView(commentForm, null);
+        return result;
+    }
+
+    protected ModelAndView createCommentPModelAndView(CommentForm commentForm, String message) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        result = new ModelAndView("comment/createp");
+        result.addObject("commentForm", commentForm);
+        result.addObject("userId", commentForm.getUserId());
+        result.addObject("projectId", commentForm.getProjectId());
+        result.addObject("teamId", commentForm.getTeamId());
+        result.addObject("userCreated", userCreated);
+        result.addObject("message", message);
+        return result;
+    }
+
+    protected ModelAndView createCommentTModelAndView(CommentForm commentForm) {
+        ModelAndView result;
+        result = createCommentModelAndView(commentForm, null);
+        return result;
+    }
+
+    protected ModelAndView createCommentTModelAndView(CommentForm commentForm, String message) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        result = new ModelAndView("comment/createt");
+        result.addObject("commentForm", commentForm);
+        result.addObject("userId", commentForm.getUserId());
+        result.addObject("projectId", commentForm.getProjectId());
+        result.addObject("teamId", commentForm.getTeamId());
         result.addObject("userCreated", userCreated);
         result.addObject("message", message);
         return result;

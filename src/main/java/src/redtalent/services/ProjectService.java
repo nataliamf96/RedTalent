@@ -141,4 +141,8 @@ public class ProjectService {
         return projectRepository.findProjectsByCategorie_Name(category);
     }
 
+    public Project findProjectByCommentsContains(Comment comment){
+        return projectRepository.findProjectByCommentsContains(comment);
+    }
+
 }

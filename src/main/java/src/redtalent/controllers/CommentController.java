@@ -360,6 +360,92 @@ public class CommentController {
         return result;
     }
 
+    // Eliminar un comentario de un projecto
+
+    @RequestMapping(value = "/project/delete", method = RequestMethod.GET)
+    public ModelAndView deleteCommentProject(@RequestParam ObjectId commentId) {
+        ModelAndView result;
+        Assert.notNull(commentService.findOne(commentId.toString()), "La id no puede ser nula");
+
+        Comment res = commentService.findOne(commentId.toString());
+        User userCreador = userService.findUserByCommentsContains(res);
+        Project project = projectService.findProjectByCommentsContains(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        if (userCreador.equals(userCreated)) {
+            List<Comment> comments = project.getComments();
+            comments.remove(res);
+            project.setComments(comments);
+            Project saved = projectService.save(project);
+            projectService.saveAll(saved);
+
+            Set<Comment> comments1 = userCreador.getComments();
+            comments1.remove(res);
+            userCreador.setComments(comments1);
+            User userSaved = userService.saveUser(userCreador);
+
+            Set<Project> projects = userSaved.getProjects();
+            for(Project p: projects){
+                p.setComments(comments);
+            }
+            userSaved.setProjects(projects);
+            userService.saveUser(userSaved);
+
+            for (Reply r : res.getReplies()) {
+                replyService.remove(r);
+            }
+
+            commentService.remove(res);
+        }
+
+        result = new ModelAndView("redirect:/comment/project/list?projectId=" +project.getId());
+        return result;
+    }
+
+    // Eliminar un comentario de un equipo
+
+    @RequestMapping(value = "/team/delete", method = RequestMethod.GET)
+    public ModelAndView deleteCommentTeam(@RequestParam ObjectId commentId) {
+        ModelAndView result;
+        Assert.notNull(commentService.findOne(commentId.toString()), "La id no puede ser nula");
+
+        Comment res = commentService.findOne(commentId.toString());
+        User userCreador = userService.findUserByCommentsContains(res);
+        Team team = teamService.findTeamByCommentsContains(res);
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userCreated = utilidadesService.userConectado(authentication.getName());
+
+        if (userCreador.equals(userCreated)) {
+            List<Comment> comments = team.getComments();
+            comments.remove(res);
+            team.setComments(comments);
+            teamService.save(team);
+
+            Set<Comment> comments1 = userCreador.getComments();
+            comments1.remove(res);
+            userCreador.setComments(comments1);
+            User userSaved = userService.saveUser(userCreador);
+
+            Set<Team> teams = userSaved.getTeams();
+            for(Team t: teams){
+                t.setComments(comments);
+            }
+            userSaved.setTeams(teams);
+            userService.saveUser(userSaved);
+
+            for (Reply r : res.getReplies()) {
+                replyService.remove(r);
+            }
+
+            commentService.remove(res);
+        }
+
+        result = new ModelAndView("redirect:/comment/team/list?teamId=" +team.getId());
+        return result;
+    }
+
+
     //Model and View --------------------------------
     protected ModelAndView createCommentModelAndView(CommentForm commentForm) {
         ModelAndView result;

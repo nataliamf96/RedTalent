@@ -243,7 +243,9 @@ public class BlogController {
 
                     Set<Blog> blogs = userSaved.getBlogs();
                     for(Blog b: blogs){
-                        b.setComments(comments);
+                        if(b.equals(blog)) {
+                            b.setComments(comments);
+                        }
                     }
                     userSaved.setBlogs(blogs);
                     userService.saveUser(userSaved);
@@ -257,7 +259,9 @@ public class BlogController {
 
                     Set<Blog> blogs = userSaved.getBlogs();
                     for (Blog b : blogs) {
-                        b.setComments(comments);
+                        if(b.equals(blog)) {
+                            b.setComments(comments);
+                        }
                     }
                     userSaved.setBlogs(blogs);
                     userService.saveUser(userSaved);
@@ -320,44 +324,82 @@ public class BlogController {
                 reply.setText(replyForm.getText());
                 Reply saved = replyService.save(reply);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Reply> replies = user.getReplies();
-                replies.add(saved);
-                user.setReplies(replies);
-                userService.saveUser(user);
-
                 Set<Reply> replies1 = comment.getReplies();
                 replies1.add(saved);
                 comment.setReplies(replies1);
                 commentService.save(comment);
 
-                Set<Comment> comments1 = saved2.getComments();
-                for(Comment c: comments1){
-                    c.setReplies(replies1);
-                }
-                saved2.setComments(comments1);
-                userService.saveUser(saved2);
-
                 List<Comment> comments = blog.getComments();
                 for(Comment c: comments){
-                    c.setReplies(replies1);
+                    if(c.equals(comment)) {
+                        c.setReplies(replies1);
+                    }
                 }
                 blog.setComments(comments);
                 blogService.save(blog);
 
-                Set<Blog> blogs = userSaved.getBlogs();
-                for(Blog b: blogs){
-                    for(Comment c1: b.getComments()){
-                        c1.setReplies(replies1);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+
+                if(user.equals(userSaved) && user.equals(saved2)){
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.add(saved);
+                    user.setReplies(replies);
+
+                    Set<Comment> comments1 = user.getComments();
+                    for (Comment c : comments1) {
+                        if(c.equals(comment)){
+                            c.setReplies(replies1);
+                        }
                     }
+                    user.setComments(comments1);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for (Blog b : blogs) {
+                        for (Comment c1 : b.getComments()) {
+                            if(c1.equals(comment)){
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    user.setBlogs(blogs);
+
+                    userService.saveUser(user);
+
+                } else {
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.add(saved);
+                    user.setReplies(replies);
+                    userService.saveUser(user);
+
+                    Set<Comment> comments1 = saved2.getComments();
+                    for (Comment c : comments1) {
+                        if(c.equals(comment)){
+                            c.setReplies(replies1);
+                        }
+                    }
+                    saved2.setComments(comments1);
+                    userService.saveUser(saved2);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for (Blog b : blogs) {
+                        for (Comment c1 : b.getComments()) {
+                            if(c1.equals(comment)){
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    userSaved.setBlogs(blogs);
+                    if(userSaved.equals(saved2)){
+                        userSaved.setComments(comments1);
+                    }
+                    if(userSaved.equals(user)){
+                        userSaved.setReplies(replies);
+                    }
+                    userService.saveUser(userSaved);
                 }
-                if(userSaved.equals(user) && userSaved.equals(saved2)){
-                    userSaved.setComments(comments1);
-                    userSaved.setReplies(replies);
-                }
-                userSaved.setBlogs(blogs);
-                userService.saveUser(userSaved);
 
                 result = new ModelAndView("redirect:/blog/listReply?blogId=" + replyForm.getBlogId() + "&commentId=" +replyForm.getCommentId());
 
@@ -432,8 +474,10 @@ public class BlogController {
                 user.setComments(comments);
 
                 Set<Blog> blogs = user.getBlogs();
-                for(Blog bl: blogs){
-                    bl.setComments(comments1);
+                for(Blog b1: blogs){
+                    if(b1.equals(b)){
+                        b1.setComments(comments1);
+                    }
                 }
                 user.setBlogs(blogs);
 
@@ -446,8 +490,10 @@ public class BlogController {
                 userService.saveUser(user);
 
                 Set<Blog> blogs = user1.getBlogs();
-                for (Blog bl : blogs) {
-                    bl.setComments(comments1);
+                for (Blog b1 : blogs) {
+                    if(b1.equals(b)){
+                        b1.setComments(comments1);
+                    }
                 }
                 user1.setBlogs(blogs);
                 userService.saveUser(user1);
@@ -477,6 +523,8 @@ public class BlogController {
         User userCreated = utilidadesService.userConectado(authentication.getName());
         Comment c = commentService.findCommentByRepliesContaining(res);
         Blog b = blogService.findBlogByCommentsContaining(c);
+        User userBlog = userService.findUserByBlogsContains(b);
+        User userComent = userService.findUserByCommentsContains(c);
 
         if(user.equals(userCreated)) {
 
@@ -487,22 +535,116 @@ public class BlogController {
 
             List<Comment> comments1 = b.getComments();
             for(Comment com1: comments1){
-                com1.setReplies(replies1);
+                if(com1.equals(c)){
+                    com1.setReplies(replies1);
+                }
             }
             b.setComments(comments1);
             blogService.save(b);
 
+            if(!user.equals(userComent) && !user.equals(userBlog)) {
+                Set<Reply> replies = user.getReplies();
+                replies.remove(res);
+                user.setReplies(replies);
+                userService.saveUser(user);
 
-            Set<Comment> comments = user.getComments();
-            for(Comment com : comments){
-                com.setReplies(replies1);
+                Set<Comment> comments = userComent.getComments();
+                for (Comment com : comments) {
+                    if (com.equals(c)) {
+                        com.setReplies(replies1);
+                    }
+                }
+                userComent.setComments(comments);
+                userService.saveUser(userComent);
+
+                Set<Blog> blogs = userBlog.getBlogs();
+                for (Blog b1 : blogs) {
+                    for (Comment c1 : b1.getComments()) {
+                        if (c1.equals(c)) {
+                            c1.setReplies(replies1);
+                        }
+                    }
+                }
+                userBlog.setBlogs(blogs);
+                userService.saveUser(userBlog);
+            } else{
+                if(userComent.equals(user) && userBlog.equals(user)){
+                    Set<Reply> replies = user.getReplies();
+                    replies.remove(res);
+                    user.setReplies(replies);
+
+                    Set<Comment> comments = user.getComments();
+                    for (Comment com : comments) {
+                        if (com.equals(c)) {
+                            com.setReplies(replies1);
+                        }
+                    }
+                    user.setComments(comments);
+
+                    Set<Blog> blogs = user.getBlogs();
+                    for (Blog b1 : blogs) {
+                        for (Comment c1 : b1.getComments()) {
+                            if (c1.equals(c)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    user.setBlogs(blogs);
+                    userService.saveUser(user);
+                }
+                if(userBlog.equals(user) && !userComent.equals(user)){
+
+                    Set<Comment> comments = userComent.getComments();
+                    for (Comment com : comments) {
+                        if (com.equals(c)) {
+                            com.setReplies(replies1);
+                        }
+                    }
+                    userComent.setComments(comments);
+                    userService.saveUser(userComent);
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.remove(res);
+                    user.setReplies(replies);
+
+                    Set<Blog> blogs = user.getBlogs();
+                    for (Blog b1 : blogs) {
+                        for (Comment c1 : b1.getComments()) {
+                            if (c1.equals(c)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    user.setBlogs(blogs);
+                    userService.saveUser(user);
+                }
+                if(!userBlog.equals(user) && userComent.equals(user)){
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.remove(res);
+                    user.setReplies(replies);
+
+                    Set<Comment> comments = user.getComments();
+                    for (Comment com : comments) {
+                        if (com.equals(c)) {
+                            com.setReplies(replies1);
+                        }
+                    }
+                    user.setComments(comments);
+                    userService.saveUser(user);
+
+                    Set<Blog> blogs = userBlog.getBlogs();
+                    for (Blog b1 : blogs) {
+                        for (Comment c1 : b1.getComments()) {
+                            if (c1.equals(c)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    userBlog.setBlogs(blogs);
+                    userService.saveUser(userBlog);
+                }
             }
-            Set<Reply> replies = user.getReplies();
-            replies.remove(res);
-            user.setReplies(replies);
-            user.setComments(comments);
-            userService.saveUser(user);
-
             replyService.remove(res);
         }
 

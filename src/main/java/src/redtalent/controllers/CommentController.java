@@ -238,7 +238,9 @@ public class CommentController {
                 if(!userCreated.equals(user)){
                     Set<Project> projects = user.getProjects();
                     for(Project p: projects){
-                        p.setComments(comments);
+                        if(p.equals(project)){
+                            p.setComments(comments);
+                        }
                     }
                     user.setProjects(projects);
                     userService.saveUser(user);
@@ -309,7 +311,9 @@ public class CommentController {
 
                 Set<Team> teams = user.getTeams();
                 for(Team t: teams){
-                    t.setComments(comments);
+                    if(t.equals(team)){
+                        t.setComments(comments);
+                    }
                 }
                 user.setComments(comments1);
                 user.setTeams(teams);
@@ -387,7 +391,9 @@ public class CommentController {
 
             Set<Project> projects = userSaved.getProjects();
             for(Project p: projects){
-                p.setComments(comments);
+                if(p.equals(project)){
+                    p.setComments(comments);
+                }
             }
             userSaved.setProjects(projects);
             userService.saveUser(userSaved);
@@ -429,7 +435,9 @@ public class CommentController {
 
             Set<Team> teams = userSaved.getTeams();
             for(Team t: teams){
-                t.setComments(comments);
+                if(t.equals(team)){
+                    t.setComments(comments);
+                }
             }
             userSaved.setTeams(teams);
             userService.saveUser(userSaved);

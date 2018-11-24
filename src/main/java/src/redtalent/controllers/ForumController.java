@@ -303,39 +303,128 @@ public class ForumController {
             try {
                 Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
                 Forum forum = forumService.findOne(commentForm.getForumId().toString());
-                User userSaved = userService.findUserByForumsContains(forum);
+                User userForum = userService.findUserByForumsContains(forum);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                Project project = projectService.findOne(commentForm.getProjectId().toString());
+                Team team = teamService.teamByProjectId(project);
+                User userProject = userService.findUserByProjectsContains(project);
 
                 Comment comment = commentService.create();
                 comment.setTitle(commentForm.getTitle());
                 comment.setText(commentForm.getText());
                 Comment saved = commentService.save(comment);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Comment> comments = user.getComments();
-                comments.add(saved);
-                user.setComments(comments);
-                userService.saveUser(user);
-
                 List<Comment> comments1 = forum.getComments();
                 comments1.add(saved);
                 forum.setComments(comments1);
                 forumService.save(forum);
 
-                Set<Forum> forums1 = userSaved.getForums();
-                for(Forum f1: forums1){
-                    f1.setComments(comments1);
-                }
-                userSaved.setForums(forums1);
-                userService.saveUser(userSaved);
-
-                Project project = projectService.findOne(commentForm.getProjectId().toString());
                 List<Forum> forums = project.getForums();
                 for(Forum f: forums){
-                    f.setComments(comments1);
+                    if(f.equals(forum)){
+                        f.setComments(comments1);
+                    }
                 }
                 project.setForums(forums);
                 projectService.save(project);
+
+                List<Project> projects1 = team.getProjects();
+                for(Project p1 : projects1){
+                    for(Forum f: p1.getForums()){
+                        if(f.equals(forum)){
+                            f.setComments(comments1);
+                        }
+                    }
+                }
+                team.setProjects(projects1);
+                teamService.save(team);
+
+                if(user.equals(userForum) && user.equals(userProject)){
+
+                    Set<Comment> comments = user.getComments();
+                    comments.add(saved);
+                    user.setComments(comments);
+
+                    Set<Forum> forums1 = user.getForums();
+                    for(Forum f1: forums1){
+                        if(f1.equals(forum)){
+                            f1.setComments(comments1);
+                        }
+                    }
+                    user.setForums(forums1);
+
+                    Set<Project> projects = user.getProjects();
+                    for(Project pr : projects){
+                        for(Forum forum2: pr.getForums()){
+                            if(forum2.equals(forum)){
+                                forum2.setComments(comments1);
+                            }
+                        }
+                    }
+                    user.setProjects(projects);
+
+                    Set<Team> teams = user.getTeams();
+                    for(Team t: teams){
+                        for(Project p: t.getProjects()){
+                            for(Forum forum1 : p.getForums()){
+                                if(forum1.equals(forum)){
+                                    forum1.setComments(comments1);
+                                }
+                            }
+                        }
+                    }
+                    user.setTeams(teams);
+                    userService.saveUser(user);
+
+                }else{
+
+                    Set<Comment> comments = user.getComments();
+                    comments.add(saved);
+                    user.setComments(comments);
+                    userService.saveUser(user);
+
+                    Set<Forum> forums1 = userForum.getForums();
+                    for(Forum f1: forums1){
+                        if(f1.equals(forum)) {
+                            f1.setComments(comments1);
+                        }
+                    }
+                    userForum.setForums(forums1);
+                    if(user.equals(userForum)){
+                        userForum.setComments(comments);
+                    }
+                    userService.saveUser(userForum);
+
+                    Set<Project> projects = userProject.getProjects();
+                    for(Project pr : projects){
+                        for(Forum forum2: pr.getForums()){
+                            if(forum2.equals(forum)){
+                                forum2.setComments(comments1);
+                            }
+                        }
+                    }
+                    userProject.setProjects(projects);
+
+                    Set<Team> teams = userProject.getTeams();
+                    for(Team t: teams){
+                        for(Project p: t.getProjects()){
+                            for(Forum forum1 : p.getForums()){
+                                if(forum1.equals(forum)){
+                                    forum1.setComments(comments1);
+                                }
+                            }
+                        }
+                    }
+                    userProject.setTeams(teams);
+                    if(user.equals(userProject)){
+                        userProject.setComments(comments);
+                    }
+                    if(userProject.equals(userForum)){
+                        userProject.setForums(forums1);
+                    }
+                    userService.saveUser(userProject);
+                }
 
                 result = new ModelAndView("redirect:/forum/listComment?forumId=" +commentForm.getForumId()+ "&projectId=" +commentForm.getProjectId());
 

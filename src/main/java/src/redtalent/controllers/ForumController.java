@@ -177,15 +177,15 @@ public class ForumController {
                     }
                     userProject.setProjects(projects);
 
-                    Set<Team> teams = userProject.getTeams();
-                    for(Team t: teams){
-                        for(Project p: projects){
+                    Set<Team> teams2 = userProject.getTeams();
+                    for(Team t: teams2){
+                        for(Project p: t.getProjects()){
                             if(p.equals(project)){
                                 p.setForums(forums1);
                             }
                         }
                     }
-                    userProject.setTeams(teams);
+                    userProject.setTeams(teams2);
                     userService.saveUser(userProject);
                 }else{
 
@@ -203,7 +203,7 @@ public class ForumController {
 
                     Set<Team> teams = user.getTeams();
                     for(Team t: teams){
-                        for(Project p: projects){
+                        for(Project p: t.getProjects()){
                             if(p.equals(project)){
                                 p.setForums(forums1);
                             }

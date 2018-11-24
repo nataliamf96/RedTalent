@@ -12,4 +12,5 @@ public interface BlogRepository extends MongoRepository<Blog, String> {
 
     Blog findBlogByCommentsContaining(Comment comment);
     List<Blog> findAllByCategory(Category category);
+    Set<Blog> findBlogsByCategory_Name(String text);
 }

@@ -18,9 +18,7 @@ import src.redtalent.forms.UpdateUserForm;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.repositories.RoleRepository;
 import src.redtalent.security.Role;
-import src.redtalent.services.DirectivoService;
-import src.redtalent.services.ProjectService;
-import src.redtalent.services.UtilidadesService;
+import src.redtalent.services.*;
 
 import javax.validation.Valid;
 import java.util.HashSet;
@@ -48,6 +46,18 @@ public class DirectivoController {
     @Autowired
     private AccountRepository accountRepository;
 
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TeamService teamService;
+
+    @Autowired
+    private CategoryService categoryService;
+
+    @Autowired
+    private TagService tagService;
+
     public DirectivoController(){
         super();
     }
@@ -63,14 +73,43 @@ public class DirectivoController {
     }
 
     @RequestMapping(value = "/dashboardDirectivo")
-    public ModelAndView dashboardDirectivo() {
+    public ModelAndView dashboardDirectivo(){
         ModelAndView result;
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         result = new ModelAndView("directivo/dashboardDirectivo");
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("proyectosAbiertos",projectService.findAllByPrivadoFalseAndEstadoFalse());
-        result.addObject("proyectosCerrados",projectService.findAllByPrivadoTrue());
+        result.addObject("projects",projectService.findAll());
+        result.addObject("users",userService.findAll());
+        result.addObject("teams",teamService.findAll());
+        result.addObject("evaluationsTeam",utilidadesService.evaluationsTeam());
+        result.addObject("categorias",categoryService.findAll());
+        result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
+        return result;
+    }
 
+    @RequestMapping(value = "/verTags")
+    public ModelAndView verTags() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("directivo/verTags");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("tags",tagService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/estadisticas")
+    public ModelAndView estadisticas() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("directivo/estadisticas");
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("usersTrue",userService.findAllByEnabledIsTrue());
+        result.addObject("usersFalse",userService.findAllByEnabledIsFalse());
+        result.addObject("categoriasNombres",utilidadesService.nombresCategoriasConProyectos());
+        result.addObject("categoriasConNumeroProyectos",utilidadesService.numeroProyectosPorCategorias());
+        result.addObject("temasBlogNombres",utilidadesService.nombresCategoriasConTemasBlog());
+        result.addObject("categoriasConNumeroTemasBlog",utilidadesService.numeroTemasBlogPorCategorias());
         return result;
     }
 

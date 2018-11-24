@@ -61,6 +61,9 @@ public class UserController {
     @Autowired
     private GradeService gradeService;
 
+    @Autowired
+    private BlogService blogService;
+
     public UserController(){
         super();
     }
@@ -210,6 +213,23 @@ public class UserController {
             return result;
         }
 
+
+    @RequestMapping(value = "/filtrarBlogsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarBlogsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("user/filtrarBlogsCategorias");
+
+        if(category.isEmpty()){
+            result.addObject("blogs",blogService.findAll());
+        }else{
+            result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
 
     @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
     public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "category", defaultValue = "") String category) {

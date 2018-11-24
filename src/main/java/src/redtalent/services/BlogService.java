@@ -11,6 +11,7 @@ import src.redtalent.repositories.BlogRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -64,5 +65,9 @@ public class BlogService {
 
     public List<Blog> findAllByCategorie(Category category){
         return blogRepository.findAllByCategory(category);
+    }
+
+    public Set<Blog> findBlogsByCategory_Name(String text){
+        return blogRepository.findBlogsByCategory_Name(text);
     }
 }

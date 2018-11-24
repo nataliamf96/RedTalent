@@ -20,4 +20,5 @@ public interface UserRepository extends MongoRepository<User, String> {
     User findUserByCommentsReceivedContains(Comment comment);
     Set<User> findAllByFullnameContains(String texto);
     Set<User> findAllByTagsContains(Set<Tag> listaTags);
+    Set<User> findAllByProjectsContains(Project project);
 }

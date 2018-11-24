@@ -135,6 +135,9 @@ public class ForumController {
         } else {
             try {
                 Assert.notNull(forumForm, "No puede ser nulo el formulario de ForumForm");
+                Project project = projectService.findOne(forumForm.getProjectId().toString());
+                Team team = teamService.teamByProjectId(project);
+                User userProject = userService.findUserByProjectsContains(project);
 
                 Forum forum = forumService.create();
                 forum.setTitle(forumForm.getTitle());
@@ -143,18 +146,65 @@ public class ForumController {
                 forum.setCategory(forumForm.getCategory());
                 Forum saved = this.forumService.save(forum);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Forum> forums = user.getForums();
-                forums.add(saved);
-                user.setForums(forums);
-                userService.saveUser(user);
-
-                Project project = projectService.findOne(forumForm.getProjectId().toString());
                 List<Forum> forums1 = project.getForums();
                 forums1.add(saved);
                 project.setForums(forums1);
-                projectService.save(project);
+                Project projectSaved = projectService.save(project);
+
+                List<Project> projects1 = team.getProjects();
+                projects1.add(projectSaved);
+                team.setProjects(projects1);
+                teamService.save(team);
+
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+
+                if(!user.equals(userProject)){
+                    Set<Forum> forums = user.getForums();
+                    forums.add(saved);
+                    user.setForums(forums);
+                    userService.saveUser(user);
+
+                    Set<Project> projects = userProject.getProjects();
+                    for(Project p : projects){
+                        if(p.equals(project)){
+                            p.setForums(forums1);
+                        }
+                    }
+                    userProject.setProjects(projects);
+
+                    Set<Team> teams = userProject.getTeams();
+                    for(Team t: teams){
+                        if(t.equals(team)){
+                            t.setProjects(projects1);
+                        }
+                    }
+                    userProject.setTeams(teams);
+                    userService.saveUser(userProject);
+                }else{
+
+                    Set<Forum> forums = user.getForums();
+                    forums.add(saved);
+                    user.setForums(forums);
+
+                    Set<Project> projects = user.getProjects();
+                    for(Project p : projects){
+                        if(p.equals(project)){
+                            p.setForums(forums1);
+                        }
+                    }
+                    user.setProjects(projects);
+
+                    Set<Team> teams = user.getTeams();
+                    for(Team t: teams){
+                        if(t.equals(team)){
+                            t.setProjects(projects1);
+                        }
+                    }
+                    user.setTeams(teams);
+
+                    userService.saveUser(user);
+                }
 
                 result = new ModelAndView("redirect:/forum/list?projectId=" + forumForm.getProjectId());
 

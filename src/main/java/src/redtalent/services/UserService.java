@@ -170,4 +170,7 @@ public class UserService {
         return userRepository.findAllByFullnameContains(texto);
     }
 
+    public Set<User> findAllByProjectsContains(Project project){
+        return userRepository.findAllByProjectsContains(project);
+    }
 }

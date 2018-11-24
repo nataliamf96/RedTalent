@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Perfiles</title>
+    <link rel="icon" href="/images/us.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div style="margin-top: -25px" class="container py-4">
+    <h1 class="my-4">Filtrado
+        <small>Proyectos por Categorías</small>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <form id="formulario">
+                <div class="form-group">
+                    <label>Etiquetas</label>:
+                    <input type="text" class="form-control" id="text" name="text" style="max-width: 350px"/>
+                </div>
+                <script>
+                    var formulario = document.getElementById('formulario');
+                    var text = document.getElementById('text');
+
+                    formulario.onsubmit = function(e){
+                        location = "/user/filtrarPerfilesPorEtiquetas?tag=" + encodeURIComponent(text.value);
+                        return false;
+                    }</script>
+                <input type="submit" class="btn btn-info" value="Buscar" />
+            </form>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div class="row">
+        <div th:each="user : ${users}" class="col-lg-3 col-sm-6 portfolio-item">
+            <div style="margin-top: -12px" class='card card-profile text-center'>
+                <img alt='' class='card-img-top' th:src="@{/images/color-img.jpg}">
+                <div class='card-block'>
+                    <img alt='' class='card-img-profile' th:src="${user.getImage()}">
+                    <h4 style="margin-top: -23px" class='card-title'>
+                        <i th:text="${user.getFullname()}" />
+                        <small th:text="${user.getAccount().getEmail()}"></small>
+                    </h4>
+                    <div class='card-links'>
+                        <a class='fa fa-dribbble' href='#'></a>
+                        <a class='fa fa-twitter' href='#'></a>
+                        <a class='fa fa-facebook' href='#'></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <br />
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer" />
+</body>
+</html>

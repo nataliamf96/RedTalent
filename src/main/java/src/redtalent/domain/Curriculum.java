@@ -10,13 +10,15 @@ import javax.validation.constraints.NotNull;
 public class Curriculum extends DomainEntity{
 
     private String urlLinkedin;
+    private Grade grade;
 
     public Curriculum(){
         super();
     }
 
-    public Curriculum(String urlLinkedin){
+    public Curriculum(String urlLinkedin, Grade grade){
         this.urlLinkedin = urlLinkedin;
+        this.grade = grade;
     }
 
     @URL
@@ -29,4 +31,12 @@ public class Curriculum extends DomainEntity{
         this.urlLinkedin = urlLinkedin;
     }
 
+    @NotNull
+    public Grade getGrade() {
+        return grade;
+    }
+
+    public void setGrade(Grade grade) {
+        this.grade = grade;
+    }
 }

@@ -1,15 +1,15 @@
 package src.redtalent.forms;
 
 import org.hibernate.validator.constraints.URL;
+import src.redtalent.domain.Grade;
 
 import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
 
 public class CurriculumForm {
 
     private String urlLinkedin;
-    private String area;
-    private String escuela;
-    private String grado;
+    private String grade;
 
     public CurriculumForm(){
         super();
@@ -25,30 +25,12 @@ public class CurriculumForm {
         this.urlLinkedin = urlLinkedin;
     }
 
-    @NotBlank
-    public String getArea() {
-        return area;
+    @NotNull
+    public String getGrade() {
+        return grade;
     }
 
-    public void setArea(String area) {
-        this.area = area;
-    }
-
-    @NotBlank
-    public String getEscuela() {
-        return escuela;
-    }
-
-    public void setEscuela(String escuela) {
-        this.escuela = escuela;
-    }
-
-    @NotBlank
-    public String getGrado() {
-        return grado;
-    }
-
-    public void setGrado(String grado) {
-        this.grado = grado;
+    public void setGrade(String grade) {
+        this.grade = grade;
     }
 }

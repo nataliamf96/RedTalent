@@ -64,6 +64,9 @@ public class UserController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private ForumService forumService;
+
     public UserController(){
         super();
     }
@@ -248,6 +251,23 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("user/filtrarForumsCategorias");
+
+        if(category.isEmpty()){
+            result.addObject("forums",forumService.findAll());
+        }else{
+            result.addObject("forums",forumService.findForumsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
     @RequestMapping(value = "/filtrarPerfilesPorEtiquetas", method = RequestMethod.GET)
     public ModelAndView filtrarPerfilesPorEtiquetas(@RequestParam(value = "tag", defaultValue = "") String tag) {
         ModelAndView result;
@@ -285,8 +305,6 @@ public class UserController {
 
         result = new ModelAndView("user/curriculum/createCurriculum");
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("areas",areaService.findAll());
-        result.addObject("departments",departmentService.findAll());
         result.addObject("grades",gradeService.findAll());
         result.addObject("curriculumForm",curriculumForm);
         return result;
@@ -298,7 +316,9 @@ public class UserController {
 
         if (binding.hasErrors())
             result = createEditModelAndViewUserCurriculum(curriculumForm);
-        else
+        else if(curriculumForm.getGrade().equals("0")){
+            result = createEditModelAndViewUserCurriculum(curriculumForm,"Seleccione un Grado");
+        }else
             try {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());
@@ -306,7 +326,7 @@ public class UserController {
                 Curriculum curriculum = new Curriculum();
 
                 curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
-
+                curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
                 Curriculum csave = curriculumService.save(curriculum);
 
                 user.setCurriculum(csave);
@@ -333,6 +353,7 @@ public class UserController {
         result = new ModelAndView("user/curriculum/createCurriculum");
         result.addObject("curriculumForm", curriculumForm);
         result.addObject("message", message);
+        result.addObject("grades",gradeService.findAll());
         result.addObject("auth",utilidadesService.actorConectado());
 
         return result;

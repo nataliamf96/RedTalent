@@ -8,9 +8,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import src.redtalent.domain.Account;
 import src.redtalent.domain.Directivo;
+import src.redtalent.domain.Tag;
 import src.redtalent.domain.User;
 import src.redtalent.forms.DirectivoForm;
 import src.redtalent.forms.UpdateDirectivoForm;
@@ -58,6 +60,12 @@ public class DirectivoController {
     @Autowired
     private TagService tagService;
 
+    @Autowired
+    private BlogService blogService;
+
+    @Autowired
+    private ForumService forumService;
+
     public DirectivoController(){
         super();
     }
@@ -84,6 +92,86 @@ public class DirectivoController {
         result.addObject("evaluationsTeam",utilidadesService.evaluationsTeam());
         result.addObject("categorias",categoryService.findAll());
         result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarBlogsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarBlogsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("directivo/filtrarBlogsCategorias");
+
+        if(category.isEmpty()){
+            result.addObject("blogs",blogService.findAll());
+        }else{
+            result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("directivo/filtrarProyectosCategorias");
+
+        if(category.isEmpty()){
+            result.addObject("projects",projectService.findAll());
+        }else{
+            result.addObject("projects",projectService.findProjectsByCategorie_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("directivo/filtrarForumsCategorias");
+
+        if(category.isEmpty()){
+            result.addObject("forums",forumService.findAll());
+        }else{
+            result.addObject("forums",forumService.findForumsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilesPorEtiquetas", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilesPorEtiquetas(@RequestParam(value = "tag", defaultValue = "") String tag) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("directivo/filtrarPerfilesPorEtiquetas");
+
+        /* Etiquetas */
+        Set<Tag> tagsUser = new HashSet<Tag>();
+        for(String nombreTag : tag.replace(" ","").split(",")){
+            for(Tag t:tagService.findAll()){
+                if(t.getName().toUpperCase().equals(nombreTag.toUpperCase())){
+                    tagsUser.add(t);
+                }
+            }
+        }
+
+        if(tag.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else if(tagsUser.size() == 0){
+            result.addObject("users",new HashSet<User>());
+        }else{
+            result.addObject("users",userService.findAllByTagsContains(tagsUser));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
         return result;
     }
 

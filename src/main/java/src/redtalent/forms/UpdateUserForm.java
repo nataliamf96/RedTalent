@@ -1,11 +1,17 @@
 package src.redtalent.forms;
 
+import src.redtalent.domain.Grade;
+
+import javax.validation.constraints.NotBlank;
+
 public class UpdateUserForm {
 
     private String fullname;
     private String image;
     private String etiquetas;
+    private Grade grade;
 
+    @NotBlank
     public String getFullname() {
         return fullname;
     }
@@ -30,13 +36,6 @@ public class UpdateUserForm {
         this.etiquetas = etiquetas;
     }
 
-    @Override
-    public String toString() {
-        return "UpdateUserForm{" +
-                "fullname='" + fullname + '\'' +
-                ", image='" + image + '\'' +
-                ", etiquetas='" + etiquetas + '\'' +
-                '}';
-    }
+
 }
 

@@ -23,6 +23,17 @@
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Filtros
+                    </a>
+                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        <a class="dropdown-item" href="/directivo/filtrarPerfilesPorEtiquetas">Perfiles Por Etiquetas</a>
+                        <a class="dropdown-item" href="/directivo/filtrarProyectosCategorias">Proyectos Por Categorias</a>
+                        <a class="dropdown-item" href="/directivo/filtrarBlogsCategorias">Blogs Por Categorias</a>
+                        <a class="dropdown-item" href="/directivo/filtrarForumsCategorias">Foros Por Categorias</a>
+                    </div>
+                </li>
                 <li class="nav-item active">
                     <form th:action="@{/logout}" method="post">
                         <input class="btn btn-warning" type="submit" value="Cerrar Sesión"/>

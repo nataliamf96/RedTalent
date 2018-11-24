@@ -11,10 +11,9 @@ public class UserForm {
     private String email;
     private String password;
     private String fullname;
-    private String role;
     private Boolean terms;
     private String image;
-    private String etiquetas;
+    private String role;
 
     public UserForm(){
         super();
@@ -73,13 +72,5 @@ public class UserForm {
 
     public void setRole(String role) {
         this.role = role;
-    }
-
-    public String getEtiquetas() {
-        return etiquetas;
-    }
-
-    public void setEtiquetas(String etiquetas) {
-        this.etiquetas = etiquetas;
     }
 }

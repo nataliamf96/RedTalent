@@ -57,4 +57,9 @@ public class DepartmentService {
         Assert.notNull(grade, "El grado no puede ser nulo");
         return departmentRepository.findDepartmentByGradesContaining(grade);
     }
+
+    public Department findDepartmentByGradesContains(Grade grade){
+        Assert.notNull(grade, "El grado no puede ser nulo");
+        return departmentRepository.findDepartmentByGradesContains(grade);
+    }
 }

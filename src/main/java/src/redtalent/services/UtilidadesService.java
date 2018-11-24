@@ -30,6 +30,12 @@ public class UtilidadesService {
     private CategoryService categoryService;
     @Autowired
     private BlogService blogService;
+    @Autowired
+    private AreaService areaService;
+    @Autowired
+    private DepartmentService departmentService;
+    @Autowired
+    private GradeService gradeService;
 
     public UtilidadesService(){
         super();
@@ -39,6 +45,32 @@ public class UtilidadesService {
         List<User> result = new ArrayList<User>();
         result.add(userService.findUserByTeamsConstains(team));
         team.getApplications().stream().filter(x->x.getStatus().equals("ACCEPTED")).forEach(x->result.add(userService.findUserByApplicationsContains(x)));
+        return result;
+    }
+
+    public Set<User> usuariosPorArea(Area area){
+        Set<User> result = new HashSet<User>();
+        for(User user : userService.findAll()){
+            if(user.getCurriculum()!=null){
+                    if(area.getDepartaments().contains(departmentService.findDepartmentByGradesContains(user.getCurriculum().getGrade()))){
+                        result.add(user);
+                    }
+            }
+        }
+
+        return result;
+    }
+
+    public Set<User> usuariosPorDepartamento(Department department){
+        Set<User> result = new HashSet<User>();
+        for(User user : userService.findAll()){
+            if(user.getCurriculum()!=null){
+                if(departmentService.findDepartmentByGradesContains(user.getCurriculum().getGrade())==department){
+                    result.add(user);
+                }
+            }
+        }
+
         return result;
     }
 

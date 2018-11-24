@@ -251,6 +251,60 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/filtrarPerfilDepartamento", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilDepartamento(@RequestParam(value = "departamento", defaultValue = "") String departamento) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/filtrarPerfilDepartamento");
+        result.addObject("departments",departmentService.findAll());
+
+        if(departamento.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Department a = departmentService.findOne(departamento);
+            result.addObject("users",utilidadesService.usuariosPorDepartamento(a));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilGrado", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilGrado(@RequestParam(value = "grade", defaultValue = "") String grade) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/filtrarPerfilGrado");
+        result.addObject("grades",gradeService.findAll());
+
+        if(grade.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Grade g = gradeService.findOne(grade);
+            result.addObject("users",userService.findUsersByCurriculum_Grade(g));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilArea", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilArea(@RequestParam(value = "area", defaultValue = "") String area) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/filtrarPerfilArea");
+        result.addObject("areas",areaService.findAll());
+
+        if(area.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Area a = areaService.findOne(area);
+            result.addObject("users",utilidadesService.usuariosPorArea(a));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
     @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
     public ModelAndView filtrarForumsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
         ModelAndView result;

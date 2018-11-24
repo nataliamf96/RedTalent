@@ -10,10 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import src.redtalent.domain.Account;
-import src.redtalent.domain.Directivo;
-import src.redtalent.domain.Tag;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 import src.redtalent.forms.DirectivoForm;
 import src.redtalent.forms.UpdateDirectivoForm;
 import src.redtalent.forms.UpdateUserForm;
@@ -66,6 +63,15 @@ public class DirectivoController {
     @Autowired
     private ForumService forumService;
 
+    @Autowired
+    private AreaService areaService;
+
+    @Autowired
+    private DepartmentService departmentService;
+
+    @Autowired
+    private GradeService gradeService;
+
     public DirectivoController(){
         super();
     }
@@ -112,6 +118,42 @@ public class DirectivoController {
         return result;
     }
 
+    @RequestMapping(value = "/filtrarPerfilDepartamento", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilDepartamento(@RequestParam(value = "departamento", defaultValue = "") String departamento) {
+        ModelAndView result;
+
+        result = new ModelAndView("directivo/filtrarPerfilDepartamento");
+        result.addObject("departments",departmentService.findAll());
+
+        if(departamento.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Department a = departmentService.findOne(departamento);
+            result.addObject("users",utilidadesService.usuariosPorDepartamento(a));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilGrado", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilGrado(@RequestParam(value = "grade", defaultValue = "") String grade) {
+        ModelAndView result;
+
+        result = new ModelAndView("directivo/filtrarPerfilGrado");
+        result.addObject("grades",gradeService.findAll());
+
+        if(grade.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Grade g = gradeService.findOne(grade);
+            result.addObject("users",userService.findUsersByCurriculum_Grade(g));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
     @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
     public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
         ModelAndView result;
@@ -123,6 +165,24 @@ public class DirectivoController {
             result.addObject("projects",projectService.findAll());
         }else{
             result.addObject("projects",projectService.findProjectsByCategorie_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilArea", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilArea(@RequestParam(value = "area", defaultValue = "") String area) {
+        ModelAndView result;
+
+        result = new ModelAndView("directivo/filtrarPerfilArea");
+        result.addObject("areas",areaService.findAll());
+
+        if(area.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Area a = areaService.findOne(area);
+            result.addObject("users",utilidadesService.usuariosPorArea(a));
         }
 
         result.addObject("auth",utilidadesService.actorConectado());

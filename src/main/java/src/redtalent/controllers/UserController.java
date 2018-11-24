@@ -310,6 +310,22 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/curriculum/updateCurriculum")
+    public ModelAndView updateCurriculum(){
+        ModelAndView result;
+        CurriculumForm curriculumForm;
+        curriculumForm = new CurriculumForm();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        result = new ModelAndView("user/curriculum/updateCurriculum");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("grades",gradeService.findAll());
+        result.addObject("curriculumForm",user.getCurriculum());
+        return result;
+    }
+
     @RequestMapping(value = "/curriculum/createCurriculum", method = RequestMethod.POST, params = "createCurriculum")
     public ModelAndView createCurriculum(@Valid CurriculumForm curriculumForm, BindingResult binding){
         ModelAndView result;
@@ -337,6 +353,58 @@ public class UserController {
             } catch (Throwable oops) {
                 result = createEditModelAndViewUserCurriculum(curriculumForm, "ERROR AL CREAR EL CURRICULUM");
             }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/curriculum/updateCurriculum", method = RequestMethod.POST, params = "updateCurriculum")
+    public ModelAndView updateCurriculum(@Valid CurriculumForm curriculumForm, BindingResult binding){
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        if (binding.hasErrors())
+            result = updateEditModelAndViewUserCurriculum(curriculumForm);
+        else if(user.getCurriculum() == null){
+            result = new ModelAndView("redirect:/user/index");
+        } else if(curriculumForm.getGrade().equals("0")){
+            result = updateEditModelAndViewUserCurriculum(curriculumForm,"Seleccione un Grado");
+        }else
+            try {
+
+                Curriculum curriculum = user.getCurriculum();
+
+                curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
+                curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
+                Curriculum csave = curriculumService.save(curriculum);
+
+                user.setCurriculum(csave);
+                userService.saveUser(user);
+
+                result = new ModelAndView("redirect:/user/index");
+
+            } catch (Throwable oops) {
+                result = updateEditModelAndViewUserCurriculum(curriculumForm, "ERROR AL ACTUALIZAR EL CURRICULUM");
+            }
+
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewUserCurriculum(CurriculumForm curriculumForm) {
+        ModelAndView result;
+        result = updateEditModelAndViewUserCurriculum(curriculumForm, null);
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewUserCurriculum(CurriculumForm curriculumForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/curriculum/updateCurriculum");
+        result.addObject("curriculumForm", curriculumForm);
+        result.addObject("message", message);
+        result.addObject("grades",gradeService.findAll());
+        result.addObject("auth",utilidadesService.actorConectado());
 
         return result;
     }

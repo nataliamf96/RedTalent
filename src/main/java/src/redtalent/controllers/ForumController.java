@@ -149,10 +149,14 @@ public class ForumController {
                 List<Forum> forums1 = project.getForums();
                 forums1.add(saved);
                 project.setForums(forums1);
-                Project projectSaved = projectService.save(project);
+                projectService.save(project);
 
                 List<Project> projects1 = team.getProjects();
-                projects1.add(projectSaved);
+                for(Project p1 : projects1){
+                    if(p1.equals(project)){
+                        p1.setForums(forums1);
+                    }
+                }
                 team.setProjects(projects1);
                 teamService.save(team);
 
@@ -175,8 +179,10 @@ public class ForumController {
 
                     Set<Team> teams = userProject.getTeams();
                     for(Team t: teams){
-                        if(t.equals(team)){
-                            t.setProjects(projects1);
+                        for(Project p: projects){
+                            if(p.equals(project)){
+                                p.setForums(forums1);
+                            }
                         }
                     }
                     userProject.setTeams(teams);
@@ -197,8 +203,10 @@ public class ForumController {
 
                     Set<Team> teams = user.getTeams();
                     for(Team t: teams){
-                        if(t.equals(team)){
-                            t.setProjects(projects1);
+                        for(Project p: projects){
+                            if(p.equals(project)){
+                                p.setForums(forums1);
+                            }
                         }
                     }
                     user.setTeams(teams);

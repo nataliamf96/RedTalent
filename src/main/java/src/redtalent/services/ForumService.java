@@ -13,6 +13,7 @@ import src.redtalent.repositories.ForumRepository;
 import java.util.Date;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @Transactional
@@ -68,5 +69,9 @@ public class ForumService {
         Assert.notNull(category, "La categoría es nula");
         List<Forum> result = forumRepository.findAllByCategory(category);
         return result;
+    }
+
+    public Set<Forum> findForumsByCategory_Name(String texto){
+        return forumRepository.findForumsByCategory_Name(texto);
     }
 }

@@ -13,6 +13,7 @@ public class CommentForm {
     private ObjectId userId;
     private ObjectId forumId;
     private ObjectId projectId;
+    private ObjectId teamId;
 
     @NotBlank
     public String getTitle() {
@@ -72,4 +73,11 @@ public class CommentForm {
         this.projectId = projectId;
     }
 
+    public ObjectId getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(ObjectId teamId) {
+        this.teamId = teamId;
+    }
 }

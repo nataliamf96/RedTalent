@@ -221,31 +221,51 @@ public class BlogController {
         } else {
             try {
                 Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
+                Blog blog = blogService.findOne(commentForm.getBlogId().toString());
+                User userSaved = userService.findUserByBlogsContains(blog);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
 
                 Comment comment = commentService.create();
                 comment.setTitle(commentForm.getTitle());
                 comment.setText(commentForm.getText());
                 Comment saved = commentService.save(comment);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Comment> comments = user.getComments();
+                List<Comment> comments = blog.getComments();
                 comments.add(saved);
-                user.setComments(comments);
-                User userSaved = userService.saveUser(user);
-
-                Blog blog = blogService.findOne(commentForm.getBlogId().toString());
-                List<Comment> comments1 = blog.getComments();
-                comments1.add(saved);
-                blog.setComments(comments1);
+                blog.setComments(comments);
                 blogService.save(blog);
 
-                Set<Blog> blogs = userSaved.getBlogs();
-                for(Blog b: blogs){
-                    b.setComments(comments1);
+                if(userSaved.equals(user)){
+                    Set<Comment> comments1 = userSaved.getComments();
+                    comments1.add(saved);
+                    userSaved.setComments(comments1);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for(Blog b: blogs){
+                        if(b.equals(blog)) {
+                            b.setComments(comments);
+                        }
+                    }
+                    userSaved.setBlogs(blogs);
+                    userService.saveUser(userSaved);
+
+                } else {
+
+                    Set<Comment> comments3 = user.getComments();
+                    comments3.add(saved);
+                    user.setComments(comments3);
+                    userService.saveUser(user);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for (Blog b : blogs) {
+                        if(b.equals(blog)) {
+                            b.setComments(comments);
+                        }
+                    }
+                    userSaved.setBlogs(blogs);
+                    userService.saveUser(userSaved);
                 }
-                userSaved.setBlogs(blogs);
-                userService.saveUser(userSaved);
 
                 result = new ModelAndView("redirect:/blog/listComment?blogId=" +commentForm.getBlogId());
 
@@ -294,48 +314,92 @@ public class BlogController {
         } else {
             try {
                 Assert.notNull(replyForm, "No puede ser nulo el formulario de Reply");
+                Blog blog = blogService.findOne(replyForm.getBlogId().toString());
+                User userSaved = userService.findUserByBlogsContains(blog);
+                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
+                User saved2 = userService.findUserByCommentsContains(comment);
 
                 Reply reply = replyService.create();
                 reply.setTitle(replyForm.getTitle());
                 reply.setText(replyForm.getText());
                 Reply saved = replyService.save(reply);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Reply> replies = user.getReplies();
-                replies.add(saved);
-                user.setReplies(replies);
-                User userSaved = userService.saveUser(user);
-
-                Comment comment = commentService.findOne(replyForm.getCommentId().toString());
                 Set<Reply> replies1 = comment.getReplies();
                 replies1.add(saved);
                 comment.setReplies(replies1);
                 commentService.save(comment);
 
-                Blog blog = blogService.findOne(replyForm.getBlogId().toString());
                 List<Comment> comments = blog.getComments();
                 for(Comment c: comments){
-                    c.setReplies(replies1);
+                    if(c.equals(comment)) {
+                        c.setReplies(replies1);
+                    }
                 }
                 blog.setComments(comments);
                 blogService.save(blog);
 
-                Set<Blog> blogs = userSaved.getBlogs();
-                for(Blog b: blogs){
-                    for(Comment c1: b.getComments()){
-                        c1.setReplies(replies1);
-                    }
-                }
-                userSaved.setBlogs(blogs);
-                User saved2 = userService.saveUser(userSaved);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
 
-                Set<Comment> comments1 = saved2.getComments();
-                for(Comment c: comments1){
-                    c.setReplies(replies1);
+                if(user.equals(userSaved) && user.equals(saved2)){
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.add(saved);
+                    user.setReplies(replies);
+
+                    Set<Comment> comments1 = user.getComments();
+                    for (Comment c : comments1) {
+                        if(c.equals(comment)){
+                            c.setReplies(replies1);
+                        }
+                    }
+                    user.setComments(comments1);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for (Blog b : blogs) {
+                        for (Comment c1 : b.getComments()) {
+                            if(c1.equals(comment)){
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    user.setBlogs(blogs);
+
+                    userService.saveUser(user);
+
+                } else {
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.add(saved);
+                    user.setReplies(replies);
+                    userService.saveUser(user);
+
+                    Set<Comment> comments1 = saved2.getComments();
+                    for (Comment c : comments1) {
+                        if(c.equals(comment)){
+                            c.setReplies(replies1);
+                        }
+                    }
+                    saved2.setComments(comments1);
+                    userService.saveUser(saved2);
+
+                    Set<Blog> blogs = userSaved.getBlogs();
+                    for (Blog b : blogs) {
+                        for (Comment c1 : b.getComments()) {
+                            if(c1.equals(comment)){
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    userSaved.setBlogs(blogs);
+                    if(userSaved.equals(saved2)){
+                        userSaved.setComments(comments1);
+                    }
+                    if(userSaved.equals(user)){
+                        userSaved.setReplies(replies);
+                    }
+                    userService.saveUser(userSaved);
                 }
-                saved2.setComments(comments1);
-                userService.saveUser(saved2);
 
                 result = new ModelAndView("redirect:/blog/listReply?blogId=" + replyForm.getBlogId() + "&commentId=" +replyForm.getCommentId());
 
@@ -395,18 +459,45 @@ public class BlogController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
         Blog b = blogService.findBlogByCommentsContaining(res);
+        User user1 = userService.findUserByBlogsContains(b);
 
         if(user.equals(userCreated)) {
-            Set<Comment> comments = user.getComments();
-            comments.remove(res);
-            user.setComments(comments);
-            userService.saveUser(user);
 
             List<Comment> comments1 = b.getComments();
             comments1.remove(res);
             b.setComments(comments1);
             blogService.save(b);
 
+            if(user.equals(user1)){
+                Set<Comment> comments = user.getComments();
+                comments.remove(res);
+                user.setComments(comments);
+
+                Set<Blog> blogs = user.getBlogs();
+                for(Blog b1: blogs){
+                    if(b1.equals(b)){
+                        b1.setComments(comments1);
+                    }
+                }
+                user.setBlogs(blogs);
+
+                userService.saveUser(user);
+            } else {
+
+                Set<Comment> comments = user.getComments();
+                comments.remove(res);
+                user.setComments(comments);
+                userService.saveUser(user);
+
+                Set<Blog> blogs = user1.getBlogs();
+                for (Blog b1 : blogs) {
+                    if(b1.equals(b)){
+                        b1.setComments(comments1);
+                    }
+                }
+                user1.setBlogs(blogs);
+                userService.saveUser(user1);
+            }
 
             for (Reply r : res.getReplies()) {
                 replyService.remove(r);
@@ -432,6 +523,8 @@ public class BlogController {
         User userCreated = utilidadesService.userConectado(authentication.getName());
         Comment c = commentService.findCommentByRepliesContaining(res);
         Blog b = blogService.findBlogByCommentsContaining(c);
+        User userBlog = userService.findUserByBlogsContains(b);
+        User userComent = userService.findUserByCommentsContains(c);
 
         if(user.equals(userCreated)) {
 
@@ -442,22 +535,116 @@ public class BlogController {
 
             List<Comment> comments1 = b.getComments();
             for(Comment com1: comments1){
-                com1.setReplies(replies1);
+                if(com1.equals(c)){
+                    com1.setReplies(replies1);
+                }
             }
             b.setComments(comments1);
             blogService.save(b);
 
+            if(!user.equals(userComent) && !user.equals(userBlog)) {
+                Set<Reply> replies = user.getReplies();
+                replies.remove(res);
+                user.setReplies(replies);
+                userService.saveUser(user);
 
-            Set<Comment> comments = user.getComments();
-            for(Comment com : comments){
-                com.setReplies(replies1);
+                Set<Comment> comments = userComent.getComments();
+                for (Comment com : comments) {
+                    if (com.equals(c)) {
+                        com.setReplies(replies1);
+                    }
+                }
+                userComent.setComments(comments);
+                userService.saveUser(userComent);
+
+                Set<Blog> blogs = userBlog.getBlogs();
+                for (Blog b1 : blogs) {
+                    for (Comment c1 : b1.getComments()) {
+                        if (c1.equals(c)) {
+                            c1.setReplies(replies1);
+                        }
+                    }
+                }
+                userBlog.setBlogs(blogs);
+                userService.saveUser(userBlog);
+            } else{
+                if(userComent.equals(user) && userBlog.equals(user)){
+                    Set<Reply> replies = user.getReplies();
+                    replies.remove(res);
+                    user.setReplies(replies);
+
+                    Set<Comment> comments = user.getComments();
+                    for (Comment com : comments) {
+                        if (com.equals(c)) {
+                            com.setReplies(replies1);
+                        }
+                    }
+                    user.setComments(comments);
+
+                    Set<Blog> blogs = user.getBlogs();
+                    for (Blog b1 : blogs) {
+                        for (Comment c1 : b1.getComments()) {
+                            if (c1.equals(c)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    user.setBlogs(blogs);
+                    userService.saveUser(user);
+                }
+                if(userBlog.equals(user) && !userComent.equals(user)){
+
+                    Set<Comment> comments = userComent.getComments();
+                    for (Comment com : comments) {
+                        if (com.equals(c)) {
+                            com.setReplies(replies1);
+                        }
+                    }
+                    userComent.setComments(comments);
+                    userService.saveUser(userComent);
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.remove(res);
+                    user.setReplies(replies);
+
+                    Set<Blog> blogs = user.getBlogs();
+                    for (Blog b1 : blogs) {
+                        for (Comment c1 : b1.getComments()) {
+                            if (c1.equals(c)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    user.setBlogs(blogs);
+                    userService.saveUser(user);
+                }
+                if(!userBlog.equals(user) && userComent.equals(user)){
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.remove(res);
+                    user.setReplies(replies);
+
+                    Set<Comment> comments = user.getComments();
+                    for (Comment com : comments) {
+                        if (com.equals(c)) {
+                            com.setReplies(replies1);
+                        }
+                    }
+                    user.setComments(comments);
+                    userService.saveUser(user);
+
+                    Set<Blog> blogs = userBlog.getBlogs();
+                    for (Blog b1 : blogs) {
+                        for (Comment c1 : b1.getComments()) {
+                            if (c1.equals(c)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    userBlog.setBlogs(blogs);
+                    userService.saveUser(userBlog);
+                }
             }
-            Set<Reply> replies = user.getReplies();
-            replies.remove(res);
-            user.setReplies(replies);
-            user.setComments(comments);
-            userService.saveUser(user);
-
             replyService.remove(res);
         }
 

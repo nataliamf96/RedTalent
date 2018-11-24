@@ -1,10 +1,7 @@
 package src.redtalent.repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
-import src.redtalent.domain.Category;
-import src.redtalent.domain.Forum;
-import src.redtalent.domain.Project;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 
 import java.util.Set;
 
@@ -16,4 +13,5 @@ public interface ProjectRepository extends MongoRepository<Project, String> {
     Project findProjectByForumsContains(Forum Forum);
     Set<Project> findAllByCategorieName(String category);
     Set<Project> findProjectsByCategorie_Name(String text);
+    Project findProjectByCommentsContains(Comment comment);
 }

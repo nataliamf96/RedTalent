@@ -4,10 +4,7 @@ import com.mysema.commons.lang.Assert;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import src.redtalent.domain.Application;
-import src.redtalent.domain.Project;
-import src.redtalent.domain.Team;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 import src.redtalent.repositories.TeamRepository;
 
 import java.util.Collection;
@@ -61,5 +58,9 @@ public class TeamService {
         Assert.notNull(application,"La solicitud es NULL");
         Team result = teamRepository.findTeamByApplicationsContaining(application);
         return result;
+    }
+
+    public Team findTeamByCommentsContains(Comment comment){
+        return teamRepository.findTeamByCommentsContains(comment);
     }
 }

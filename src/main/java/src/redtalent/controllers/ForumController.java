@@ -511,9 +511,14 @@ public class ForumController {
             try {
                 Assert.notNull(replyForm, "No puede ser nulo el formulario de Reply");
                 Forum forum = forumService.findOne(replyForm.getForumId().toString());
-                User userSaved = userService.findUserByForumsContains(forum);
+                Project project = projectService.findOne(replyForm.getProjectId().toString());
+                User userForum = userService.findUserByForumsContains(forum);
                 Comment comment = commentService.findOne(replyForm.getCommentId().toString());
-                User saved2 = userService.findUserByCommentsContains(comment);
+                User userComment = userService.findUserByCommentsContains(comment);
+                User userProject = userService.findUserByProjectsContains(project);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User user = utilidadesService.userConectado(authentication.getName());
+                Team team = teamService.teamByProjectId(project);
 
                 Reply reply = replyService.create();
                 reply.setTitle(replyForm.getTitle());
@@ -525,47 +530,168 @@ public class ForumController {
                 comment.setReplies(replies1);
                 commentService.save(comment);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User user = utilidadesService.userConectado(authentication.getName());
-                Set<Reply> replies = user.getReplies();
-                replies.add(saved);
-                user.setReplies(replies);
-                userService.saveUser(user);
-
-                Set<Forum> forums1 = userSaved.getForums();
-                for(Forum f1: forums1){
-                    for(Comment c1: f1.getComments()){
-                        c1.setReplies(replies1);
-                    }
-                }
-                userSaved.setForums(forums1);
-                userService.saveUser(userSaved);
-
-                Set<Comment> comments1 = saved2.getComments();
-                for(Comment c: comments1){
-                    c.setReplies(replies1);
-                }
-                saved2.setComments(comments1);
-                userService.saveUser(saved2);
-
                 List<Comment> comments = forum.getComments();
                 for(Comment c: comments){
-                    c.setReplies(replies1);
+                    if(c.equals(comment)) {
+                        c.setReplies(replies1);
+                    }
                 }
                 forum.setComments(comments);
                 forumService.save(forum);
 
-                Project project = projectService.findOne(replyForm.getProjectId().toString());
                 List<Forum> forums = project.getForums();
                 for(Forum f: forums){
-                    f.setComments(comments);
+                    for(Comment c : f.getComments()){
+                        if(c.equals(comment)){
+                            c.setReplies(replies1);
+                        }
+                    }
                 }
                 project.setForums(forums);
                 projectService.save(project);
 
+                List<Project> projects1 = team.getProjects();
+                for(Project p1 : projects1){
+                    for(Forum f: p1.getForums()){
+                        for(Comment c: f.getComments()){
+                            if(c.equals(comment)){
+                                c.setReplies(replies1);
+                            }
+                        }
+                    }
+                }
+                team.setProjects(projects1);
+                teamService.save(team);
+
+                if(user.equals(userProject) && user.equals(userForum) && user.equals(userComment)){
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.add(saved);
+                    user.setReplies(replies);
+
+                    Set<Comment> comments1 = user.getComments();
+                    for(Comment c: comments1){
+                        if(c.equals(comment)) {
+                            c.setReplies(replies1);
+                        }
+                    }
+                    user.setComments(comments1);
+
+                    Set<Forum> forums1 = user.getForums();
+                    for(Forum f1: forums1){
+                        for(Comment c1: f1.getComments()){
+                            if(c1.equals(comment)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    user.setForums(forums1);
+
+                    Set<Project> projects = user.getProjects();
+                    for(Project pr : projects){
+                        for(Forum forum2: pr.getForums()){
+                            for(Comment comment2: forum2.getComments()){
+                                if(comment2.equals(comment)){
+                                    comment2.setReplies(replies1);
+                                }
+                            }
+                        }
+                    }
+                    user.setProjects(projects);
+
+                    Set<Team> teams = user.getTeams();
+                    for(Team t: teams){
+                        for(Project p: t.getProjects()){
+                            for(Forum forum1 : p.getForums()){
+                                for(Comment comment1: forum1.getComments()){
+                                    if(comment1.equals(comment)){
+                                        comment1.setReplies(replies1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    user.setTeams(teams);
+
+                    userService.saveUser(user);
+
+                } else{
+
+                    Set<Reply> replies = user.getReplies();
+                    replies.add(saved);
+                    user.setReplies(replies);
+                    userService.saveUser(user);
+
+                    Set<Comment> comments1 = userComment.getComments();
+                    for(Comment c: comments1){
+                        if(c.equals(comment)) {
+                            c.setReplies(replies1);
+                        }
+                    }
+                    if(userComment.equals(user)){
+                        userComment.setReplies(replies);
+                    }
+                    userComment.setComments(comments1);
+                    userService.saveUser(userComment);
+
+                    Set<Forum> forums1 = userForum.getForums();
+                    for(Forum f1: forums1){
+                        for(Comment c1: f1.getComments()){
+                            if(c1.equals(comment)) {
+                                c1.setReplies(replies1);
+                            }
+                        }
+                    }
+                    if(userForum.equals(userComment)){
+                        userForum.setComments(comments1);
+                    }
+                    if(userForum.equals(user)){
+                        userForum.setReplies(replies);
+                    }
+                    userForum.setForums(forums1);
+                    userService.saveUser(userForum);
+
+                    Set<Project> projects = userProject.getProjects();
+                    for(Project pr : projects){
+                        for(Forum forum2: pr.getForums()){
+                            for(Comment comment2: forum2.getComments()){
+                                if(comment2.equals(comment)){
+                                    comment2.setReplies(replies1);
+                                }
+                            }
+                        }
+                    }
+                    userProject.setProjects(projects);
+
+                    Set<Team> teams = userProject.getTeams();
+                    for(Team t: teams){
+                        for(Project p: t.getProjects()){
+                            for(Forum forum1 : p.getForums()){
+                                for(Comment comment1: forum1.getComments()){
+                                    if(comment1.equals(comment)){
+                                        comment1.setReplies(replies1);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                    if(userProject.equals(user)){
+                        userProject.setReplies(replies);
+                    }
+                    if(userProject.equals(userComment)){
+                        userProject.setComments(comments1);
+                    }
+                    if(userProject.equals(userForum)){
+                        userProject.setForums(forums1);
+                    }
+                    userProject.setTeams(teams);
+                    userService.saveUser(userProject);
+                }
+
                 result = new ModelAndView("redirect:/forum/listReply?forumId=" + replyForm.getForumId() + "&projectId=" +replyForm.getProjectId() +"&commentId=" +replyForm.getCommentId());
 
             } catch (Throwable oops) {
+
                 result = createReplyModelAndView(replyForm, "No se puede crear correctamente las respuestas del comentario");
 
             }

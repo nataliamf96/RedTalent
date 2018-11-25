@@ -61,11 +61,26 @@ public class UtilidadesService {
         return result;
     }
 
+    public Department departamentoDelGrado(Grade grade){
+        Department result = null;
+
+        for(Department t:departmentService.findAll()){
+            for(Grade g:t.getGrades()){
+                if(g.getName().equals(grade.getName())){
+                    result = t;
+                    break;
+                }
+            }
+        }
+
+        return result;
+    }
+
     public Set<User> usuariosPorDepartamento(Department department){
         Set<User> result = new HashSet<User>();
         for(User user : userService.findAll()){
             if(user.getCurriculum()!=null){
-                if(departmentService.findDepartmentByGradesContains(user.getCurriculum().getGrade())==department){
+                if(department.getGrades().contains(user.getCurriculum().getGrade())){
                     result.add(user);
                 }
             }

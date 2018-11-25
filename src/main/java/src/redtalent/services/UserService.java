@@ -179,4 +179,23 @@ public class UserService {
     public Set<User> findAllByProjectsContains(Project project){
         return userRepository.findAllByProjectsContains(project);
     }
+
+    public Double mediaEvaluacionUser(User user){
+        Double result = 0.0;
+        for(Evaluation eva : user.getEvaluations()){
+            result += eva.getRate();
+        }
+
+        return result/user.getEvaluations().size();
+    }
+
+    public List<User> usuariosOrdenadosPorEvaluacion(){
+        List<User> users = new ArrayList<User>(findAll());
+        Collections.sort(users, new Comparator<User>() {
+            public int compare(User o1, User o2) {
+                return Double.compare(mediaEvaluacionUser(o1),(mediaEvaluacionUser(o2)));
+            }
+        });
+        return users;
+    }
 }

@@ -109,7 +109,7 @@
             <p th:text="${comment.getText()}"></p>
         </div>
     </div>
-    <div th:if="${auth.equals('USER') && !yaEresDelEquipo && project.getEstado() == false && team != null}" class="row">
+    <div th:if="${auth.equals('USER') && !yaEresDelEquipo && project.getEstado() == false && project.getCerrado() == false && team != null}" class="row">
         <div th:if="${tieneSolicitudEnviada!=null}" class="col-12">
             <h4>Solicitud en estado <i th:text="${tieneSolicitudEnviada.getStatus()}"></i></h4>
         </div>

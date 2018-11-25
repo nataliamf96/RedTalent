@@ -52,6 +52,8 @@
             </div>
             <div th:if="${alerta.getText().substring(0,9).equals('[code:nc]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-warning" role="alert">
             </div>
+            <div th:if="${alerta.getText().substring(0,9).equals('[code:bp]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-dark" role="alert">
+            </div>
         </div>
     </div>
 </div>

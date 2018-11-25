@@ -229,16 +229,18 @@
                                 <th>Imagen</th>
                                 <th>Descripción</th>
                                 <th>Privado</th>
+                                <th>Nota Media</th>
                                 <th>Estado</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="project : ${projects}">
+                            <tr th:each="project,iter : ${projects}">
                                 <td th:text="${project.getName()}"></td>
                                 <td><img style="width: 45px" th:src="${project.getImage()}"></td>
                                 <td th:text="${project.getDescription()}"></td>
                                 <td th:if="${project.getPrivado()}">Si</td>
                                 <td th:if="${!project.getPrivado()}">No</td>
+                                <td th:text="${evaluationsProject.get(iter.index)}"></td>
                                 <td th:if="${project.getEstado()}">Cerrado</td>
                                 <td th:if="${!project.getEstado()}">Abierto</td>
                             </tr>
@@ -261,14 +263,16 @@
                                 <th>Nombre y Apellidos</th>
                                 <th>Imagen</th>
                                 <th>Email</th>
+                                <th>Nota Media</th>
                                 <th>Estado</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="user : ${users}">
+                            <tr th:each="user,iter : ${users}">
                                 <td th:text="${user.getFullname()}"></td>
                                 <td><img style="width: 15%" th:src="${user.getImage()}"></td>
                                 <td th:text="${user.getAccount().getEmail()}"></td>
+                                <td th:text="${evaluationsUser.get(iter.index)}"></td>
                                 <td th:if="${user.getAccount().isEnabled()}">Baneado</td>
                                 <td th:if="${!user.getAccount().isEnabled()}">Acceso al Sistema</td>
                             </tr>

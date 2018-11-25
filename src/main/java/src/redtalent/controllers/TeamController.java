@@ -96,7 +96,10 @@ public class TeamController {
         teamForm.setProjectId(projectId);
 
         try {
-            //Assert.isTrue(teamForm.isClosed(), "No se puede crear un equipo que no está cerrado");
+            Assert.isTrue(projectService.findOne(projectId.toString())!=null,"Proyecto No Existente");
+            Assert.isTrue(projectService.findOne(projectId.toString()).getEstado()!=true,"El proyecto está borrado");
+            Assert.isTrue(projectService.findOne(projectId.toString()).getCerrado()!=true,"El proyecto está Cerrado");
+
             result = new ModelAndView("team/create");
             result.addObject("teamForm", teamForm);
             result.addObject("projectId", projectId);

@@ -109,6 +109,8 @@
         <div class="col-12 portfolio-item">
             <a type="button" class="btn btn-info" href="/user/cambiarContraseña">Modificar Contraseña</a>
             <a type="button" class="btn btn-info" href="/user/updateUser">Modificar Datos de Usuario</a>
+            <a th:if="${user.getCurriculum()==null}" type="button" class="btn btn-info" href="/user/curriculum/createCurriculum">Añadir Mi Curriculum</a>
+            <a th:if="${user.getCurriculum()!=null}" type="button" class="btn btn-info" href="/user/curriculum/updateCurriculum">Actualizar Mi Curriculum</a>
         </div>
     </div>
 </div>

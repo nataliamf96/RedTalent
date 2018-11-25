@@ -8,4 +8,5 @@ import src.redtalent.domain.Grade;
 public interface DepartmentRepository extends MongoRepository<Department, String> {
 
     Department findDepartmentByGradesContaining(Grade grade);
+    Department findDepartmentByGradesContains(Grade grade);
 }

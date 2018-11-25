@@ -161,6 +161,10 @@ public class UserService {
 
     }
 
+    public Set<User> findUsersByCurriculum_Grade(Grade grade){
+        return userRepository.findUsersByCurriculum_Grade(grade);
+    }
+
 
     public Set<User> findAllByTagsContains(Set<Tag> listaTags){
         return userRepository.findAllByTagsContains(listaTags);

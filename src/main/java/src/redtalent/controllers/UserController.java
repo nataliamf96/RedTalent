@@ -64,6 +64,9 @@ public class UserController {
     @Autowired
     private BlogService blogService;
 
+    @Autowired
+    private ForumService forumService;
+
     public UserController(){
         super();
     }
@@ -248,6 +251,77 @@ public class UserController {
         return result;
     }
 
+    @RequestMapping(value = "/filtrarPerfilDepartamento", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilDepartamento(@RequestParam(value = "departamento", defaultValue = "") String departamento) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/filtrarPerfilDepartamento");
+        result.addObject("departments",departmentService.findAll());
+
+        if(departamento.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Department a = departmentService.findOne(departamento);
+            result.addObject("users",utilidadesService.usuariosPorDepartamento(a));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilGrado", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilGrado(@RequestParam(value = "grade", defaultValue = "") String grade) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/filtrarPerfilGrado");
+        result.addObject("grades",gradeService.findAll());
+
+        if(grade.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Grade g = gradeService.findOne(grade);
+            result.addObject("users",userService.findUsersByCurriculum_Grade(g));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilArea", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilArea(@RequestParam(value = "area", defaultValue = "") String area) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/filtrarPerfilArea");
+        result.addObject("areas",areaService.findAll());
+
+        if(area.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else{
+            Area a = areaService.findOne(area);
+            result.addObject("users",utilidadesService.usuariosPorArea(a));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("user/filtrarForumsCategorias");
+
+        if(category.isEmpty()){
+            result.addObject("forums",forumService.findAll());
+        }else{
+            result.addObject("forums",forumService.findForumsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
     @RequestMapping(value = "/filtrarPerfilesPorEtiquetas", method = RequestMethod.GET)
     public ModelAndView filtrarPerfilesPorEtiquetas(@RequestParam(value = "tag", defaultValue = "") String tag) {
         ModelAndView result;
@@ -285,10 +359,24 @@ public class UserController {
 
         result = new ModelAndView("user/curriculum/createCurriculum");
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("areas",areaService.findAll());
-        result.addObject("departments",departmentService.findAll());
         result.addObject("grades",gradeService.findAll());
         result.addObject("curriculumForm",curriculumForm);
+        return result;
+    }
+
+    @RequestMapping(value = "/curriculum/updateCurriculum")
+    public ModelAndView updateCurriculum(){
+        ModelAndView result;
+        CurriculumForm curriculumForm;
+        curriculumForm = new CurriculumForm();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        result = new ModelAndView("user/curriculum/updateCurriculum");
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("grades",gradeService.findAll());
+        result.addObject("curriculumForm",user.getCurriculum());
         return result;
     }
 
@@ -298,7 +386,9 @@ public class UserController {
 
         if (binding.hasErrors())
             result = createEditModelAndViewUserCurriculum(curriculumForm);
-        else
+        else if(curriculumForm.getGrade().equals("0")){
+            result = createEditModelAndViewUserCurriculum(curriculumForm,"Seleccione un Grado");
+        }else
             try {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());
@@ -306,7 +396,7 @@ public class UserController {
                 Curriculum curriculum = new Curriculum();
 
                 curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
-
+                curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
                 Curriculum csave = curriculumService.save(curriculum);
 
                 user.setCurriculum(csave);
@@ -317,6 +407,58 @@ public class UserController {
             } catch (Throwable oops) {
                 result = createEditModelAndViewUserCurriculum(curriculumForm, "ERROR AL CREAR EL CURRICULUM");
             }
+
+        return result;
+    }
+
+    @RequestMapping(value = "/curriculum/updateCurriculum", method = RequestMethod.POST, params = "updateCurriculum")
+    public ModelAndView updateCurriculum(@Valid CurriculumForm curriculumForm, BindingResult binding){
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        if (binding.hasErrors())
+            result = updateEditModelAndViewUserCurriculum(curriculumForm);
+        else if(user.getCurriculum() == null){
+            result = new ModelAndView("redirect:/user/index");
+        } else if(curriculumForm.getGrade().equals("0")){
+            result = updateEditModelAndViewUserCurriculum(curriculumForm,"Seleccione un Grado");
+        }else
+            try {
+
+                Curriculum curriculum = user.getCurriculum();
+
+                curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
+                curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
+                Curriculum csave = curriculumService.save(curriculum);
+
+                user.setCurriculum(csave);
+                userService.saveUser(user);
+
+                result = new ModelAndView("redirect:/user/index");
+
+            } catch (Throwable oops) {
+                result = updateEditModelAndViewUserCurriculum(curriculumForm, "ERROR AL ACTUALIZAR EL CURRICULUM");
+            }
+
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewUserCurriculum(CurriculumForm curriculumForm) {
+        ModelAndView result;
+        result = updateEditModelAndViewUserCurriculum(curriculumForm, null);
+        return result;
+    }
+
+    protected ModelAndView updateEditModelAndViewUserCurriculum(CurriculumForm curriculumForm, String message) {
+        ModelAndView result;
+
+        result = new ModelAndView("user/curriculum/updateCurriculum");
+        result.addObject("curriculumForm", curriculumForm);
+        result.addObject("message", message);
+        result.addObject("grades",gradeService.findAll());
+        result.addObject("auth",utilidadesService.actorConectado());
 
         return result;
     }
@@ -333,6 +475,7 @@ public class UserController {
         result = new ModelAndView("user/curriculum/createCurriculum");
         result.addObject("curriculumForm", curriculumForm);
         result.addObject("message", message);
+        result.addObject("grades",gradeService.findAll());
         result.addObject("auth",utilidadesService.actorConectado());
 
         return result;

@@ -1,6 +1,7 @@
 package src.redtalent.services;
 
 import com.mysema.commons.lang.Assert;
+import groovy.util.Eval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -8,10 +9,7 @@ import src.redtalent.domain.*;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.repositories.UserRepository;
 
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @Transactional
@@ -48,6 +46,8 @@ public class UserService {
         Set<Reply> r = new HashSet<Reply>();
         Set<Comment> c = new HashSet<Comment>();
         Set<Tag> tags = new HashSet<Tag>();
+        List<Evaluation> evaluations = new ArrayList<Evaluation>();
+        List<Evaluation> evaluationsReceived = new ArrayList<Evaluation>();
         result.setApplications(ap);
         result.setTags(tags);
         result.setTeams(ta);
@@ -55,6 +55,8 @@ public class UserService {
         result.setBlogs(s);
         result.setComments(c);
         result.setReplies(r);
+        result.setEvaluations(evaluations);
+        result.setEvaluationsReceived(evaluationsReceived);
         return result;
     }
 

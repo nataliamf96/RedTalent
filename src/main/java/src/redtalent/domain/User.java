@@ -1,10 +1,12 @@
 package src.redtalent.domain;
 
+import groovy.util.Eval;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import src.redtalent.security.Role;
 
 import javax.validation.constraints.NotBlank;
+import java.util.List;
 import java.util.Set;
 
 @Document(collection = "Users")
@@ -28,17 +30,20 @@ public class User extends DomainEntity{
     private Set<Tag> tags;
     private Curriculum curriculum;
     private Set<Comment> commentsReceived;
+    private List<Evaluation> evaluations;
+    private List<Evaluation> evaluationsReceived;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(Curriculum curriculum,Set<Tag> tags,Account account,String fullname, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Comment> commentsReceived, Set<Reply> replies, String image){
+    public User(Curriculum curriculum,Set<Tag> tags,Account account, String fullname, List<Evaluation> evaluations, List<Evaluation> evaluationsReceived, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Comment> commentsReceived, Set<Reply> replies, String image){
         this.fullname = fullname;
         this.curriculum = curriculum;
         this.tags = tags;
         this.roles = roles;
+        this.evaluations = evaluations;
         this.projects = projects;
         this.teams = teams;
         this.applications = applications;
@@ -49,6 +54,7 @@ public class User extends DomainEntity{
         this.image = image;
         this.account = account;
         this.commentsReceived = commentsReceived;
+        this.evaluationsReceived = evaluationsReceived;
     }
 
     public Set<Project> getProjects() {
@@ -161,5 +167,21 @@ public class User extends DomainEntity{
 
     public void setCommentsReceived(Set<Comment> commentsReceived) {
         this.commentsReceived = commentsReceived;
+    }
+
+    public List<Evaluation> getEvaluations() {
+        return evaluations;
+    }
+
+    public void setEvaluations(List<Evaluation> evaluations) {
+        this.evaluations = evaluations;
+    }
+
+    public List<Evaluation> getEvaluationsReceived() {
+        return evaluationsReceived;
+    }
+
+    public void setEvaluationsReceived(List<Evaluation> evaluationsReceived) {
+        this.evaluationsReceived = evaluationsReceived;
     }
 }

@@ -1,6 +1,7 @@
 package src.redtalent.services;
 
 import com.mysema.commons.lang.Assert;
+import groovy.util.Eval;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -44,6 +45,8 @@ public class ProjectService {
         List<Comment> comments = new ArrayList<Comment>();
         List<Alert> alerts = new ArrayList<Alert>();
         List<User> users = new ArrayList<User>();
+        List<Evaluation> evaluations = new ArrayList<>();
+        result.setEvaluations(evaluations);
         result.setAlerts(alerts);
         result.setCerrado(false);
         result.setComments(comments);

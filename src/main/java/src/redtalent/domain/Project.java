@@ -1,5 +1,6 @@
 package src.redtalent.domain;
 
+import groovy.util.Eval;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.format.annotation.DateTimeFormat;
 
@@ -28,10 +29,11 @@ public class Project extends DomainEntity{
         this.comments = new ArrayList<>();
         this.alerts = new ArrayList<>();
         this.forums = new ArrayList<>();
+        this.evaluations = new ArrayList<>();
     }
 
     public Project(String name, String image, String description, String requiredProfiles,
-                   List<Comment> comments, List<Alert> alerts, User userCreated, Boolean privado, Boolean estado, Category categorie,
+                   List<Comment> comments, List<Evaluation> evaluations, List<Alert> alerts, User userCreated, Boolean privado, Boolean estado, Category categorie,
                    List<Forum> forums,Boolean cerrado){
         this.name = name;
         this.cerrado = cerrado;
@@ -44,6 +46,7 @@ public class Project extends DomainEntity{
         this.estado = estado;
         this.categorie = categorie;
         this.forums = forums;
+        this.evaluations = evaluations;
     }
 
     //Getters and setters -----------------------------------------------
@@ -97,6 +100,15 @@ public class Project extends DomainEntity{
     private List<Alert> alerts;
     private Category categorie;
     private List<Forum> forums;
+    private List<Evaluation> evaluations;
+
+    public List<Evaluation> getEvaluations() {
+        return evaluations;
+    }
+
+    public void setEvaluations(List<Evaluation> evaluations) {
+        this.evaluations = evaluations;
+    }
 
     public List<Comment> getComments() {
         return comments;

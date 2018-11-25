@@ -215,7 +215,10 @@ public class CommentController {
             try {
                 Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
                 Project project = projectService.findOne(commentForm.getProjectId().toString());
-                User user = userService.findUserByProjectsContains(project);
+                User userProject = userService.findUserByProjectsContains(project);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User userCreated = utilidadesService.userConectado(authentication.getName());
+                Team team = teamService.teamByProjectId(project);
 
                 Comment comment = commentService.create();
                 comment.setTitle(commentForm.getTitle());
@@ -225,26 +228,42 @@ public class CommentController {
                 List<Comment> comments = project.getComments();
                 comments.add(saved);
                 project.setComments(comments);
-                Project projectSaved = projectService.save(project);
-                projectService.saveAll(projectSaved);
+                projectService.save(project);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User userCreated = utilidadesService.userConectado(authentication.getName());
+                List<Project> projects = team.getProjects();
+                for(Project p : projects){
+                    if(p.equals(project)){
+                        p.setComments(comments);
+                    }
+                }
+                team.setProjects(projects);
+                teamService.save(team);
+
                 Set<Comment> comments1 = userCreated.getComments();
                 comments1.add(saved);
                 userCreated.setComments(comments1);
                 userService.saveUser(userCreated);
 
-                if(!userCreated.equals(user)){
-                    Set<Project> projects = user.getProjects();
-                    for(Project p: projects){
-                        if(p.equals(project)){
-                            p.setComments(comments);
+                Set<Project> projects1 = userProject.getProjects();
+                for(Project p1: projects1){
+                    if(p1.equals(project))
+                        p1.setComments(comments);
+                }
+                userProject.setProjects(projects1);
+
+                Set<Team> teams = userProject.getTeams();
+                for(Team t: teams){
+                    for(Project p2: t.getProjects()){
+                        if(p2.equals(project)){
+                            p2.setComments(comments);
                         }
                     }
-                    user.setProjects(projects);
-                    userService.saveUser(user);
                 }
+                userProject.setTeams(teams);
+                if(userProject.equals(userCreated)){
+                    userProject.setComments(comments1);
+                }
+                userService.saveUser(userProject);
 
                 result = new ModelAndView("redirect:/comment/project/list?projectId=" +commentForm.getProjectId());
 
@@ -290,34 +309,36 @@ public class CommentController {
             try {
                 Assert.notNull(commentForm, "No puede ser nulo el formulario de Comment");
                 Team team = teamService.findOne(commentForm.getTeamId().toString());
-                User user = userService.findUserByTeamsConstains(team);
+                User userTeam = userService.findUserByTeamsConstains(team);
+                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+                User userCreated = utilidadesService.userConectado(authentication.getName());
 
                 Comment comment = commentService.create();
                 comment.setTitle(commentForm.getTitle());
                 comment.setText(commentForm.getText());
                 Comment saved = commentService.save(comment);
 
-                Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-                User userCreated = utilidadesService.userConectado(authentication.getName());
+                List<Comment> comments = team.getComments();
+                comments.add(saved);
+                team.setComments(comments);
+                teamService.save(team);
+
                 Set<Comment> comments1 = userCreated.getComments();
                 comments1.add(saved);
                 userCreated.setComments(comments1);
                 userService.saveUser(userCreated);
 
-                List<Comment> comments = team.getComments();
-                comments.add(saved);
-                team.setComments(comments);
-                Team teamSaved = teamService.save(team);
-
-                Set<Team> teams = user.getTeams();
+                Set<Team> teams = userTeam.getTeams();
                 for(Team t: teams){
                     if(t.equals(team)){
                         t.setComments(comments);
                     }
                 }
-                user.setComments(comments1);
-                user.setTeams(teams);
-                userService.saveUser(user);
+                if(userCreated.equals(userTeam)){
+                    userTeam.setComments(comments1);
+                }
+                userTeam.setTeams(teams);
+                userService.saveUser(userTeam);
 
                 result = new ModelAndView("redirect:/comment/team/list?teamId=" +commentForm.getTeamId());
 

@@ -10,6 +10,7 @@ public class EvaluationForm {
     private Integer rate;
     private ObjectId userId;
     private ObjectId projectId;
+    private ObjectId teamId;
     private ObjectId evaluationId;
 
     @Range(min=1, max=5)
@@ -43,5 +44,13 @@ public class EvaluationForm {
 
     public void setEvaluationId(ObjectId evaluationId) {
         this.evaluationId = evaluationId;
+    }
+
+    public ObjectId getTeamId() {
+        return teamId;
+    }
+
+    public void setTeamId(ObjectId teamId) {
+        this.teamId = teamId;
     }
 }

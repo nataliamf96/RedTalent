@@ -92,10 +92,12 @@ public class DirectivoController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         result = new ModelAndView("directivo/dashboardDirectivo");
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("projects",projectService.findAll());
-        result.addObject("users",userService.findAll());
+        result.addObject("projects",projectService.proyectosOrdenadosPorEvaluacion());
+        result.addObject("users",userService.usuariosOrdenadosPorEvaluacion());
         result.addObject("teams",teamService.findAll());
         result.addObject("evaluationsTeam",utilidadesService.evaluationsTeam());
+        result.addObject("evaluationsProject",utilidadesService.evaluationsProject());
+        result.addObject("evaluationsUser",utilidadesService.evaluationsUser());
         result.addObject("categorias",categoryService.findAll());
         result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
         return result;

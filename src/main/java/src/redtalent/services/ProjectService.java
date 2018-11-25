@@ -16,6 +16,7 @@ import src.redtalent.repositories.ProjectRepository;
 import src.redtalent.repositories.UserRepository;
 
 import java.util.*;
+import java.util.stream.Stream;
 
 @Service
 @Transactional
@@ -146,6 +147,25 @@ public class ProjectService {
 
     public Project findProjectByCommentsContains(Comment comment){
         return projectRepository.findProjectByCommentsContains(comment);
+    }
+
+    public Double mediaEvaluacionProyecto(Project project){
+        Double result = 0.0;
+        for(Evaluation eva : project.getEvaluations()){
+            result += eva.getRate();
+        }
+
+        return result/project.getEvaluations().size();
+    }
+
+    public List<Project> proyectosOrdenadosPorEvaluacion(){
+        List<Project> projects = new ArrayList<Project>(findAll());
+        Collections.sort(projects, new Comparator<Project>() {
+            public int compare(Project o1, Project o2) {
+                return Double.compare(mediaEvaluacionProyecto(o1),(mediaEvaluacionProyecto(o2)));
+            }
+        });
+        return projects;
     }
 
 }

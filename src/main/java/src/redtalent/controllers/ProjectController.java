@@ -281,6 +281,40 @@ public class ProjectController {
         return result;
     }
 
+    @RequestMapping(value = "/borrarProyecto", method = RequestMethod.GET)
+    public ModelAndView borrarProyecto(@RequestParam String projectId) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        try{
+            Assert.isTrue(user.getProjects().contains(projectService.findOne(projectId)),"El usuario creador no es el conectado.");
+
+            Project project = projectService.findOne(projectId);
+            project.setCerrado(true);
+
+            List<Alert> listaAlertas = project.getAlerts();
+            Alert newAlert = alertService.create();
+            String alerta = "[code:bp]El proyecto " +project.getName()+ " ha sido borrado.";
+            newAlert.setText(alerta);
+            Alert alertSave = alertService.save(newAlert);
+            listaAlertas.add(alertSave);
+            project.setAlerts(listaAlertas);
+
+            Project savee = projectService.save(project);
+
+            projectService.saveAll(savee);
+
+            result = new ModelAndView("redirect:/user/index");
+            result.addObject("auth",utilidadesService.actorConectado());
+        }catch (Throwable oops){
+            result = new ModelAndView("redirect:/403");
+        }
+
+        return result;
+    }
+
     @RequestMapping(value = "/createProject", method = RequestMethod.POST, params = "saveProject")
     public ModelAndView save(@Valid ProjectForm projectForm, BindingResult binding) {
         ModelAndView result;

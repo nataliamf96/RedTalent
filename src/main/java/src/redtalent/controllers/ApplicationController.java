@@ -126,35 +126,39 @@ public class ApplicationController{
         ModelAndView result;
         result = new ModelAndView("application/crearAplicacionProyecto");
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = utilidadesService.userConectado(authentication.getName());
-        Application application = applicationService.create();
-        Application savee = applicationService.save(application);
+        if(projectService.findOne(projectId.toString()).getEstado()==true || projectService.findOne(projectId.toString()).getCerrado()==true){
+            return new ModelAndView("redirect:/403");
+        }else{
+            Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+            User user = utilidadesService.userConectado(authentication.getName());
+            Application application = applicationService.create();
+            Application savee = applicationService.save(application);
 
-        Set<Application> applicationsUser = user.getApplications();
-        applicationsUser.add(savee);
-        user.setApplications(applicationsUser);
-        userService.saveUser(user);
+            Set<Application> applicationsUser = user.getApplications();
+            applicationsUser.add(savee);
+            user.setApplications(applicationsUser);
+            userService.saveUser(user);
 
-        Project project = projectService.findOne(projectId.toString());
+            Project project = projectService.findOne(projectId.toString());
 
-        Team team = teamService.teamByProjectId(project);
-        List<Application> applicationsTeam = team.getApplications();
-        applicationsTeam.add(savee);
-        team.setApplications(applicationsTeam);
-        Team saTeam = teamService.save(team);
+            Team team = teamService.teamByProjectId(project);
+            List<Application> applicationsTeam = team.getApplications();
+            applicationsTeam.add(savee);
+            team.setApplications(applicationsTeam);
+            Team saTeam = teamService.save(team);
 
-        //Usuario creador del Team -> Debe de guardar también las aplications nuevas dentro del team
+            //Usuario creador del Team -> Debe de guardar también las aplications nuevas dentro del team
 
-        User u = userService.findUserByProjectsContains(project);
-        Set<Team> tt = new HashSet<Team>();
-        tt.addAll(u.getTeams());
-        tt.remove(team);
-        tt.add(saTeam);
-        u.setTeams(tt);
-        userService.saveUser(u);
+            User u = userService.findUserByProjectsContains(project);
+            Set<Team> tt = new HashSet<Team>();
+            tt.addAll(u.getTeams());
+            tt.remove(team);
+            tt.add(saTeam);
+            u.setTeams(tt);
+            userService.saveUser(u);
 
-        result = new ModelAndView("redirect:/application/list");
+            result = new ModelAndView("redirect:/application/list");
+        }
 
         return result;
     }

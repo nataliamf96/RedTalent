@@ -291,4 +291,40 @@ public class UtilidadesService {
         return result;
     }
 
+    public List<Double> evaluationsProject(){
+        List<Double> result = new ArrayList<Double>();
+        for(Project t:projectService.proyectosOrdenadosPorEvaluacion()){
+            Double sum = 0.0;
+            Double media = 0.0;
+            if(t.getEvaluations().size()==0){
+                result.add(0.0);
+            }else{
+                for(Evaluation evaluation:t.getEvaluations()){
+                    sum += evaluation.getRate();
+                }
+                media = sum/t.getEvaluations().size();
+                result.add(media);
+            }
+        }
+        return result;
+    }
+
+    public List<Double> evaluationsUser(){
+        List<Double> result = new ArrayList<Double>();
+        for(User t:userService.usuariosOrdenadosPorEvaluacion()){
+            Double sum = 0.0;
+            Double media = 0.0;
+            if(t.getEvaluations().size()==0){
+                result.add(0.0);
+            }else{
+                for(Evaluation evaluation:t.getEvaluations()){
+                    sum += evaluation.getRate();
+                }
+                media = sum/t.getEvaluations().size();
+                result.add(media);
+            }
+        }
+        return result;
+    }
+
 }

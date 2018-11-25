@@ -397,27 +397,49 @@ public class CommentController {
         Project project = projectService.findProjectByCommentsContains(res);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
+        Team team = teamService.teamByProjectId(project);
+        User userProject = userService.findUserByProjectsContains(project);
 
         if (userCreador.equals(userCreated)) {
             List<Comment> comments = project.getComments();
             comments.remove(res);
             project.setComments(comments);
-            Project saved = projectService.save(project);
-            projectService.saveAll(saved);
+            projectService.save(project);
 
-            Set<Comment> comments1 = userCreador.getComments();
-            comments1.remove(res);
-            userCreador.setComments(comments1);
-            User userSaved = userService.saveUser(userCreador);
-
-            Set<Project> projects = userSaved.getProjects();
-            for(Project p: projects){
-                if(p.equals(project)){
+            List<Project> projects = team.getProjects();
+            for (Project p : projects) {
+                if (p.equals(project)) {
                     p.setComments(comments);
                 }
             }
-            userSaved.setProjects(projects);
-            userService.saveUser(userSaved);
+            team.setProjects(projects);
+            teamService.save(team);
+
+            Set<Comment> comments1 = userCreated.getComments();
+            comments1.remove(res);
+            userCreated.setComments(comments1);
+            userService.saveUser(userCreated);
+
+            Set<Project> projects1 = userProject.getProjects();
+            for (Project p1 : projects1) {
+                if (p1.equals(project))
+                    p1.setComments(comments);
+            }
+            userProject.setProjects(projects1);
+
+            Set<Team> teams = userProject.getTeams();
+            for (Team t : teams) {
+                for (Project p2 : t.getProjects()) {
+                    if (p2.equals(project)) {
+                        p2.setComments(comments);
+                    }
+                }
+            }
+            userProject.setTeams(teams);
+            if (userProject.equals(userCreated)) {
+                userProject.setComments(comments1);
+            }
+            userService.saveUser(userProject);
 
             for (Reply r : res.getReplies()) {
                 replyService.remove(r);
@@ -442,6 +464,7 @@ public class CommentController {
         Team team = teamService.findTeamByCommentsContains(res);
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User userCreated = utilidadesService.userConectado(authentication.getName());
+        User userTeam = userService.findUserByTeamsConstains(team);
 
         if (userCreador.equals(userCreated)) {
             List<Comment> comments = team.getComments();
@@ -449,19 +472,22 @@ public class CommentController {
             team.setComments(comments);
             teamService.save(team);
 
-            Set<Comment> comments1 = userCreador.getComments();
-            comments1.remove(res);
-            userCreador.setComments(comments1);
-            User userSaved = userService.saveUser(userCreador);
+            Set<Comment> comments1 = userCreated.getComments();
+            comments1.add(res);
+            userCreated.setComments(comments1);
+            userService.saveUser(userCreated);
 
-            Set<Team> teams = userSaved.getTeams();
+            Set<Team> teams = userTeam.getTeams();
             for(Team t: teams){
                 if(t.equals(team)){
                     t.setComments(comments);
                 }
             }
-            userSaved.setTeams(teams);
-            userService.saveUser(userSaved);
+            if(userCreated.equals(userTeam)){
+                userTeam.setComments(comments1);
+            }
+            userTeam.setTeams(teams);
+            userService.saveUser(userTeam);
 
             for (Reply r : res.getReplies()) {
                 replyService.remove(r);

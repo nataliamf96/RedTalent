@@ -75,10 +75,13 @@ public class UserController {
     public ModelAndView index() {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User principal = userService.findByEmail(authentication.getName());
         result = new ModelAndView("user/index");
         result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",utilidadesService.userConectado(authentication.getName()));
+        result.addObject("users",userService.findAll());
+        result.addObject("usuariosMejorValorados",userService.usuariosOrdenadosPorEvaluacion());
         return result;
     }
 

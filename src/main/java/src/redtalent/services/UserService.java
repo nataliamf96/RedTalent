@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.*;
 import src.redtalent.repositories.AccountRepository;
+import src.redtalent.repositories.CurriculumRepository;
 import src.redtalent.repositories.UserRepository;
 
 import java.util.*;
@@ -20,6 +21,9 @@ public class UserService {
 
     @Autowired
     private AccountRepository accountRepository;
+
+    @Autowired
+    private CurriculumService curriculumService;
 
     public UserService(){
         super();
@@ -48,6 +52,7 @@ public class UserService {
         Set<Tag> tags = new HashSet<Tag>();
         List<Evaluation> evaluations = new ArrayList<Evaluation>();
         List<Evaluation> evaluationsReceived = new ArrayList<Evaluation>();
+        Curriculum curriculum = curriculumService.create();
         result.setApplications(ap);
         result.setTags(tags);
         result.setTeams(ta);
@@ -57,6 +62,7 @@ public class UserService {
         result.setReplies(r);
         result.setEvaluations(evaluations);
         result.setEvaluationsReceived(evaluationsReceived);
+        result.setCurriculum(curriculum);
         return result;
     }
 

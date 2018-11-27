@@ -10,13 +10,13 @@ public class CurriculumForm {
 
     private String urlLinkedin;
     private String grade;
+    private String description;
 
     public CurriculumForm(){
         super();
     }
 
     @URL
-    @NotBlank
     public String getUrlLinkedin() {
         return urlLinkedin;
     }
@@ -32,5 +32,14 @@ public class CurriculumForm {
 
     public void setGrade(String grade) {
         this.grade = grade;
+    }
+
+    @NotNull
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

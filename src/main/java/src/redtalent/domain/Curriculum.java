@@ -1,5 +1,6 @@
 package src.redtalent.domain;
 
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.hibernate.validator.constraints.URL;
 import org.springframework.data.mongodb.core.mapping.Document;
 
@@ -11,18 +12,21 @@ public class Curriculum extends DomainEntity{
 
     private String urlLinkedin;
     private Grade grade;
+    private String description;
+    private Boolean realized;
 
     public Curriculum(){
         super();
     }
 
-    public Curriculum(String urlLinkedin, Grade grade){
+    public Curriculum(String urlLinkedin, Grade grade, String description, Boolean realized){
         this.urlLinkedin = urlLinkedin;
         this.grade = grade;
+        this.description = description;
+        this.realized = realized;
     }
 
     @URL
-    @NotBlank
     public String getUrlLinkedin() {
         return urlLinkedin;
     }
@@ -31,12 +35,27 @@ public class Curriculum extends DomainEntity{
         this.urlLinkedin = urlLinkedin;
     }
 
-    @NotNull
     public Grade getGrade() {
         return grade;
     }
 
     public void setGrade(Grade grade) {
         this.grade = grade;
+    }
+
+    public Boolean getRealized() {
+        return realized;
+    }
+
+    public void setRealized(Boolean realized) {
+        this.realized = realized;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import src.redtalent.domain.AcademicProfile;
+import src.redtalent.domain.Comment;
 import src.redtalent.domain.Curriculum;
 import src.redtalent.repositories.CurriculumRepository;
 
 import java.util.Collection;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -20,6 +22,15 @@ public class CurriculumService {
 
     public CurriculumService(){
         super();
+    }
+
+    public Curriculum create(){
+        Curriculum curriculum;
+
+        curriculum = new Curriculum();
+        curriculum.setRealized(false);
+
+        return curriculum;
     }
 
     public Curriculum findOne(String curriculum){

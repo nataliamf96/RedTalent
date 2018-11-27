@@ -396,10 +396,12 @@ public class UserController {
                 Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
                 User user = utilidadesService.userConectado(authentication.getName());
 
-                Curriculum curriculum = new Curriculum();
+                Curriculum curriculum = curriculumService.create();
 
                 curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
                 curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
+                curriculum.setDescription(curriculumForm.getDescription());
+                curriculum.setRealized(true);
                 Curriculum csave = curriculumService.save(curriculum);
 
                 user.setCurriculum(csave);
@@ -423,7 +425,7 @@ public class UserController {
 
         if (binding.hasErrors())
             result = updateEditModelAndViewUserCurriculum(curriculumForm);
-        else if(user.getCurriculum() == null){
+        else if(user.getCurriculum().getRealized() == false){
             result = new ModelAndView("redirect:/user/index");
         } else if(curriculumForm.getGrade().equals("0")){
             result = updateEditModelAndViewUserCurriculum(curriculumForm,"Seleccione un Grado");
@@ -434,6 +436,7 @@ public class UserController {
 
                 curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
                 curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
+                curriculum.setDescription(curriculumForm.getDescription());
                 Curriculum csave = curriculumService.save(curriculum);
 
                 user.setCurriculum(csave);

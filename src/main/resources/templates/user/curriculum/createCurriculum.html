@@ -29,6 +29,9 @@
                 <li th:each="err : ${#fields.errors('grade')}" th:text="${err}" />
             </div>
             <b style="color: red" th:text="${message}" />
+            <label for="description">Descripción</label>:
+            <input type="textarea" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
+            <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
             <br />
             <br />
             <input type="submit" class="btn btn-info" name="createCurriculum" value="Crear" />

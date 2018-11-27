@@ -140,13 +140,12 @@ public class UserController {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
-        //Team team = teamService.findByUserCreated(user);
         Set<Project> projects = user.getProjects();
         projects.addAll(utilidadesService.todosLosProyectosEnLosQueEstoy(user));
         result = new ModelAndView("user/userData");
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",user);
-        //result.addObject("team",team);
+        result.addObject("users",userService.findAll());
         result.addObject("projects", projects);
         return result;
     }

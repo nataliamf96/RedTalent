@@ -35,11 +35,14 @@
                         <span th:text="${user.getFullname()}" /> <br />
                         <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
                     </h6>
-                    <h6 th:if="${user.getCurriculum()!=null}" style="margin-top: -23px" class='card-title'>
+                    <h6 th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
                         <span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span>
                     </h6>
-                    <div th:if="${user.getCurriculum()!=null}" class='card-links'>
+                    <div th:if="${user.getCurriculum().getRealized()==true}" class='card-links'>
                         <a style="color: black" th:href="${user.getCurriculum().getUrlLinkedin()}"><i class="fab fa-linkedin" style="color: #3b5999"></i></a>
+                    </div>
+                    <div th:if="${user.getCurriculum().getRealized()==false}" class='card-links'>
+                       Esto es una url para crear curriculum
                     </div>
                 </div>
             </div>
@@ -58,7 +61,7 @@
                                     </div>
                                     <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-11">
                                         <b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b>
-                                        <span th:if="${user.getCurriculum()!=null}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span>
+                                        <span th:if="${user.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span>
                                     </div>
                                 </div>
                             </span>
@@ -81,16 +84,16 @@
         <div class="col-lg-3 col-md-6 col-sm-12 portfolio-item">
             <br />
             <br />
-            <h6>Perfiles mejor valorados</h6>
-            <div style="margin-top: 10px" class="row">
+            <h6 style="margin-top: 7px">Perfiles mejor valorados</h6>
+            <div style="margin-top: 13px" class="row">
                 <div th:each="u : ${usuariosMejorValorados}" class="col-12">
-                    <div class="row">
+                    <div style="background-color: whitesmoke" class="row py-3">
                         <div class="col-3">
                             <img alt='' class='card-img-profile' style="width: 40px; height: 40px;border-radius: 50%; border-width: 2px; border-color: white" th:src="${u.getImage()}">
                         </div>
                         <div class="col-9">
                             <b style="color:#6c757d;font-family: Calibri"><span th:text="${u.getFullname()}" /></b> <br />
-                            <span style="font-size: 0.8em;display: flex; margin-top: -10px" th:text="${u.getAccount().getEmail()}"></span>
+                            <span th:if="${u.getCurriculum().getRealized()==true}" style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -7px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
                         </div>
                     </div>
                     <br />

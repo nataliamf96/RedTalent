@@ -11,10 +11,10 @@
     <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
 <div th:if="${auth.equals('ADMIN')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
 </div>
 <div th:if="${auth.equals('DIRECTIVO')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
 </div>
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>

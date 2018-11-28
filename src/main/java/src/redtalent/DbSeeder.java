@@ -118,20 +118,14 @@ public class DbSeeder implements CommandLineRunner{
         forumRepository.deleteAll();
         recomendationRepository.deleteAll();
 
-        Role estudiante = new Role("ESTUDIANTE");
-        Role profesor = new Role("PROFESOR");
-        Role egresado = new Role("EGRESADO");
+        Role user = new Role("USER");
         Role administrador = new Role("ADMIN");
         Role directivo = new Role("DIRECTIVO");
-        List<Role> roles = Arrays.asList(estudiante,profesor,egresado,administrador,directivo);
+        List<Role> roles = Arrays.asList(user,administrador,directivo);
         roleRepository.saveAll(roles);
 
-        Set<Role> roleEstudiante = new HashSet<Role>();
-        roleEstudiante.add(estudiante);
-        Set<Role> roleProfesor = new HashSet<Role>();
-        roleProfesor.add(profesor);
-        Set<Role> roleEgresado = new HashSet<Role>();
-        roleEgresado.add(egresado);
+        Set<Role> roleUser = new HashSet<Role>();
+        roleUser.add(user);
         Set<Role> roleAdministrador = new HashSet<Role>();
         roleAdministrador.add(administrador);
         Set<Role> roleDirectivo = new HashSet<Role>();
@@ -885,23 +879,23 @@ public class DbSeeder implements CommandLineRunner{
         Set<Comment> comentarios3 = new HashSet<Comment>();
         comentarios3.add(comentario3);
 
-        Account ae1 = new Account("user1@user.com",bCryptPasswordEncoder.encode("user1"),false,roleEstudiante);
+        Account ae1 = new Account("user1@user.com",bCryptPasswordEncoder.encode("user1"),false,roleUser);
         Account sae1 = accountRepository.save(ae1);
-        Account ae2 = new Account("user2@user.com",bCryptPasswordEncoder.encode("user2"),false,roleEstudiante);
+        Account ae2 = new Account("user2@user.com",bCryptPasswordEncoder.encode("user2"),false,roleUser);
         Account sae2 = accountRepository.save(ae2);
-        Account ae3 = new Account("user3@user.com",bCryptPasswordEncoder.encode("user3"),false,roleEstudiante);
+        Account ae3 = new Account("user3@user.com",bCryptPasswordEncoder.encode("user3"),false,roleUser);
         Account sae3 = accountRepository.save(ae3);
-        Account app1 = new Account("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),false,roleProfesor);
+        Account app1 = new Account("profesor1@profesor.com",bCryptPasswordEncoder.encode("profesor1"),false,roleUser);
         Account sapp1 = accountRepository.save(app1);
-        Account app2 = new Account("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),true,roleProfesor);
+        Account app2 = new Account("profesor2@profesor.com",bCryptPasswordEncoder.encode("profesor2"),true,roleUser);
         Account sapp2 = accountRepository.save(app2);
-        Account app3 = new Account("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),false,roleProfesor);
+        Account app3 = new Account("profesor3@profesor.com",bCryptPasswordEncoder.encode("profesor3"),false,roleUser);
         Account sapp3 = accountRepository.save(app3);
-        Account aee1 = new Account("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),false,roleEgresado);
+        Account aee1 = new Account("egresado1@egresado.com",bCryptPasswordEncoder.encode("egresado1"),false,roleUser);
         Account saee1 = accountRepository.save(aee1);
-        Account aee2 = new Account("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),true,roleEgresado);
+        Account aee2 = new Account("egresado2@egresado.com",bCryptPasswordEncoder.encode("egresado2"),true,roleUser);
         Account saee2 = accountRepository.save(aee2);
-        Account aee3 = new Account("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),false,roleEgresado);
+        Account aee3 = new Account("egresado3@egresado.com",bCryptPasswordEncoder.encode("egresado3"),false,roleUser);
         Account saee3 = accountRepository.save(aee3);
 
         User est1 = new User(c1, tagsUser,sae1,"Usuario 1",

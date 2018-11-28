@@ -65,7 +65,6 @@ public class UserForm {
     }
 
     @NotBlank
-    @Pattern(regexp = "^ESTUDIANTE|PROFESOR|EGRESADO$")
     public String getRole() {
         return role;
     }

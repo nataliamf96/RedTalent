@@ -181,7 +181,7 @@ public class UtilidadesService {
         //Para saber quién está authenticado
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         for (GrantedAuthority auth : authentication.getAuthorities()) {
-            if ("PROFESOR".equals(auth.getAuthority()) || "ESTUDIANTE".equals(auth.getAuthority()) ||"EGRESADO".equals(auth.getAuthority())) {
+            if ("USER".equals(auth.getAuthority())) {
                 res = "USER";
             }
             else if ("ADMIN".equals(auth.getAuthority())) {

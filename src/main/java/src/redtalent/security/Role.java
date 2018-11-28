@@ -19,7 +19,7 @@ public class Role extends DomainEntity {
     }
 
     @NotBlank
-    @Pattern(regexp = "^ESTUDIANTE|PROFESOR|EGRESADO|ADMIN|DIRECTIVO$")
+    @Pattern(regexp = "^USER|ADMIN|DIRECTIVO$")
     public String getRole() {
         return role;
     }

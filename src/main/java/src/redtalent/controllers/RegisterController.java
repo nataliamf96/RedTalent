@@ -81,7 +81,7 @@ public class RegisterController {
                 Account a = new Account();
                 a.setEmail(userForm.getEmail());
                 a.setPassword(bCryptPasswordEncoder.encode(userForm.getPassword()));
-                Role role = roleRepository.findByRole(userForm.getRole());
+                Role role = roleRepository.findByRole("USER");
                 Set<Role> roles = new HashSet<Role>();
                 roles.add(role);
                 a.setRoles(roles);

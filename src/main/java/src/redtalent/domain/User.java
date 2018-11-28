@@ -32,13 +32,15 @@ public class User extends DomainEntity{
     private Set<Comment> commentsReceived;
     private List<Evaluation> evaluations;
     private List<Evaluation> evaluationsReceived;
+    private List<Recomendation> recomendations;
+    private List<Recomendation> recomendationsReceived;
 
     //Constructors -----------------------------------------------
     public User(){
         super();
     }
 
-    public User(Curriculum curriculum,Set<Tag> tags,Account account, String fullname, List<Evaluation> evaluations, List<Evaluation> evaluationsReceived, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Comment> commentsReceived, Set<Reply> replies, String image){
+    public User(Curriculum curriculum,Set<Tag> tags,Account account, String fullname, List<Evaluation> evaluations, List<Evaluation> evaluationsReceived, List<Recomendation> recomendations, List<Recomendation> recomendationsReceived, Set<Project> projects, Set<Team> teams, Set<Application> applications, Set<Blog> blogs, Set<Forum> forums, Set<Comment> comments, Set<Comment> commentsReceived, Set<Reply> replies, String image){
         this.fullname = fullname;
         this.curriculum = curriculum;
         this.tags = tags;
@@ -55,6 +57,8 @@ public class User extends DomainEntity{
         this.account = account;
         this.commentsReceived = commentsReceived;
         this.evaluationsReceived = evaluationsReceived;
+        this.recomendations = recomendations;
+        this.recomendationsReceived = recomendationsReceived;
     }
 
     public Set<Project> getProjects() {
@@ -183,5 +187,21 @@ public class User extends DomainEntity{
 
     public void setEvaluationsReceived(List<Evaluation> evaluationsReceived) {
         this.evaluationsReceived = evaluationsReceived;
+    }
+
+    public List<Recomendation> getRecomendations() {
+        return recomendations;
+    }
+
+    public void setRecomendations(List<Recomendation> recomendations) {
+        this.recomendations = recomendations;
+    }
+
+    public List<Recomendation> getRecomendationsReceived() {
+        return recomendationsReceived;
+    }
+
+    public void setRecomendationsReceived(List<Recomendation> recomendationsReceived) {
+        this.recomendationsReceived = recomendationsReceived;
     }
 }

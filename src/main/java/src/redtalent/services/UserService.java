@@ -49,11 +49,15 @@ public class UserService {
         Set<Blog> s = new HashSet<Blog>();
         Set<Reply> r = new HashSet<Reply>();
         Set<Comment> c = new HashSet<Comment>();
+        Set<Comment> commentsReceived = new HashSet<>();
         Set<Tag> tags = new HashSet<Tag>();
         List<Evaluation> evaluations = new ArrayList<Evaluation>();
         List<Evaluation> evaluationsReceived = new ArrayList<Evaluation>();
         Curriculum curriculum = curriculumService.create();
+        List<Recomendation> recomendations = new ArrayList<>();
+        List<Recomendation> recomendationsReceived = new ArrayList<>();
         result.setApplications(ap);
+        result.setCommentsReceived(commentsReceived);
         result.setTags(tags);
         result.setTeams(ta);
         result.setProjects(pr);
@@ -63,6 +67,8 @@ public class UserService {
         result.setEvaluations(evaluations);
         result.setEvaluationsReceived(evaluationsReceived);
         result.setCurriculum(curriculum);
+        result.setRecomendations(recomendations);
+        result.setRecomendationsReceived(recomendationsReceived);
         return result;
     }
 
@@ -145,6 +151,18 @@ public class UserService {
     public User findUserByCommentsReceivedContains(Comment comment){
         Assert.notNull(comment, "Comment null");
         User result = userRepository.findUserByCommentsReceivedContains(comment);
+        return result;
+    }
+
+    public User findUserByRecomendationsContains(Recomendation recomendation){
+        Assert.notNull(recomendation, "Recomendation null");
+        User result = userRepository.findUserByRecomendationsContains(recomendation);
+        return result;
+    }
+
+    public User findUserByRecomendationsReceivedContains(Recomendation recomendation){
+        Assert.notNull(recomendation, "Recomendation null");
+        User result = userRepository.findUserByRecomendationsReceivedContains(recomendation);
         return result;
     }
 

@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:form="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Recomendación</title>
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="screen" />
+    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
+</head>
+<body class="bg-light">
+<div th:replace="masterpage/headerUser :: nav"></div>
+<br />
+<br />
+<div class="container py-4">
+    <h3 class="my-4">
+        Crea una nueva recomendación
+    </h3>
+    <div class="container-fluid">
+        <form th:action="@{/recomendation/create(userId=${userId})}" th:object="${recomendationForm}" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label for="text">Descripción</label>:
+                <textarea type="textarea" class="form-control" id="text" name="text" style="max-width: 350px; max-height: 300px" th:field="*{text}"/>
+                <li th:each="err : ${#fields.errors('text')}" th:text="${err}" />
+            </div>
+            <input type="submit" class="btn btn-info" name="save" value="Crear" />
+        </form>
+    </div>
+    <br />
+    <br />
+</div>
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

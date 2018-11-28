@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Recomendaciones</title>
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+</head>
+<body>
+<div th:replace="masterpage/headerUser :: nav"></div>
+<div class="container">
+    <br />
+    <br />
+    <h3>Recomendaciones</h3>
+    <div style="margin-top: 20px" class="row">
+        <div th:each="recomendation : ${recomendations}" class="col-12 portfolio-item">
+            <h5>Descripción</h5>
+            <span th:text="${recomendation.getText()}"></span>
+            <h5>Momento de publicación</h5>
+            <span th:text="${recomendation.getMoment()}"></span>
+            <a th:if="${userCreated.getRecomendations().contains(recomendation)}" th:href="@{/recomendation/delete(recomendationId=${recomendation.getId()})}"><i class="far fa-trash-alt"></i></a>
+        </div>
+    </div>
+</div>
+<br />
+<br />
+<br />
+<br />
+<div th:replace="masterpage/footer :: footer"></div>
+</body>
+</html>

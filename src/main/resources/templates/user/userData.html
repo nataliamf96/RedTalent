@@ -123,7 +123,7 @@
                         <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
                     </h6>
                     <h6 th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
-                        <span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span>
+                        <span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span><br />
                         <a style="color: black" th:href="${user.getCurriculum().getUrlLinkedin()}"><i class="fab fa-linkedin" style="color: #3b5999; font-size: 1.5em"></i></a>
                     </h6>
                     <div th:if="${user.getCurriculum().getRealized()==true}" style="border-top: grey solid 1px;margin-top: -23px;text-align: left;margin-left: 25px; margin-right: 25px" class='card-title'>
@@ -138,7 +138,7 @@
     <div class="row">
             <table class="table table-bordered table-active">
                 <thead>
-                    <tr style="text-align: center; color: white">
+                    <tr style="text-align: center; color: black">
                         <th onclick="verTablaProyecto()" scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos</th>
                         <th onclick="verTablaEquipo()" scope="col"> <i class="fas fa-users"></i>&nbsp;&nbsp;Equipos</th>
                         <th onclick="verTablaComentario()" scope="col"><i class="fas fa-comment"></i>&nbsp;&nbsp;Comentarios</th>

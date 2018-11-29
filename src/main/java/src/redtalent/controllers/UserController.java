@@ -306,7 +306,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/filtrarBlogsCategoriasResultado", method = RequestMethod.GET)
-    public ModelAndView filtrarBlogsCategoriasResultado(@RequestParam String category) {
+    public ModelAndView filtrarBlogsCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         result = new ModelAndView("user/filtrarBlogsCategoriasResultado");
@@ -320,12 +320,12 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+    @RequestMapping(value = "/filtrarProyectosCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        result = new ModelAndView("user/filtrarProyectosCategorias");
+        result = new ModelAndView("user/filtrarProyectosCategoriasResultado");
 
         if(category.isEmpty()){
             result.addObject("projects",projectService.findAll());
@@ -334,6 +334,24 @@ public class UserController {
         }
 
         result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("user/filtrarProyectosCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(projectService.findProjectsByCategorie_Name(c.getName()).size());
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
         return result;
     }
 

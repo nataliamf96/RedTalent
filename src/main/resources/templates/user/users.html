@@ -25,28 +25,32 @@
         <small>Red Talent</small>
     </h1>
     <div class="row">
-        <div th:each="u : ${users}" class="col-lg-3 col-sm-6 portfolio-item">
-            <div style="margin-top: -12px" class='card card-profile text-center'>
-            <img alt='' class='card-img-top' th:src="@{/images/color-img.jpg}">
-            <div class='card-block'>
-                <img alt='' class='card-img-profile' th:src="${u.getImage()}">
-                <h4 style="margin-top: -23px" class='card-title'>
-                    <i th:text="${u.getFullname()}" />
-                    <small th:text="${u.getAccount().getEmail()}"></small>
-                </h4>
-                <div class='card-links'>
-                    <a class='fa fa-dribbble' href='#'></a>
-                    <a class='fa fa-twitter' href='#'></a>
-                    <a class='fa fa-facebook' href='#'></a>
+        <div th:each="user : ${users}" class="col-lg-3 col-md-6 col-sm-12 portfolio-item">
+            <br />
+            <br />
+            <br />
+            <div style="margin-top: -12px" class='card card-profile text-center shadow-sm bg-white rounded'>
+                <img alt='' class='card-img-top' style="max-height: 80px" th:src="@{/images/color-img.jpg}">
+                <div class='card-block' style="margin-top: 47px">
+                    <img alt='' class='card-img-profile' style="width: 90px; height: 90px; border-width: 2px; border-color: white" th:src="${user.getImage()}">
+                    <h6 style="margin-top: -23px" class='card-title'>
+                        <span th:text="${user.getFullname()}" /> <br />
+                        <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
+                    </h6>
+                    <div th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
+                        <a style="font-family: Calibri;font-size: 0.9em;color: grey; margin: 5px" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                    </div>
+                    <div th:if="${user.getCurriculum().getRealized()==true}" class='card-links'>
+                        <a style="color: black" th:href="${user.getCurriculum().getUrlLinkedin()}"><i class="fab fa-linkedin" style="color: #3b5999"></i></a>
+                    </div>
                 </div>
             </div>
-        </div>
-        </div>
     </div>
     <br />
     <br />
     <br />
     <br />
+</div>
 </div>
 <div th:replace="masterpage/footer :: footer" />
 </body>

@@ -288,28 +288,35 @@ public class UserController {
 
 
     @RequestMapping(value = "/filtrarBlogsCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarBlogsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+    public ModelAndView filtrarBlogsCategorias() {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         result = new ModelAndView("user/filtrarBlogsCategorias");
-
-        if(category.isEmpty()){
-            result.addObject("blogs",blogService.findAll());
-        }else{
-            result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
-        }
-
         List<Category> categories = new ArrayList<Category>();
         List<Integer> cTam = new ArrayList<Integer>();
         for(Category c:categoryService.findAll()){
             categories.add(c);
-            cTam.add(blogService.findBlogsByCategory_Name(category).size());
+            cTam.add(blogService.findBlogsByCategory_Name(c.getName()).size());
         }
 
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("categories",categories);
         result.addObject("cTam",cTam);
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarBlogsCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarBlogsCategoriasResultado(@RequestParam String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("user/filtrarBlogsCategoriasResultado");
+        if(category.isEmpty()){
+            result.addObject("blogs",blogService.findAll());
+        }else{
+            result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
+        }
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
         return result;
     }
 

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Home</title>
+    <link rel="icon" href="/images/us.ico">
+    <link href="/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
+</div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div style="margin-top: -25px" class="container py-4">
+    <h1 class="my-4">Filtrado
+        <small>Blogs por Categoría</small>
+    </h1>
+    <div class="row">
+        <div class="col-12">
+            <div th:if="${forums.size()!=0}" class="row">
+                <div class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
+                    <div style="margin-top: 10px" class="row">
+                        <div th:each="forum : ${forums}" class="col-12" style="margin-bottom: 16px">
+                            <div class="card h-100">
+                                <div>
+                            <span th:each="user : ${users}" th:if="${user.getForums().contains(forum)}">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <a th:href="@{/user/dataUser(userId=${user.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}"></a>
+                                    </div>
+                                    <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                        <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
+                                        <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span th:if="${user.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                                    </div>
+                                </div>
+                            </span>
+                                </div>
+                                <a th:href="@{/forum/forum(forum=${forum.getId()})}"><img class="card-img-top" th:src="${forum.getImage()}"></a>
+                                <div class="card-body">
+                                    <h4 class="card-title">
+                                        <a th:href="@{/forum/forum(forumId=${forum.getId()})}" th:text="${forum.getTitle()}"></a>
+                                    </h4>
+                                    <p class="card-text" th:if="${forum.getBody().length() < 150}" th:text="${forum.getBody()}"></p>
+                                    <p class="card-text" th:if="${forum.getBody.length() >= 150}" th:text="${forum.getBody().substring(0,120).concat('...')}"></p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div style="min-height: 370px" th:if="${forums.size()==0}" class="row">
+                <div class="col-12">
+                    No existen Foros
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:replace="masterpage/footer :: footer" />
+</body>
+</html>

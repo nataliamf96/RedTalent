@@ -22,47 +22,24 @@
 </div>
 <div style="margin-top: -25px" class="container py-4">
     <h1 class="my-4">Filtrado
-        <small>Proyectos por Categorías</small>
+        <small>Proyectos por Categoría</small>
     </h1>
-    <div class="row">
-        <div class="col-12">
-            <form id="formulario">
-                <div class="form-group">
-                    <label>Nombre de la Categoría</label>:
-                    <input type="text" class="form-control" id="text" name="text" style="max-width: 350px"/>
-                </div>
-                <script>
-                    var formulario = document.getElementById('formulario');
-                    var text = document.getElementById('text');
-
-                    formulario.onsubmit = function(e){
-                        location = "/user/filtrarProyectosCategorias?category=" + encodeURIComponent(text.value);
-                        return false;
-                    }</script>
-                <input type="submit" class="btn btn-info" value="Buscar" />
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div th:each="project : ${projects}" class="col-lg-3 col-sm-6 portfolio-item">
-            <div class="card h-100">
-                <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+    <div style="margin-bottom: 50px" class="row">
+        <div th:each="categorie,iter : ${categories}" class="col-lg-3 col-sm-6 col-md-4" style="text-align: center">
+            <div style="width: 80%" class="card portfolio-item">
                 <div class="card-body">
-                    <h4 class="card-title">
-                        <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
-                    </h4>
-                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
-                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                    <a th:href="@{/user/filtrarProyectosCategoriasResultado(category=${categorie.getName()})}"><h5 th:text="${categorie.getName()}" class="card-title"></h5></a>
+                    <span th:if="${cTam.get(iter.index)==0}" th:text="${cTam.get(iter.index)}"></span>
+                    <span th:if="${cTam.get(iter.index)==1}" th:text="${cTam.get(iter.index).toString().concat(' '+' Proyecto')}"></span>
+                    <span th:if="${cTam.get(iter.index)>1}" th:text="${cTam.get(iter.index).toString().concat(' '+' Proyectos')}"></span>
                 </div>
             </div>
         </div>
     </div>
-
-    <br />
-    <br />
-    <br />
-    <br />
 </div>
+<br />
+<br />
+<br />
 <div th:replace="masterpage/footer :: footer" />
 </body>
 </html>

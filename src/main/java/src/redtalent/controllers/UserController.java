@@ -75,7 +75,7 @@ public class UserController {
     public ModelAndView index() {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User principal = userService.findByEmail(authentication.getName());
+        User user = utilidadesService.userConectado(authentication.getName());
         result = new ModelAndView("user/index");
         result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
         result.addObject("auth",utilidadesService.actorConectado());
@@ -140,13 +140,79 @@ public class UserController {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
-        Set<Project> projects = user.getProjects();
-        projects.addAll(utilidadesService.todosLosProyectosEnLosQueEstoy(user));
+        Set<Project> projectsParticipo = new HashSet<Project>();
+        Set<Project> projectsCreados = user.getProjects();
+        Set<Team> teamsParticipo = new HashSet<Team>();
+        Set<Team> teamsCreados = user.getTeams();
+        projectsParticipo.addAll(utilidadesService.todosLosProyectosEnLosQueEstoyAceptado(user));
+        teamsParticipo.addAll(utilidadesService.todosLosEquiposEnLosQueEstoyAceptado(user));
+
+        for(Project p:projectsParticipo){
+            if(p.getCerrado() == true){
+                projectsParticipo.remove(p);
+            }
+        }
+
+        for(Project p:projectsCreados){
+            if(p.getCerrado() == true){
+                projectsCreados.remove(p);
+            }
+        }
+
         result = new ModelAndView("user/userData");
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",user);
         result.addObject("users",userService.findAll());
-        result.addObject("projects", projects);
+        result.addObject("projectsParticipo", projectsParticipo);
+        result.addObject("projectsCreados", projectsCreados);
+        result.addObject("teamsParticipo", teamsParticipo);
+        result.addObject("teamsCreados", teamsCreados);
+        return result;
+    }
+
+    @RequestMapping(value = "/dataUser")
+    public ModelAndView dataUser(@RequestParam String userId) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("user/dataUser");
+        try{
+            User user = userService.findOne(userId.toString());
+            Set<Project> projectsParticipo = new HashSet<Project>();
+            Set<Project> projectsCreados = user.getProjects();
+            Set<Team> teamsParticipo = new HashSet<Team>();
+            Set<Team> teamsCreados = user.getTeams();
+            projectsParticipo.addAll(utilidadesService.todosLosProyectosEnLosQueEstoyAceptado(user));
+            teamsParticipo.addAll(utilidadesService.todosLosEquiposEnLosQueEstoyAceptado(user));
+
+            for(Project p:projectsParticipo){
+                if(p.getCerrado() == true || p.getEstado() == true){
+                    projectsParticipo.remove(p);
+                }
+            }
+
+            for(Project p:projectsCreados){
+                if(p.getCerrado() == true || p.getEstado() == true){
+                    projectsCreados.remove(p);
+                }
+            }
+
+            result = new ModelAndView("user/userData");
+            result.addObject("auth",utilidadesService.actorConectado());
+            result.addObject("user",user);
+            result.addObject("users",userService.findAll());
+            result.addObject("projectsParticipo", projectsParticipo);
+            result.addObject("projectsCreados", projectsCreados);
+            result.addObject("teamsParticipo", teamsParticipo);
+            result.addObject("teamsCreados", teamsCreados);
+        }catch(Throwable oops){
+            if(utilidadesService.actorConectado().equals("USER")){
+                result = new ModelAndView("redirect:/user/index");
+            }else if(utilidadesService.actorConectado().equals("ADMIN")){
+                result = new ModelAndView("redirect:/admin/index");
+            }else if(utilidadesService.actorConectado().equals("ADMIN")){
+                result = new ModelAndView("redirect:/directivo/index");
+            }
+        }
         return result;
     }
 

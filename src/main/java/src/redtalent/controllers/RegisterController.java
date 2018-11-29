@@ -70,9 +70,7 @@ public class RegisterController {
             result = createEditModelAndViewUser(userForm);
         else if (!userForm.getTerms())
             result = createEditModelAndViewUser(userForm, "Debe de Aceptar los Términos");
-        else if(userForm.getRole().equals("ADMIN") || userForm.getRole().equals("DIRECTIVO")){
-            result = createEditModelAndViewUser(userForm, "Acción denegada");
-        }else if(utilidadesService.allEmails().contains(userForm.getEmail())){
+        else if(utilidadesService.allEmails().contains(userForm.getEmail())){
             result = createEditModelAndViewUser(userForm, "Email Existente");
         }
         else

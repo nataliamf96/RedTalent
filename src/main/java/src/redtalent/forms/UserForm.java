@@ -64,7 +64,6 @@ public class UserForm {
         this.fullname = fullname;
     }
 
-    @NotBlank
     public String getRole() {
         return role;
     }

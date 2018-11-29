@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Mis Datos</title>
+    <title>Datos del Usuario</title>
     <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
@@ -94,7 +94,7 @@
                         <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
                     </h6>
                     <h6 th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
-                        <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span></a><br />
+                        <span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span><br />
                         <a style="color: black" th:href="${user.getCurriculum().getUrlLinkedin()}"><i class="fab fa-linkedin" style="color: #3b5999; font-size: 1.5em"></i></a>
                     </h6>
                     <div th:if="${user.getTags().size() != 0}" style="margin-top: -30px;text-align: left;margin-left: 25px; margin-right: 25px" class='card-title'>
@@ -116,17 +116,17 @@
 </div>
 <div class="container">
     <div class="row">
-            <table class="table table-bordered table-active">
-                <thead>
-                    <tr style="text-align: center; color: black">
-                        <th onclick="verTablaProyecto()" scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos</th>
-                        <th onclick="verTablaEquipo()" scope="col"> <i class="fas fa-users"></i>&nbsp;&nbsp;Equipos</th>
-                        <th onclick="verTablaComentario()" scope="col"><i class="fas fa-comment"></i>&nbsp;&nbsp;Comentarios</th>
-                        <th onclick="verTablaRecomendacion()" scope="col"><i class="fas fa-comment-dots"></i>&nbsp;&nbsp;Recomendaciones</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+        <table class="table table-bordered table-active">
+            <thead>
+            <tr style="text-align: center; color: black">
+                <th onclick="verTablaProyecto()" scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos</th>
+                <th onclick="verTablaEquipo()" scope="col"> <i class="fas fa-users"></i>&nbsp;&nbsp;Equipos</th>
+                <th onclick="verTablaComentario()" scope="col"><i class="fas fa-comment"></i>&nbsp;&nbsp;Comentarios</th>
+                <th onclick="verTablaRecomendacion()" scope="col"><i class="fas fa-comment-dots"></i>&nbsp;&nbsp;Recomendaciones</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
     <div class="row">
         <div class="col-12">
             <hr />
@@ -140,7 +140,7 @@
             <thead>
             <tr style="text-align: center; color: black">
                 <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos Creados</th>
-                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos Participo</th>
+                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos Participa</th>
             </tr>
             </thead>
         </table>
@@ -185,7 +185,7 @@
             </div>
         </div>
     </div>
-    </div>
+</div>
 </div>
 <div id="tablaEquipos" style="display: none" class="container">
     <h2>Equipos</h2>
@@ -194,7 +194,7 @@
             <thead>
             <tr style="text-align: center; color: black">
                 <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Equipos Creados</th>
-                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Equipos Participo</th>
+                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Equipos Participa</th>
             </tr>
             </thead>
         </table>
@@ -202,7 +202,7 @@
     <div class="row">
         <div class="col-6">
             <div th:if="${teamsCreados.size() == 0}" class="row">
-                <p style="margin-left: 16px;font-family: Calibri">No tienes equipos creados</p>
+                <p style="margin-left: 16px;font-family: Calibri">No tiene equipos creados</p>
             </div>
             <div style="margin-top: +20px" th:if="${teamsCreados.size() != 0}" class="row">
                 <div th:each="team : ${teamsCreados}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
@@ -221,7 +221,7 @@
         </div>
         <div class="col-6">
             <div th:if="${teamsParticipo.size() == 0}" class="row">
-                <p style="margin-left: 16px;font-family: Calibri">No tienes equipos creados</p>
+                <p style="margin-left: 16px;font-family: Calibri">No tiene equipos creados</p>
             </div>
             <div style="margin-top: +20px" th:if="${teamsParticipo.size() != 0}" class="row">
                 <div th:each="team : ${teamsParticipo}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
@@ -255,7 +255,7 @@
                             </div>
                             <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
                                 <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
-                                <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                                <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
                             </div>
                         </div>
                     </span>
@@ -273,7 +273,7 @@
 <div id="tablaRecomendaciones" style="display: none" class="container">
     <h2>Recomendaciones</h2>
     <div th:if="${user.getRecomendationsReceived().size() == 0}" class="row">
-        <p style="margin-left: 16px;font-family: Calibri">No tiene recomendaciones recibidos</p>
+        <p style="margin-left: 16px;font-family: Calibri">No tiene recomendaciones recibidas</p>
     </div>
     <div style="margin-top: +20px" th:if="${user.getRecomendationsReceived().size() != 0}" class="row">
         <div th:each="comment : ${user.getRecomendationsReceived()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
@@ -285,7 +285,7 @@
                             </div>
                             <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
                                 <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
-                                <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                                <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
                             </div>
                         </div>
                     </span>

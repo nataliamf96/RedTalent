@@ -104,6 +104,35 @@ public class UtilidadesService {
         return result;
     }
 
+    public Set<Project> todosLosProyectosEnLosQueEstoyAceptado(User user){
+        Set<Project> result = new HashSet<Project>();
+
+        for(Team t : teamService.findAll()){
+            for(Application a : user.getApplications()){
+                if(t.getApplications().contains(a) && a.getStatus().equals("ACCEPTED")){
+                    Project p = t.getProjects().get(0);
+                    result.add(p);
+                }
+            }
+        }
+
+        return result;
+    }
+
+    public Set<Team> todosLosEquiposEnLosQueEstoyAceptado(User user){
+        Set<Team> result = new HashSet<Team>();
+
+        for(Team t : teamService.findAll()){
+            for(Application a : user.getApplications()){
+                if(t.getApplications().contains(a) && a.getStatus().equals("ACCEPTED")){
+                    result.add(t);
+                }
+            }
+        }
+
+        return result;
+    }
+
     public List<String> allEmails(){
         List<String> result = new ArrayList<String>();
         List<String> a = accountRepository.findAll().stream().map(z->z.getEmail()).collect(Collectors.toList());

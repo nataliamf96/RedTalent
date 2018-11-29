@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
     <title>Home</title>
     <link rel="icon" href="/images/us.ico">
@@ -9,18 +9,7 @@
     <link href="/css/all.min.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-<div th:if="${auth.equals('USER')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
-</div>
-<div th:if="${auth.equals('ADMIN')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
-</div>
-<div th:if="${auth.equals('DIRECTIVO')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
-</div>
-<div th:if="${auth.equals('')}">
-    <div th:replace="masterpage/header :: nav"></div>
-</div>
+<div th:replace="masterpage/headerUser :: nav"></div>
 <div style="margin-top: -25px" class="container py-4">
     <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-12 portfolio-item">
@@ -35,14 +24,14 @@
                         <span th:text="${user.getFullname()}" /> <br />
                         <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
                     </h6>
-                    <h6 th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
-                        <span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span>
-                    </h6>
+                    <div th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
+                        <a style="font-family: Calibri;font-size: 0.9em;color: grey; margin: 5px" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                    </div>
                     <div th:if="${user.getCurriculum().getRealized()==true}" class='card-links'>
                         <a style="color: black" th:href="${user.getCurriculum().getUrlLinkedin()}"><i class="fab fa-linkedin" style="color: #3b5999"></i></a>
                     </div>
                     <div th:if="${user.getCurriculum().getRealized()==false}" class='card-links'>
-                       Esto es una url para crear curriculum
+                        Esto es una url para crear curriculum
                     </div>
                 </div>
             </div>
@@ -57,11 +46,11 @@
                             <span th:each="user : ${users}" th:if="${user.getProjects().contains(project)}">
                                 <div class="row">
                                     <div class="col-1">
-                                        <img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}">
+                                        <a th:href="@{/user/dataUser(userId=${user.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}"></a>
                                     </div>
                                     <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-11">
-                                        <b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b>
-                                        <span th:if="${user.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span>
+                                        <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
+                                        <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span th:if="${user.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
                                     </div>
                                 </div>
                             </span>
@@ -71,8 +60,8 @@
                             <h4 class="card-title">
                                 <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                             </h4>
-                                <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
-                                <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                            <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                            <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
                             <h5>Perfiles Requeridos</h5>
                             <p class="card-text" th:if="${project.getRequiredProfiles().length() < 150}" th:text="${project.getRequiredProfiles()}"></p>
                             <p class="card-text" th:if="${project.getRequiredProfiles().length() >= 150}" th:text="${project.getRequiredProfiles().substring(0,120).concat('...')}"></p>
@@ -89,14 +78,13 @@
                 <div th:each="u : ${usuariosMejorValorados}" class="col-12">
                     <div style="background-color: whitesmoke" class="row py-3">
                         <div class="col-3">
-                            <img alt='' class='card-img-profile' style="width: 40px; height: 40px;border-radius: 50%; border-width: 2px; border-color: white" th:src="${u.getImage()}">
+                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 40px; height: 40px;border-radius: 50%; border-width: 2px; border-color: white; margin-top: 7px" th:src="${u.getImage()}"></a>
                         </div>
                         <div class="col-9">
-                            <b style="color:#6c757d;font-family: Calibri"><span th:text="${u.getFullname()}" /></b> <br />
-                            <span th:if="${u.getCurriculum().getRealized()==true}" style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -7px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
+                            <a th:if="${u.getCurriculum().getRealized()==true}" th:href="@{/user/dataUser(userId=${u.getId()})}"><b style="color:#6c757d;font-family: Calibri"><span th:text="${u.getFullname()}" /></b></a> <br />
+                            <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span  style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -5px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
                         </div>
                     </div>
-                    <br />
                 </div>
             </div>
         </div>

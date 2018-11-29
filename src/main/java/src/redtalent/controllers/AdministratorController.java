@@ -4,15 +4,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.util.Assert;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
-import src.redtalent.domain.Account;
-import src.redtalent.domain.Administrator;
-import src.redtalent.domain.Tag;
-import src.redtalent.domain.User;
+import src.redtalent.domain.*;
 import src.redtalent.forms.UpdateAdminForm;
 import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
@@ -41,6 +39,8 @@ public class AdministratorController {
     private AccountRepository accountRepository;
     @Autowired
     private TagService tagService;
+    @Autowired
+    private AlertService alertService;
 
     public AdministratorController(){
         super();
@@ -154,6 +154,38 @@ public class AdministratorController {
         result = new ModelAndView("admin/verTags");
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("tags",tagService.findAll());
+
+        return result;
+    }
+
+    @RequestMapping(value = "/deleteProject", method = RequestMethod.GET)
+    public ModelAndView borrarProyecto(@RequestParam String projectId) {
+        ModelAndView result;
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User user = utilidadesService.userConectado(authentication.getName());
+
+        try{
+            Project project = projectService.findOne(projectId);
+            project.setCerrado(true);
+
+            List<Alert> listaAlertas = project.getAlerts();
+            Alert newAlert = alertService.create();
+            String alerta = "[code:bp]El proyecto " +project.getName()+ " ha sido eliminado por contenido inapropiado. Para más información contacte con el administrador del sistema.";
+            newAlert.setText(alerta);
+            Alert alertSave = alertService.save(newAlert);
+            listaAlertas.add(alertSave);
+            project.setAlerts(listaAlertas);
+
+            Project savee = projectService.save(project);
+
+            projectService.saveAll(savee);
+
+            result = new ModelAndView("redirect:/user/index");
+            result.addObject("auth",utilidadesService.actorConectado());
+        }catch (Throwable oops){
+            result = new ModelAndView("redirect:/403");
+        }
 
         return result;
     }

@@ -13,16 +13,18 @@ public class Curriculum extends DomainEntity{
     private String urlLinkedin;
     private Grade grade;
     private String description;
+    private String userType;
     private Boolean realized;
 
     public Curriculum(){
         super();
     }
 
-    public Curriculum(String urlLinkedin, Grade grade, String description, Boolean realized){
+    public Curriculum(String urlLinkedin, Grade grade, String description, String userType, Boolean realized){
         this.urlLinkedin = urlLinkedin;
         this.grade = grade;
         this.description = description;
+        this.userType = userType;
         this.realized = realized;
     }
 
@@ -57,5 +59,13 @@ public class Curriculum extends DomainEntity{
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

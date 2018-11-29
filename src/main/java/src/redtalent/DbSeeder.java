@@ -775,6 +775,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade1,
                 "Estudiante de 4º curso.",
+                "Estudiante",
                 true
         );
 
@@ -782,6 +783,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade2,
                 "Estudiante de 4º curso.",
+                "Estudiante",
                 true
         );
 
@@ -789,6 +791,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade3,
                 "Estudiante de 4º curso.",
+                "Estudiante",
                 true
         );
 
@@ -796,6 +799,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade4,
                 "Estudiante de 4º curso.",
+                "Egresado",
                 true
         );
 
@@ -803,6 +807,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade5,
                 "Estudiante de 4º curso.",
+                "Estudiante",
                 true
         );
 
@@ -810,6 +815,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade6,
                 "Estudiante de 4º curso.",
+                "Docente",
                 true
         );
 
@@ -817,6 +823,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade7,
                 "Estudiante de 4º curso.",
+                "Egresado",
                 true
         );
 
@@ -824,6 +831,7 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade8,
                 "Estudiante de 4º curso.",
+                "Docente",
                 true
         );
 
@@ -831,11 +839,13 @@ public class DbSeeder implements CommandLineRunner{
                 null,
                 grade9,
                 "Estudiante de 4º curso.",
+                "Egresado",
                 true
         );
 
         List<Curriculum> curriculums = Arrays.asList(c1, c2, c3, c4, c5, c6, c7, c8, c9);
         curriculumRepository.saveAll(curriculums);
+
 
         //Recomendations -----------------------------------
 

@@ -10,6 +10,7 @@ public class CurriculumForm {
 
     private String urlLinkedin;
     private String grade;
+    private String userType;
     private String description;
 
     public CurriculumForm(){
@@ -34,12 +35,21 @@ public class CurriculumForm {
         this.grade = grade;
     }
 
-    @NotNull
+    @NotBlank
     public String getDescription() {
         return description;
     }
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @NotBlank
+    public String getUserType() {
+        return userType;
+    }
+
+    public void setUserType(String userType) {
+        this.userType = userType;
     }
 }

@@ -477,6 +477,7 @@ public class UserController {
                 curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
                 curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
                 curriculum.setDescription(curriculumForm.getDescription());
+                curriculum.setUserType(curriculumForm.getUserType());
                 curriculum.setRealized(true);
                 Curriculum csave = curriculumService.save(curriculum);
 
@@ -513,6 +514,7 @@ public class UserController {
                 curriculum.setUrlLinkedin(curriculumForm.getUrlLinkedin());
                 curriculum.setGrade(gradeService.findOne(curriculumForm.getGrade()));
                 curriculum.setDescription(curriculumForm.getDescription());
+                curriculum.setUserType(curriculumForm.getUserType());
                 Curriculum csave = curriculumService.save(curriculum);
 
                 user.setCurriculum(csave);

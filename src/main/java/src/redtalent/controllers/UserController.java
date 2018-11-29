@@ -18,7 +18,9 @@ import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -298,7 +300,16 @@ public class UserController {
             result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
         }
 
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(blogService.findBlogsByCategory_Name(category).size());
+        }
+
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
         return result;
     }
 

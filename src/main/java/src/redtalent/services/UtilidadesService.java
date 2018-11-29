@@ -51,7 +51,7 @@ public class UtilidadesService {
     public Set<User> usuariosPorArea(Area area){
         Set<User> result = new HashSet<User>();
         for(User user : userService.findAll()){
-            if(user.getCurriculum()!=null){
+            if(user.getCurriculum().getRealized()==true){
                     if(area.getDepartaments().contains(departmentService.findDepartmentByGradesContains(user.getCurriculum().getGrade()))){
                         result.add(user);
                     }

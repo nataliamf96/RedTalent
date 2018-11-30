@@ -39,7 +39,7 @@
             </div>
             <b style="color: red" th:text="${message}" />
             <label for="description">Descripción</label>:
-            <input type="textarea" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
+            <textarea class="form-control" id="description" name="description" rows="5" style="max-width: 350px" th:field="*{description}"/>
             <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
             <br />
             <br />

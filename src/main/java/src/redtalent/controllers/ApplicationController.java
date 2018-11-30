@@ -58,23 +58,26 @@ public class ApplicationController{
     }
 
     @RequestMapping(value = "/solicitudesEquipo", method = RequestMethod.GET)
-    public ModelAndView solicitudesEquipo(@RequestParam ObjectId teamId) {
+    public ModelAndView solicitudesEquipo() {
         ModelAndView result;
         result = new ModelAndView("application/solicitudesEquipo");
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Team team = teamService.findOne(teamId.toString());
+        User user = userService.findByEmail(authentication.getName());
         List<Project> projects = new ArrayList<Project>();
-        team.getApplications().stream().forEach(x->projects.add(teamService.findTeamByApplicationsContaining(x).getProjects().get(0)));
         List<Team> teams = new ArrayList<Team>();
-        team.getApplications().stream().forEach(x->teams.add(teamService.findTeamByApplicationsContaining(x)));
         List<User> users = new ArrayList<User>();
+        List<Application> applications = new ArrayList<Application>();
+        for(Team team : user.getTeams()){
+        team.getApplications().stream().forEach(x->projects.add(teamService.findTeamByApplicationsContaining(x).getProjects().get(0)));
+        team.getApplications().stream().forEach(x->teams.add(teamService.findTeamByApplicationsContaining(x)));
         team.getApplications().stream().forEach(x->users.add(userService.findUserByApplicationsContains(x)));
-
+        team.getApplications().stream().forEach(x->applications.add(x));
+        }
         result.addObject("users", users);
         result.addObject("teams", teams);
         result.addObject("projects", projects);
-        result.addObject("applications", team.getApplications());
+        result.addObject("applications", applications);
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("requestURI", "application/list");
 

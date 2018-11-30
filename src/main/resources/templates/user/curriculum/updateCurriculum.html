@@ -17,15 +17,15 @@
         <form th:action="@{/user/curriculum/updateCurriculum}" th:object="${curriculumForm}" method="post">
             <div class="form-group">
                 <label for="urlLinkedin">URL Linkedin</label>:
-                <input type="text" class="form-control" id="urlLinkedin" name="urlLinkedin" th:field="*{urlLinkedin}" style="max-width: 350px"/>
+                <input type="text" class="form-control" id="urlLinkedin" name="urlLinkedin" style="max-width: 350px" th:field="*{urlLinkedin}"/>
                 <li th:each="err : ${#fields.errors('urlLinkedin')}" th:text="${err}" />
         </div>
             <div class="form-group">
-                <select style="max-width: 350px" id="userType" name="userType" class="form-control">
+                <select style="max-width: 350px" id="userType" name="userType" class="form-control" th:field="*{userType}">
                     <option value="0">Seleccione su cargo</option>
                     <option value="Estudiante">Estudiante</option>
-                    <option value="Estudiante">Docente</option>
-                    <option value="Estudiante">Egresado</option>
+                    <option value="Docente">Docente</option>
+                    <option value="Egresado">Egresado</option>
                 </select>
                 <li th:each="err : ${#fields.errors('userType')}" th:text="${err}" />
             </div>
@@ -40,7 +40,7 @@
             </div>
             <b style="color: red" th:text="${message}" />
             <label for="description">Descripción</label>:
-            <input type="textarea" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
+            <textarea type="text" class="form-control" id="description" name="description" style="max-width: 350px" rows="5" th:field="*{description}"/>
             <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
             <br />
             <br />

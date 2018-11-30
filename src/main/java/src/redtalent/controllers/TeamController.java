@@ -88,6 +88,7 @@ public class TeamController {
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("usuariosTeam", usuariosTeam);
         result.addObject("userP", userP);
+        result.addObject("users", userService.findAll());
 
         return result;
     }

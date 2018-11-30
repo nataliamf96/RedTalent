@@ -37,9 +37,9 @@
                 </thead>
                 <tbody>
                 <tr th:each="applicationn,iter : ${applications}">
-                    <th style="background-color: red" th:if="${applicationn.getStatus() == 'DENIED'}" scope="row" th:text="${iter.index}"></th>
-                    <th style="background-color: green" th:if="${applicationn.getStatus() == 'ACCEPTED'}" scope="row" th:text="${iter.index}"></th>
-                    <th style="background-color: yellow" th:if="${applicationn.getStatus() == 'PENDING'}" scope="row" th:text="${iter.index}"></th>
+                    <th style="background-color: red" th:if="${applicationn.getStatus() == 'DENEGADO'}" scope="row" th:text="${iter.index}"></th>
+                    <th style="background-color: green" th:if="${applicationn.getStatus() == 'ACEPTADO'}" scope="row" th:text="${iter.index}"></th>
+                    <th style="background-color: yellow" th:if="${applicationn.getStatus() == 'PENDIENTE'}" scope="row" th:text="${iter.index}"></th>
                     <td th:text="${applicationn.getStatus()}"></td>
                     <td th:text="${#dates.format(applicationn.getMoment(), 'dd/MM/yyyy')}"></td>
                     <td th:text="${projects.get(iter.index).getName()}"></td>

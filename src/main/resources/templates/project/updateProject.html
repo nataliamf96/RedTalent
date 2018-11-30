@@ -43,7 +43,7 @@
             </div>
             <div class="form-group">
                 <label for="description">Descripcion</label>:
-                <input type="text" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
+                <textarea type="text" class="form-control" id="description" name="description" style="max-width: 350px" th:field="*{description}"/>
                 <li th:each="err : ${#fields.errors('description')}" th:text="${err}" />
             </div>
             <div class="form-group">
@@ -55,14 +55,16 @@
             </div>
             <div class="form-group">
                 <label for="requiredProfiles">Perfiles Demandados</label>:
-                <input type="text" class="form-control" id="requiredProfiles" name="requiredProfiles" style="max-width: 350px" th:field="*{requiredProfiles}"/>
+                <textarea type="textarea" class="form-control" id="requiredProfiles" name="requiredProfiles" style="max-width: 350px" th:field="*{requiredProfiles}"/>
                 <li th:each="err : ${#fields.errors('requiredProfiles')}" th:text="${err}" />
             </div>
             <div class="form-group">
                 <label for="privado">Visibilidad</label>:
                 <select style="max-width: 350px" id="privado" name="privado" class="form-control">
-                    <option value="true">Privado</option>
-                    <option value="false">Público</option>
+                    <option th:if="${projectForm.getPrivado().equals(false)}" class="active" value="false">Público</option>
+                    <option th:if="${projectForm.getPrivado().equals(true)}" class="active" value="true">Privado</option>
+                    <option th:if="${!projectForm.getPrivado().equals(false)}" value="false">Público</option>
+                    <option th:if="${!projectForm.getPrivado().equals(true)}" value="true">Privado</option>
                 </select>
             </div>
             <div class="form-group">

@@ -26,7 +26,7 @@ public class ApplicationService {
         Application result = new Application();
         java.util.Date fecha = new Date();
         result.setMoment(fecha);
-        result.setStatus("PENDING");
+        result.setStatus("PENDIENTE");
         return result;
     }
 

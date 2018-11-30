@@ -173,7 +173,7 @@ public class ApplicationController{
         User user = utilidadesService.userConectado(authentication.getName());
 
         Application a = applicationService.findOne(applicationId.toString());
-        a.setStatus("ACCEPTED");
+        a.setStatus("ACEPTADO");
         Application savee = applicationService.save(a);
 
         //Usuario creador Application

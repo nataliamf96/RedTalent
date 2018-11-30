@@ -999,15 +999,15 @@ public class DbSeeder implements CommandLineRunner{
 
         Application application1 = new Application(
                 moment,
-                "PENDING");
+                "PENDIENTE");
 
         Application application2 = new Application(
                 moment,
-                "ACCEPTED");
+                "ACEPTADO");
 
         Application application3 = new Application(
                 moment,
-                "ACCEPTED");
+                "ACEPTADO");
 
 
         Application ap1 = applicationRepository.save(application1);

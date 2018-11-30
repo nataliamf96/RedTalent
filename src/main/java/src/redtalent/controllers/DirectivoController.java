@@ -20,7 +20,9 @@ import src.redtalent.security.Role;
 import src.redtalent.services.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -104,19 +106,106 @@ public class DirectivoController {
     }
 
     @RequestMapping(value = "/filtrarBlogsCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarBlogsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+    public ModelAndView filtrarBlogsCategorias() {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         result = new ModelAndView("directivo/filtrarBlogsCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(blogService.findBlogsByCategory_Name(c.getName()).size());
+        }
 
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarBlogsCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarBlogsCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("directivo/filtrarBlogsCategoriasResultado");
         if(category.isEmpty()){
             result.addObject("blogs",blogService.findAll());
         }else{
             result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
         }
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("directivo/filtrarProyectosCategoriasResultado");
+
+        if(category.isEmpty()){
+            result.addObject("projects",projectService.findAll());
+        }else{
+            result.addObject("projects",projectService.findProjectsByCategorie_Name(category));
+        }
 
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("directivo/filtrarForumsCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(forumService.findForumsByCategory_Name(c.getName()).size());
+        }
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("directivo/filtrarForumsCategoriasResultado");
+
+        if(category.isEmpty()){
+            result.addObject("forums",forumService.findAll());
+        }else{
+            result.addObject("forums",forumService.findForumsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("directivo/filtrarProyectosCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(projectService.findProjectsByCategorie_Name(c.getName()).size());
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
         return result;
     }
 
@@ -156,23 +245,6 @@ public class DirectivoController {
         return result;
     }
 
-    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
-        ModelAndView result;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        result = new ModelAndView("directivo/filtrarProyectosCategorias");
-
-        if(category.isEmpty()){
-            result.addObject("projects",projectService.findAll());
-        }else{
-            result.addObject("projects",projectService.findProjectsByCategorie_Name(category));
-        }
-
-        result.addObject("auth",utilidadesService.actorConectado());
-        return result;
-    }
-
     @RequestMapping(value = "/filtrarPerfilArea", method = RequestMethod.GET)
     public ModelAndView filtrarPerfilArea(@RequestParam(value = "area", defaultValue = "") String area) {
         ModelAndView result;
@@ -185,23 +257,6 @@ public class DirectivoController {
         }else{
             Area a = areaService.findOne(area);
             result.addObject("users",utilidadesService.usuariosPorArea(a));
-        }
-
-        result.addObject("auth",utilidadesService.actorConectado());
-        return result;
-    }
-
-    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarForumsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
-        ModelAndView result;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        result = new ModelAndView("directivo/filtrarForumsCategorias");
-
-        if(category.isEmpty()){
-            result.addObject("forums",forumService.findAll());
-        }else{
-            result.addObject("forums",forumService.findForumsByCategory_Name(category));
         }
 
         result.addObject("auth",utilidadesService.actorConectado());

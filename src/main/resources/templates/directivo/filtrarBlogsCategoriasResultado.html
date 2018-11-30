@@ -22,17 +22,17 @@
 </div>
 <div style="margin-top: -25px" class="container py-4">
     <h1 class="my-4">Filtrado
-        <small>Foros por Categoría</small>
+        <small>Blogs por Categoría</small>
     </h1>
     <div class="row">
         <div class="col-12">
-            <div th:if="${forums.size()!=0}" class="row">
+            <div th:if="${blogs.size()!=0}" class="row">
                 <div class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
                     <div style="margin-top: 10px" class="row">
-                        <div th:each="forum : ${forums}" class="col-12" style="margin-bottom: 16px">
+                        <div th:each="blog : ${blogs}" class="col-12" style="margin-bottom: 16px">
                             <div class="card h-100">
                                 <div>
-                            <span th:each="user : ${users}" th:if="${user.getForums().contains(forum)}">
+                            <span th:each="user : ${users}" th:if="${user.getBlogs().contains(blog)}">
                                 <div class="row">
                                     <div class="col-2">
                                         <a th:href="@{/user/dataUser(userId=${user.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}"></a>
@@ -44,22 +44,22 @@
                                 </div>
                             </span>
                                 </div>
-                                <a th:href="@{/forum/forum(forum=${forum.getId()})}"><img class="card-img-top" th:src="${forum.getImage()}"></a>
+                                <a th:href="@{/blog/blog(blogId=${blog.getId()})}"><img class="card-img-top" th:src="${blog.getImage()}"></a>
                                 <div class="card-body">
                                     <h4 class="card-title">
-                                        <a th:href="@{/forum/forum(forumId=${forum.getId()})}" th:text="${forum.getTitle()}"></a>
+                                        <a th:href="@{/blog/blog(blogId=${blog.getId()})}" th:text="${blog.getTitle()}"></a>
                                     </h4>
-                                    <p class="card-text" th:if="${forum.getBody().length() < 150}" th:text="${forum.getBody()}"></p>
-                                    <p class="card-text" th:if="${forum.getBody().length() >= 150}" th:text="${forum.getBody().substring(0,120).concat('...')}"></p>
+                                    <p class="card-text" th:if="${blog.getBody().length() < 150}" th:text="${blog.getBody()}"></p>
+                                    <p class="card-text" th:if="${blog.getBody().length() >= 150}" th:text="${blog.getBody().substring(0,120).concat('...')}"></p>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="min-height: 370px" th:if="${forums.size()==0}" class="row">
+            <div style="min-height: 370px" th:if="${blogs.size()==0}" class="row">
                 <div class="col-12">
-                    No existen Foros
+                    No existen Blogs
                 </div>
             </div>
         </div>

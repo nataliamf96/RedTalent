@@ -77,12 +77,17 @@ public class TeamController {
     public ModelAndView team(@RequestParam ObjectId teamId) {
         ModelAndView result;
         result = new ModelAndView("team/teamData");
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        User userP = userService.findByEmail(authentication.getName());
+
         Team team = teamService.findOne(teamId.toString());
         List<User> usuariosTeam = utilidadesService.usuariosDelEquipo(team);
 
         result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("usuariosTeam", usuariosTeam);
+        result.addObject("userP", userP);
 
         return result;
     }

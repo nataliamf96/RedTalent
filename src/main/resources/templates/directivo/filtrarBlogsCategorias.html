@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Blogs Por Categorías</title>
+    <title>Home</title>
     <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
@@ -12,10 +12,10 @@
     <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
 <div th:if="${auth.equals('ADMIN')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
 </div>
 <div th:if="${auth.equals('DIRECTIVO')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
 </div>
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
@@ -24,36 +24,22 @@
     <h1 class="my-4">Filtrado
         <small>Blogs por Categoría</small>
     </h1>
-    <div class="row">
-        <div class="col-12">
-            <form id="formulario">
-                <div class="form-group">
-                    <label>Nombre de la Categoría</label>:
-                    <input type="text" class="form-control" id="text" name="text" style="max-width: 350px"/>
+    <div style="margin-bottom: 50px" class="row">
+        <div th:each="categorie,iter : ${categories}" class="col-lg-3 col-sm-6 col-md-4" style="text-align: center">
+            <div style="width: 80%" class="card portfolio-item">
+                <div class="card-body">
+                    <a th:href="@{/user/filtrarBlogsCategoriasResultado(category=${categorie.getName()})}"><h5 th:text="${categorie.getName()}" class="card-title"></h5></a>
+                    <span th:if="${cTam.get(iter.index)==0}" th:text="${cTam.get(iter.index)}"></span>
+                    <span th:if="${cTam.get(iter.index)==1}" th:text="${cTam.get(iter.index).toString().concat(' '+' Blog')}"></span>
+                    <span th:if="${cTam.get(iter.index)>1}" th:text="${cTam.get(iter.index).toString().concat(' '+' Blogs')}"></span>
                 </div>
-                <script>
-                    var formulario = document.getElementById('formulario');
-                    var text = document.getElementById('text');
-
-                    formulario.onsubmit = function(e){
-                        location = "/user/filtrarBlogsCategorias?category=" + encodeURIComponent(text.value);
-                        return false;
-                    }</script>
-                <input type="submit" class="btn btn-info" value="Buscar" />
-            </form>
+            </div>
         </div>
     </div>
-    <div class="row">
-        <div th:each="blog : ${blogs}" class="col-lg-6 col-sm-6 portfolio-item">
-            <b th:text="${blog.getTitle()}"></b>
-        </div>
-    </div>
-
-    <br />
-    <br />
-    <br />
-    <br />
 </div>
+<br />
+<br />
+<br />
 <div th:replace="masterpage/footer :: footer" />
 </body>
 </html>

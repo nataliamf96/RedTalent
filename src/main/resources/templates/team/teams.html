@@ -41,20 +41,15 @@
         <small>Red Talent</small>
     </h1>
     <div class="row">
-        <div th:each="team : ${teams}" class="col-lg-4 col-sm-6 portfolio-item">
-            <div style="margin-top: -12px" class='card card-profile text-center'>
-                <img class="card-img-top" th:src="@{/images/color-img2.jpg}">
-                <div class='card-block'>
-                    <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img alt='' class='card-img-profile2' th:src="${team.getImage()}"></a>
-                    <h4 style="margin-top: -23px" class='card-title'>
-                        <a th:href="@{/team/teamData(teamId=${team.getId()})}"><i th:text="${team.getName()}" /></a>
-                        <small th:text="${team.getDescription()}"></small>
+        <div th:each="team : ${teams}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
+            <div class="card h-100">
+                <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img class="card-img-top" th:src="${team.getImage()}"></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/team/teamData(teamId=${team.getId()})}" th:text="${team.getName()}"></a>
                     </h4>
-                    <div class='card-links'>
-                        <a class='fa fa-dribbble' href='#'></a>
-                        <a class='fa fa-twitter' href='#'></a>
-                        <a class='fa fa-facebook' href='#'></a>
-                    </div>
+                    <p class="card-text" th:if="${team.getDescription().length() < 150}" th:text="${team.getDescription()}"></p>
+                    <p class="card-text" th:if="${team.getDescription().length() >= 150}" th:text="${team.getDescription().substring(0,120).concat('...')}"></p>
                 </div>
             </div>
         </div>

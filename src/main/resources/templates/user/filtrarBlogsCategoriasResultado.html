@@ -39,7 +39,7 @@
                                     </div>
                                     <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
                                         <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
-                                        <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span th:if="${user.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                                        <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
                                     </div>
                                 </div>
                             </span>

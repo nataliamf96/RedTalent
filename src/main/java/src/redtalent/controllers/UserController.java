@@ -179,12 +179,20 @@ public class UserController {
         result = new ModelAndView("user/dataUser");
         try{
             User user = userService.findOne(userId.toString());
+            User userConectado = userService.findByEmail(authentication.getName());
             Set<Project> projectsParticipo = new HashSet<Project>();
             Set<Project> projectsCreados = user.getProjects();
             Set<Team> teamsParticipo = new HashSet<Team>();
             Set<Team> teamsCreados = user.getTeams();
             projectsParticipo.addAll(utilidadesService.todosLosProyectosEnLosQueEstoyAceptado(user));
             teamsParticipo.addAll(utilidadesService.todosLosEquiposEnLosQueEstoyAceptado(user));
+
+            Boolean valora = true;
+            for(Evaluation e:user.getEvaluations()){
+                if(userConectado.getEvaluations().contains(e)){
+                    valora = false;
+                }
+            }
 
             for(Project p:projectsParticipo){
                 if(p.getCerrado() == true || p.getEstado() == true){
@@ -201,6 +209,8 @@ public class UserController {
             result = new ModelAndView("user/userData");
             result.addObject("auth",utilidadesService.actorConectado());
             result.addObject("user",user);
+            result.addObject("valora",valora);
+            result.addObject("userConectado",userConectado);
             result.addObject("users",userService.findAll());
             result.addObject("projectsParticipo", projectsParticipo);
             result.addObject("projectsCreados", projectsCreados);

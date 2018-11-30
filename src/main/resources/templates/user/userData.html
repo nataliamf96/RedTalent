@@ -6,7 +6,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
-    <link href="/css/all.min.css" rel="stylesheet">
+    <link href="/css/all.css" rel="stylesheet">
     <style>
         .card-profile2 {
             width: 100%;
@@ -262,8 +262,13 @@
                 <div class="card-body">
                     <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
                     <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
-                    <div style="text-align: right;font-size: 0.6em">
-                        <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                    <div class="row">
+                        <div class="col-6" style="text-align: left;font-size: 0.6em">
+                            <a th:if="${user.getComments().contains(comment)}" th:href="@{/comment/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="col-6" style="text-align: right;font-size: 0.6em">
+                            <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -291,8 +296,13 @@
                     </span>
                 <div class="card-body">
                     <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
-                    <div style="text-align: right;font-size: 0.6em">
-                        <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                    <div class="row">
+                        <div class="col-6" style="text-align: left;font-size: 0.6em">
+                            <a th:if="${user.getRecomendations().contains(comment)}" th:href="@{/comment/delete(recomendationId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                        </div>
+                        <div class="col-6" style="text-align: right;font-size: 0.6em">
+                            <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                        </div>
                     </div>
                 </div>
             </div>

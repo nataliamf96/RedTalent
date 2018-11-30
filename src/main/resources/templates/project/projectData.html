@@ -6,7 +6,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
-    <link href="/css/all.min.css" rel="stylesheet">
+    <link href="/css/all.css" rel="stylesheet">
 </head>
 <body>
 <div th:if="${auth.equals('USER')}">
@@ -62,11 +62,11 @@
         <div style="text-align: center; margin-top: 35px" class="col-6">
             <span th:if="${user.getProjects().contains(project) && project.getEstado() == false}" class="my-4">
                 <a th:if="${user.getProjects().contains(project)}" th:href="@{/project/updateProject(projectId=${project.getId()})}"><button type="button" class="btn btn-primary"> Actualizar proyecto </button></a>
-                <a th:if="${team == null}" class="btn btn-info" th:href="@{/team/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Añadir Equipo</button></a>
-                <a onclick="return confirm('¿Esta seguro que desea cerrar el Proyecto?')" class="btn btn-info" th:href="@{/project/cerrarProyecto(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Cerrar Proyecto</button></a>
+                <a th:if="${team == null}" th:href="@{/team/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Añadir Equipo</button></a>
+                <a onclick="return confirm('¿Esta seguro que desea cerrar el Proyecto?')" th:href="@{/project/cerrarProyecto(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Cerrar Proyecto</button></a>
             </span>
             <span th:if="${user.getProjects().contains(project) && project.getEstado() == true}" class="my-4">
-                <a onclick="return confirm('¿Esta seguro que desea eliminar el Proyecto?')" class="btn btn-info" th:href="@{/project/borrarProyecto(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Borrar Proyecto</button></a>
+                <a onclick="return confirm('¿Esta seguro que desea eliminar el Proyecto?')" th:href="@{/project/borrarProyecto(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Borrar Proyecto</button></a>
             </span>
         </div>
     </div>
@@ -160,8 +160,13 @@
                                     <div class="card-body">
                                         <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
                                         <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
-                                        <div style="text-align: right;font-size: 0.6em">
-                                            <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                                        <div class="row">
+                                            <div class="col-6" style="text-align: left;font-size: 0.6em">
+                                                <a th:if="${user.getComments().contains(comment)}" th:href="@{/comment/project/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                                            </div>
+                                            <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                                <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -170,20 +175,6 @@
                     </div>
                 </div>
             </div>
-
-        </div>
-    </div>
-</div>
-<div class="container">
-    <div th:if="${user.getProjects().contains(project) && project.getEstado() == false}" class="row">
-        <div class="col-12 portfolio-item">
-            <a type="button" class="btn btn-info" th:href="@{/project/updateProject(projectId=${project.getId()})}">Cambiar Datos del Proyecto</a>
-            <a th:if="${team == null}" type="button" class="btn btn-info" th:href="@{/team/create(projectId=${project.getId()})}">Añadir Equipo</a>
-            <a onclick="return confirm('¿Esta seguro que desea cerrar el Proyecto?')" type="button" class="btn btn-info" th:href="@{/project/cerrarProyecto(projectId=${project.getId()})}">Cerrar Proyecto</a>
-        </div>
-    </div>
-    <div th:if="${user.getProjects().contains(project) && project.getEstado() == true}" class="row">
-        <div class="col-12 portfolio-item">
 
         </div>
     </div>

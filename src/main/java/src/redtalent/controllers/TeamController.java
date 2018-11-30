@@ -84,11 +84,19 @@ public class TeamController {
         Team team = teamService.findOne(teamId.toString());
         List<User> usuariosTeam = utilidadesService.usuariosDelEquipo(team);
 
+        Boolean valora = true;
+        for(Evaluation e:team.getEvaluations()){
+            if(userP.getEvaluations().contains(e)){
+                valora = false;
+            }
+        }
+
         result.addObject("team",team);
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("usuariosTeam", usuariosTeam);
         result.addObject("userP", userP);
         result.addObject("users", userService.findAll());
+        result.addObject("valora", valora);
 
         return result;
     }

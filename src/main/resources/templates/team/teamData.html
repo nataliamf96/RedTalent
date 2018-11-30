@@ -102,12 +102,14 @@
     <div th:if="${team.getComments().size() == 0}" class="row">
         <p style="margin-left: 16px;font-family: Calibri">No tiene comentarios recibidos</p>
         <a th:href="@{/comment/team/create(teamId=${team.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
+        <a th:if="${!userP.getEvaluations().contains(team.getEvaluations())}" th:href="@{/evaluation/team/create(teamId=${team.getId()})}"><button type="button" class="btn btn-primary">Valora al Equipo</button></a>
     </div>
     <div style="margin-top: +20px" th:if="${team.getComments().size() != 0}" class="row">
        <div class="col-12">
            <div class="row">
                <div style="margin-bottom: 5px" class="col-12">
                    <a th:href="@{/comment/team/create(teamId=${team.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
+                   <a th:if="${valora}" th:href="@{/evaluation/team/create(teamId=${team.getId()})}"><button type="button" class="btn btn-primary">Valora al Equipo</button></a>
                </div>
                <div class="col-12">
                   <div class="row">

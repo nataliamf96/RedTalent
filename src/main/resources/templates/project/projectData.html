@@ -6,22 +6,7 @@
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
-    <style>
-        .card-img-profile2 {
-            max-width: 100%;
-            margin-top: -95px;
-            margin-bottom: 35px;
-        }
-        .card-profile2 {
-            width: 100%;
-            max-height: 350px;
-            margin: 50px auto;
-            background-color: gold;
-            border-radius: 0;
-            border: 0;
-            box-shadow: 1em 1em 2em rgba(0, 0, 0, 0.2);
-        }
-    </style>
+    <link href="/css/all.min.css" rel="stylesheet">
 </head>
 <body>
 <div th:if="${auth.equals('USER')}">
@@ -36,90 +21,194 @@
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
 </div>
+<div style="margin-top: 10px" class="container">
+    <div class="row">
+        <table class="table table-bordered table-active">
+            <thead>
+            <tr style="text-align: center; color: black">
+                <th onclick="verTablaInformacion()" scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Información</th>
+                <th onclick="verTablaComentario()" scope="col"> <i class="fas fa-users"></i>&nbsp;&nbsp;Comentarios</th>
+                <th th:if="${usuariosTeam.contains(user)}" onclick="verTablaForo()" scope="col">&nbsp;&nbsp<i class="fas fa-users"></i>Foro</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
+</div>
 <div class="container">
-    <h3 class="my-4">
-        Proyecto <i th:text="${project.getName()}"></i>
-    </h3>
     <div class="row">
-        <div class="col-lg-6 col-sm-6 portfolio-item">
-            <h5>Creador</h5>
-            <span th:text="${user.getFullname()}"></span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-lg-6 col-sm-6 portfolio-item">
-            <p>
-                <h5>Descripción</h5>
-                <span th:text="${project.getDescription()}"></span>
-            </p>
-            <p>
-                <h5>Perfiles Requeridos</h5>
-                <span th:text="${project.getRequiredProfiles()}"></span>
-            </p>
-        </div>
-        <div class="col-lg-6 col-sm-6 portfolio-item">
-            <img class="card-img-top" th:src="${project.getImage()}">
-        </div>
-    </div>
-    <div th:if="${team == null}" class="row">
-        <div  class="col-lg-6 col-sm-6 portfolio-item">
-            <h2>EN ESTOS MOMENTOS NO EXISTE EQUIPO ASOCIADO AL PROYECTO</h2>
-            <h4>Puedes ponerte en contacto con:</h4>
-            <b>Nombre: </b><span th:text="${user.getFullname()}" />
-            <b>Email: </b><span th:text="${user.getAccount().getEmail()}" />
-        </div>
-    </div>
-    <div th:if="${team != null}" class="row">
-        <div  class="col-lg-6 col-sm-6 portfolio-item">
-            <div style="margin-top: -12px" class='card card-profile text-center'>
-                <img alt='' class='card-img-top' th:src="@{/images/color-img2.jpg}">
-                <div class='card-block'>
-                    <img alt='' class='card-img-profile2' th:src="${team.getImage()}">
-                    <h4 style="margin-top: -23px" class='card-title'>
-                        <i th:if="${team.getName() != null}" th:text="${team.getName()}" />
-                        <small th:if="${team.getName() != null}" th:text="${team.getDescription()}" />
-                    </h4>
-                    <div class='card-links'>
-                        <a class='fa fa-dribbble' href='#'></a>
-                        <a class='fa fa-twitter' href='#'></a>
-                        <a class='fa fa-facebook' href='#'></a>
+        <div class="col-12">
+            <div th:if="${auth.equals('USER') && !yaEresDelEquipo && project.getEstado() == false && project.getCerrado() == false && team != null}" class="row">
+                <div th:if="${tieneSolicitudEnviada!=null}" style="text-align: center" class="col-12">
+                    <hr />
+                    <h4>Solicitud en estado <i th:text="${tieneSolicitudEnviada.getStatus()}"></i></h4>
+                    <hr />
+                </div>
+                <div th:if="${tieneSolicitudEnviada==null}" class="col-12">
+                    <div >
+                        <a type="button" class="btn btn-info" th:href="@{/application/crearAplicacionProyecto(projectId=${project.getId()})}">Solicitar Acceso al Equipo del Proyecto</a>
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-lg-6 col-sm-6 portfolio-item">
-                <div th:if="${team.getName() != null}" class="row">
-                    <div class="col-lg-4 col-sm-4 portfolio-item">
-                        <p>
-                            <h5 th:if="${team.getName() != null}">Nombre</h5>
-                            <span th:if="${team.getName() != null}" th:text="${team.getName()}"></span>
-                         </p>
-                        <p>
-                            <h5 th:if="${team.getDescription() != null}">Descripción</h5>
-                            <span th:text="${team.getDescription()}"></span>
-                        </p>
-                    </div>
-                </div>
-        </div>
-    </div>
-    <div th:if="${!comments.isEmpty()}" class="row">
-        <div th:each="comment : ${comments}" class="col-lg-12 portfolio-item">
-            <h3>Comentarios</h3>
-            <b th:text="${comment.getTitle()}"></b>
-            <p th:text="${comment.getText()}"></p>
-        </div>
-    </div>
-    <div th:if="${auth.equals('USER') && !yaEresDelEquipo && project.getEstado() == false && project.getCerrado() == false && team != null}" class="row">
-        <div th:if="${tieneSolicitudEnviada!=null}" class="col-12">
-            <h4>Solicitud en estado <i th:text="${tieneSolicitudEnviada.getStatus()}"></i></h4>
-        </div>
-        <div th:if="${tieneSolicitudEnviada==null}" class="col-12">
-            <div >
-                <a type="button" class="btn btn-info" th:href="@{/application/crearAplicacionProyecto(projectId=${project.getId()})}">Solicitar Acceso al Equipo del Proyecto</a>
             </div>
         </div>
     </div>
 </div>
+<div id="tablaInformacion" class="container" style="min-height: 600px">
+    <div class="row">
+        <div class="col-6">
+            <h3 class="my-4">
+                Proyecto <i th:text="${project.getName()}"></i>
+            </h3>
+        </div>
+        <div style="text-align: center; margin-top: 35px" class="col-6">
+            <span th:if="${user.getProjects().contains(project) && project.getEstado() == false}" class="my-4">
+                <a th:if="${user.getProjects().contains(project)}" th:href="@{/project/updateProject(projectId=${project.getId()})}"><button type="button" class="btn btn-primary"> Actualizar proyecto </button></a>
+                <a th:if="${team == null}" class="btn btn-info" th:href="@{/team/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Añadir Equipo</button></a>
+                <a onclick="return confirm('¿Esta seguro que desea cerrar el Proyecto?')" class="btn btn-info" th:href="@{/project/cerrarProyecto(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Cerrar Proyecto</button></a>
+            </span>
+            <span th:if="${user.getProjects().contains(project) && project.getEstado() == true}" class="my-4">
+                <a onclick="return confirm('¿Esta seguro que desea eliminar el Proyecto?')" class="btn btn-info" th:href="@{/project/borrarProyecto(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Borrar Proyecto</button></a>
+            </span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-12">
+            <h5 th:text="Descripción"></h5>
+            <p style="font-family: Calibri; margin-top: 10px" th:text="${project.getDescription()}"></p>
+            <h5 th:text="Requerimientos"></h5>
+            <p style="font-family: Calibri; margin-top: 10px" th:text="${project.getRequiredProfiles()}"></p>
+            <h5 th:text="Categoría"></h5>
+            <p style="font-family: Calibri; margin-top: 10px" th:text="${project.getCategorie().getName()}"></p>
+        </div>
+    </div>
+    <div th:if="${team == null}" class="row">
+        <div style="margin-top: -12px">
+            <h4>EN ESTOS MOMENTOS NO EXISTE EQUIPO ASOCIADO AL PROYECTO</h4>
+        </div>
+    </div>
+    <div th:if="${team != null}" class="row">
+        <div class="col-lg-4 col-sm-6 portfolio-item">
+            <h3 class="my-4">
+                Equipo <i th:text="${team.getName()}"></i>
+            </h3>
+            <div class="card h-100">
+                <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img class="card-img-top" th:src="${team.getImage()}"></a>
+                <div class="card-body">
+                    <h4 class="card-title">
+                        <a th:href="@{/team/teamData(teamId=${team.getId()})}" th:text="${team.getName()}"></a>
+                    </h4>
+                    <p class="card-text" th:if="${team.getDescription().length() < 150}" th:text="${team.getDescription()}"></p>
+                    <p class="card-text" th:if="${team.getDescription().length() >= 150}" th:text="${team.getDescription().substring(0,120).concat('...')}"></p>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    <br />
+    <br />
+    <div th:if="${usuariosTeam.contains(user)}" class="row">
+        <div class="col-12">
+                <h3>Notificaciones</h3>
+                <div th:if="${project.getAlerts().size() == 0}" class="row">
+                    <p style="margin-left: 16px;font-family: Calibri">No tiene notificaciones el proyecto</p>
+                </div>
+            <div class="row">
+                <div th:each="alerta : ${project.getAlerts()}" class="col-12 portfolio-item">
+                    <div th:if="${alerta.getText().substring(0,9).equals('[code:as]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-success" role="alert">
+                    </div>
+                    <div th:if="${alerta.getText().substring(0,9).equals('[code:cp]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-danger" role="alert">
+                    </div>
+                    <div th:if="${alerta.getText().substring(0,9).equals('[code:nc]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-warning" role="alert">
+                    </div>
+                    <div th:if="${alerta.getText().substring(0,9).equals('[code:bp]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-dark" role="alert">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="tablaComentarios" style="display: none" class="container">
+    <div style="min-height: 450px">
+        <h3>Comentarios</h3>
+        <div th:if="${project.getComments().size() == 0}" class="row">
+            <div style="margin-bottom: 5px" class="col-12">
+                <a th:href="@{/comment/project/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
+                <a th:if="${valora}" th:href="@{/evaluation/project/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Valora el Proyecto</button></a>
+            </div>
+        </div>
+        <div style="margin-top: +20px" th:if="${project.getComments().size() != 0}" class="row">
+            <div class="col-12">
+                <div class="row">
+                    <div style="margin-bottom: 5px" class="col-12">
+                        <a th:href="@{/comment/project/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
+                        <a th:if="${valora}" th:href="@{/evaluation/project/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Valora el Proyecto</button></a>
+                    </div>
+                    <div class="col-12">
+                        <div class="row">
+                            <div th:each="comment : ${project.getComments()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
+                                <div class="card h-100">
+                    <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
+                        <div class="row">
+                            <div class="col-2">
+                                <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                            </div>
+                            <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                            </div>
+                        </div>
+                    </span>
+                                    <div class="card-body">
+                                        <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
+                                        <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
+                                        <div style="text-align: right;font-size: 0.6em">
+                                            <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+<div class="container">
+    <div th:if="${user.getProjects().contains(project) && project.getEstado() == false}" class="row">
+        <div class="col-12 portfolio-item">
+            <a type="button" class="btn btn-info" th:href="@{/project/updateProject(projectId=${project.getId()})}">Cambiar Datos del Proyecto</a>
+            <a th:if="${team == null}" type="button" class="btn btn-info" th:href="@{/team/create(projectId=${project.getId()})}">Añadir Equipo</a>
+            <a onclick="return confirm('¿Esta seguro que desea cerrar el Proyecto?')" type="button" class="btn btn-info" th:href="@{/project/cerrarProyecto(projectId=${project.getId()})}">Cerrar Proyecto</a>
+        </div>
+    </div>
+    <div th:if="${user.getProjects().contains(project) && project.getEstado() == true}" class="row">
+        <div class="col-12 portfolio-item">
+
+        </div>
+    </div>
+</div>
+<script>
+    function verTablaInformacion() {
+        document.getElementById("tablaInformacion").style.display = "block";
+        document.getElementById("tablaComentarios").style.display = "none";
+        document.getElementById("tablaForos").style.display = "none";
+    }
+    function verTablaComentario() {
+        document.getElementById("tablaInformacion").style.display = "none";
+        document.getElementById("tablaComentarios").style.display = "block";
+        document.getElementById("tablaForos").style.display = "none";
+    }
+    function verTablaForo() {
+        document.getElementById("tablaInformacion").style.display = "none";
+        document.getElementById("tablaComentarios").style.display = "none";
+        document.getElementById("tablaForos").style.display = "block";
+    }
+</script>
+<br />
+<br />
+<br />
+<br />
 <div th:replace="masterpage/footer :: footer"></div>
 </body>
 </html>

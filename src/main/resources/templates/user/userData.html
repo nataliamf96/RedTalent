@@ -153,10 +153,10 @@
             <div th:if="${projectsCreados.size() != 0}" class="row">
                 <div th:each="project : ${projectsCreados}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
-                        <a th:href="@{/project/allProjectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a th:href="@{/project/allProjectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                                <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                             </h4>
                             <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
                             <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
@@ -172,10 +172,10 @@
             <div th:if="${projectsParticipo.size() != 0}" class="row">
                 <div th:each="project : ${projectsParticipo}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
-                        <a th:href="@{/project/allProjectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a th:href="@{/project/allProjectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                                <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                             </h4>
                             <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
                             <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
@@ -255,7 +255,7 @@
                             </div>
                             <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
                                 <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
-                                <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                                <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
                             </div>
                         </div>
                     </span>

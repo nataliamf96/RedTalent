@@ -63,7 +63,14 @@ public class ProjectService {
     public void saveAll(Project project){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = utilidadesService.userConectado(authentication.getName());
+        User user = null;
+        String actor = utilidadesService.actorConectado();
+
+        if(actor.equals("USER")){
+            user = utilidadesService.userConectado(authentication.getName());
+        }else if(actor.equals("ADMIN")){
+            user = userService.findUserByProjectsContains(project);
+        }
 
         Project savee = save(project);
 

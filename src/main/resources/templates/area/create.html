@@ -14,7 +14,7 @@
         Nueva área
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/area/create}" th:object="${areaForm}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/admin/area/create}" th:object="${areaForm}" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label for="area">Área</label>:
                 <input type="text" class="form-control" id="area" name="area" style="max-width: 350px" th:field="*{area}"/>

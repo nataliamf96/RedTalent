@@ -23,7 +23,7 @@ import java.util.List;
 import java.util.Set;
 
 @Controller
-@RequestMapping("/category")
+@RequestMapping("/admin/category")
 public class CategoryController {
 
     // Services ---------------------------------------------------------------
@@ -38,6 +38,9 @@ public class CategoryController {
 
     @Autowired
     private BlogService blogService;
+
+    @Autowired
+    private UtilidadesService utilidadesService;
 
     // Constructors -----------------------------------------------------------
     public CategoryController() {
@@ -54,8 +57,9 @@ public class CategoryController {
         Collection<Category> categories = categoryService.findAll();
 
         result = new ModelAndView("category/list");
-        result.addObject("requestURI", "category/list");
+        result.addObject("requestURI", "admin/category/list");
         result.addObject("categories", categories);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -69,7 +73,7 @@ public class CategoryController {
 
         result = new ModelAndView("category/create");
         result.addObject("categoryForm", categoryForm);
-        result.addObject("requestURI", "./category/create");
+        result.addObject("requestURI", "./admin/category/create");
 
         return result;
     }
@@ -93,7 +97,7 @@ public class CategoryController {
         Category category = categoryService.create();
         category.setName(categoryForm.getName());
         Category saved = categoryService.save(category);
-        result = new ModelAndView("redirect:/category/list");
+        result = new ModelAndView("redirect:/admin/category/list");
 
         return result;
     }
@@ -124,7 +128,7 @@ public class CategoryController {
 
         categoryService.remove(res);
 
-        result = new ModelAndView("redirect:/category/list");
+        result = new ModelAndView("redirect:/admin/category/list");
         return result;
     }
 

@@ -16,6 +16,7 @@ import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
 
 import javax.validation.Valid;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
@@ -158,15 +159,23 @@ public class AdministratorController {
         return result;
     }
 
+    @RequestMapping(value = "/projects", method = RequestMethod.GET)
+    public ModelAndView proyectos() {
+        ModelAndView result;
+        result = new ModelAndView("admin/projects");
+
+        result.addObject("projects",projectService.findAll());
+        result.addObject("auth", utilidadesService.actorConectado());
+        return result;
+    }
+
     @RequestMapping(value = "/deleteProject", method = RequestMethod.GET)
     public ModelAndView borrarProyecto(@RequestParam String projectId) {
         ModelAndView result;
 
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        User user = utilidadesService.userConectado(authentication.getName());
-
         try{
             Project project = projectService.findOne(projectId);
+            User user = userService.findUserByProjectsContains(project);
             project.setCerrado(true);
 
             List<Alert> listaAlertas = project.getAlerts();
@@ -179,9 +188,16 @@ public class AdministratorController {
 
             Project savee = projectService.save(project);
 
+            Set<Project> pp = new HashSet<Project>();
+            pp.addAll(user.getProjects());
+            pp.remove(projectService.findOne(project.getId()));
+            pp.add(savee);
+            user.setProjects(pp);
+            userService.saveUser(user);
+
             projectService.saveAll(savee);
 
-            result = new ModelAndView("redirect:/user/index");
+            result = new ModelAndView("redirect:/admin/projects");
             result.addObject("auth",utilidadesService.actorConectado());
         }catch (Throwable oops){
             result = new ModelAndView("redirect:/403");

@@ -14,13 +14,13 @@
         function verTablaUsersTrue() {
             document.getElementById("tablaUsersTrue").style = "display: block";
             document.getElementById("tablaUsersFalse").style = "display: none";
-            document.getElementById("textoTitulos").innerHTML = "Tabla de Usuarios No Permitidos";
+            document.getElementById("textoTitulos").innerHTML = "Usuarios bloqueados";
         }
 
         function verTablaUsersFalse() {
             document.getElementById("tablaUsersTrue").style = "display: none";
             document.getElementById("tablaUsersFalse").style = "display: block";
-            document.getElementById("textoTitulos").innerHTML = "Tabla de Usuarios Permitidos";
+            document.getElementById("textoTitulos").innerHTML = "Usuarios con acceso al sistema";
         }
     </script>
 </head>
@@ -57,9 +57,19 @@
                 <span>Estadísticas</span></a>
         </li>
         <li class="nav-item">
+            <a class="nav-link" href="/admin/projects">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Proyectos</span></a>
+        </li>
+        <li class="nav-item">
             <a class="nav-link" href="/admin/verTags">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Etiquetas</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/category/list">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Categorías</span></a>
         </li>
         <li class="nav-item">
             <a class="nav-link" href="/admin/area/list">
@@ -77,7 +87,7 @@
                 <li style="color:blue" class="breadcrumb-item">
                     Dashboard
                 </li>
-                <li id="textoTitulos" class="breadcrumb-item active">Tabla de Usuarios No Permitidos</li>
+                <li id="textoTitulos" class="breadcrumb-item active">Usuarios bloqueados</li>
             </ol>
 
             <!-- Icon Cards-->
@@ -88,7 +98,7 @@
                             <div class="card-body-icon">
                                 <i class="fas fa-user-slash"></i>
                             </div>
-                            <div class="mr-5"><i th:text="${usersTrue.size()}"></i> Usuarios No Permitidos</div>
+                            <div class="mr-5"><i th:text="${usersTrue.size()}"></i> Usuarios bloqueados</div>
                         </div>
                         <a onclick="verTablaUsersTrue()" class="card-footer text-white clearfix small z-1" href="#">
                             <span class="float-left">Ver Detalles</span>
@@ -104,7 +114,7 @@
                             <div class="card-body-icon">
                                 <i class="fas fa-user"></i>
                             </div>
-                            <div class="mr-5"><i th:text="${usersFalse.size()}"></i> Usuarios Permitidos</div>
+                            <div class="mr-5"><i th:text="${usersFalse.size()}"></i> Usuarios con acceso al sistema</div>
                         </div>
                         <a onclick="verTablaUsersFalse()" class="card-footer text-white clearfix small z-1" href="#">
                             <span class="float-left">Ver Detalles</span>
@@ -120,7 +130,7 @@
             <div id="tablaUsersTrue" class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Tabla de Usuarios No Permitidos</div>
+                    Usuarios bloqueados</div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -137,7 +147,7 @@
                                 <td th:text="${user.getFullname()}"></td>
                                 <td><img style="width: 15%" th:src="${user.getImage()}"></td>
                                 <td th:text="${user.getAccount().getEmail()}"></td>
-                                <td><a onclick="return confirm('¿Esta seguro que desea permitir el acceso al USUARIO?')" th:href="@{/admin/userNoBanned(userId=${user.getId()})}">Desbanear</a></td>
+                                <td><a onclick="return confirm('¿Esta seguro que desea permitir el acceso al usuario?')" th:href="@{/admin/userNoBanned(userId=${user.getId()})}">Desbanear</a></td>
                             </tr>
                             </tbody>
                         </table>
@@ -149,7 +159,7 @@
             <div style="display: none" id="tablaUsersFalse" class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Tabla de Usuarios Permitidos</div>
+                    Usuarios con acceso al sistema</div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

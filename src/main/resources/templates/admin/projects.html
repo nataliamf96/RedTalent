@@ -10,6 +10,19 @@
     <link href="/css/datatable.css" rel="stylesheet">
     <link href="/css/all.min.css" rel="stylesheet">
 
+    <script>
+        function verTablaUsersTrue() {
+            document.getElementById("tablaUsersTrue").style = "display: block";
+            document.getElementById("tablaUsersFalse").style = "display: none";
+            document.getElementById("textoTitulos").innerHTML = "Tabla de Usuarios No Permitidos";
+        }
+
+        function verTablaUsersFalse() {
+            document.getElementById("tablaUsersTrue").style = "display: none";
+            document.getElementById("tablaUsersFalse").style = "display: block";
+            document.getElementById("textoTitulos").innerHTML = "Tabla de Usuarios Permitidos";
+        }
+    </script>
 </head>
 <body>
 <div th:if="${auth.equals('USER')}">
@@ -43,7 +56,7 @@
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Estadísticas</span></a>
         </li>
-        <li class="nav-item">
+        <li class="nav-item active">
             <a class="nav-link" href="/admin/projects">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Proyectos</span></a>
@@ -58,7 +71,7 @@
                 <i class="fas fa-fw fa-table"></i>
                 <span>Categorías</span></a>
         </li>
-        <li class="nav-item active">
+        <li class="nav-item">
             <a class="nav-link" href="/admin/area/list">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Áreas/Centros/Grados</span></a>
@@ -71,21 +84,32 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Áreas, centros y grados de la US</div>
+                    Proyectos</div>
                 <div class="card-body">
                     <div class="table-responsive">
-                        <button type="submit" class="btn btn-primary"><a style="color: white" th:href="@{/admin/grade/create(departmentId=${departmentId}, areaId=${areaId})}">Crea un nuevo grado</a></button></br></br>
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>Nombre</th>
+                                <th>Imagen</th>
+                                <th>Descripción</th>
+                                <th>Privado</th>
+                                <th>Estado</th>
+                                <th>Foro</th>
                                 <th>Eliminar</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="grade : ${grades}">
-                                <td th:text="${grade.getName()}"></td>
-                                <td><a onclick="return confirm('¿Está seguro que desea eliminar el grado?')" th:href="@{/admin/grade/delete(gradeId=${grade.getId()})}">Eliminar</a></td>
+                            <tr th:each="project : ${projects}" th:if="${!project.getCerrado()}">
+                                <td th:text="${project.getName()}"></td>
+                                <td><img style="width: 45px" th:src="${project.getImage()}"></td>
+                                <td th:text="${project.getDescription()}"></td>
+                                <td th:if="${project.getPrivado()}">Si</td>
+                                <td th:if="${!project.getPrivado()}">No</td>
+                                <td th:if="${project.getEstado()}">Cerrado</td>
+                                <td th:if="${!project.getEstado()}">Abierto</td>
+                                <td><a th:href="@{/admin/forum/list(projectId=${project.getId()})}">Consulta el foro</a></td>
+                                <td><a onclick="return confirm('¿Esta seguro que desea eliminar el proyecto?')" th:href="@{/admin/deleteProject(projectId=${project.getId()})}">Eliminar</a></td>
                             </tr>
                             </tbody>
                         </table>

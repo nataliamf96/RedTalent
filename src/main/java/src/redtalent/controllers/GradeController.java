@@ -15,10 +15,7 @@ import src.redtalent.domain.Department;
 import src.redtalent.domain.Grade;
 import src.redtalent.forms.AreaForm;
 import src.redtalent.forms.GradeForm;
-import src.redtalent.services.AdministratorService;
-import src.redtalent.services.AreaService;
-import src.redtalent.services.DepartmentService;
-import src.redtalent.services.GradeService;
+import src.redtalent.services.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -38,6 +35,9 @@ public class GradeController {
 
     @Autowired
     private AreaService areaService;
+
+    @Autowired
+    private UtilidadesService utilidadesService;
 
 
     // Constructors -----------------------------------------------------------
@@ -59,6 +59,7 @@ public class GradeController {
         result = new ModelAndView("grade/list");
         result.addObject("requestURI", "admin/grade/list");
         result.addObject("grades", grades);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -79,6 +80,7 @@ public class GradeController {
         result.addObject("grades", grades);
         result.addObject("departmentId", departmentId);
         result.addObject("areaId", areaId);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -173,7 +175,7 @@ public class GradeController {
 
         gradeService.remove(res);
 
-        result = new ModelAndView("redirect:/admin/grade/list");
+        result = new ModelAndView("redirect:/admin/area/list");
         return result;
     }
 

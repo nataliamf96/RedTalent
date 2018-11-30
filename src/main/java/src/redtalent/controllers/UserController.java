@@ -288,23 +288,15 @@ public class UserController {
 
 
     @RequestMapping(value = "/filtrarBlogsCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarBlogsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+    public ModelAndView filtrarBlogsCategorias() {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         result = new ModelAndView("user/filtrarBlogsCategorias");
-
-        if(category.isEmpty()){
-            result.addObject("blogs",blogService.findAll());
-        }else{
-            result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
-        }
-
         List<Category> categories = new ArrayList<Category>();
         List<Integer> cTam = new ArrayList<Integer>();
         for(Category c:categoryService.findAll()){
             categories.add(c);
-            cTam.add(blogService.findBlogsByCategory_Name(category).size());
+            cTam.add(blogService.findBlogsByCategory_Name(c.getName()).size());
         }
 
         result.addObject("auth",utilidadesService.actorConectado());
@@ -313,12 +305,27 @@ public class UserController {
         return result;
     }
 
-    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarProyectosCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
+    @RequestMapping(value = "/filtrarBlogsCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarBlogsCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("user/filtrarBlogsCategoriasResultado");
+        if(category.isEmpty()){
+            result.addObject("blogs",blogService.findAll());
+        }else{
+            result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
+        }
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
         ModelAndView result;
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
 
-        result = new ModelAndView("user/filtrarProyectosCategorias");
+        result = new ModelAndView("user/filtrarProyectosCategoriasResultado");
 
         if(category.isEmpty()){
             result.addObject("projects",projectService.findAll());
@@ -327,6 +334,60 @@ public class UserController {
         }
 
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("user/filtrarForumsCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(forumService.findForumsByCategory_Name(c.getName()).size());
+        }
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("user/filtrarForumsCategoriasResultado");
+
+        if(category.isEmpty()){
+            result.addObject("forums",forumService.findAll());
+        }else{
+            result.addObject("forums",forumService.findForumsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("user/filtrarProyectosCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(projectService.findProjectsByCategorie_Name(c.getName()).size());
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
         return result;
     }
 
@@ -378,23 +439,6 @@ public class UserController {
         }else{
             Area a = areaService.findOne(area);
             result.addObject("users",utilidadesService.usuariosPorArea(a));
-        }
-
-        result.addObject("auth",utilidadesService.actorConectado());
-        return result;
-    }
-
-    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
-    public ModelAndView filtrarForumsCategorias(@RequestParam(value = "category", defaultValue = "") String category) {
-        ModelAndView result;
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
-        result = new ModelAndView("user/filtrarForumsCategorias");
-
-        if(category.isEmpty()){
-            result.addObject("forums",forumService.findAll());
-        }else{
-            result.addObject("forums",forumService.findForumsByCategory_Name(category));
         }
 
         result.addObject("auth",utilidadesService.actorConectado());

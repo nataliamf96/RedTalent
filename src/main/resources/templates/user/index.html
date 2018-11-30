@@ -31,7 +31,7 @@
                         <a style="color: black" th:href="${user.getCurriculum().getUrlLinkedin()}"><i class="fab fa-linkedin" style="color: #3b5999"></i></a>
                     </div>
                     <div th:if="${user.getCurriculum().getRealized()==false}" class='card-links'>
-                        Esto es una url para crear curriculum
+                        <a th:href="@{/user/curriculum/createCurriculum}"><button type="button" style="color: white" class="btn btn-warning">Crear Curriculum</button></a>
                     </div>
                 </div>
             </div>

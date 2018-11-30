@@ -24,37 +24,22 @@
     <h1 class="my-4">Filtrado
         <small>Blogs por Categoría</small>
     </h1>
-    <div class="row">
-        <div class="col-12">
-            <form id="formulario">
-                <div class="form-group">
-                    <label>Nombre de la Categoría</label>:
-                    <input type="text" class="form-control" id="text" name="text" style="max-width: 350px"/>
+    <div style="margin-bottom: 50px" class="row">
+        <div th:each="categorie,iter : ${categories}" class="col-lg-3 col-sm-6 col-md-4" style="text-align: center">
+            <div style="width: 80%" class="card portfolio-item">
+                <div class="card-body">
+                    <a th:href="@{/user/filtrarBlogsCategoriasResultado(category=${categorie.getName()})}"><h5 th:text="${categorie.getName()}" class="card-title"></h5></a>
+                    <span th:if="${cTam.get(iter.index)==0}" th:text="${cTam.get(iter.index)}"></span>
+                    <span th:if="${cTam.get(iter.index)==1}" th:text="${cTam.get(iter.index).toString().concat(' '+' Blog')}"></span>
+                    <span th:if="${cTam.get(iter.index)>1}" th:text="${cTam.get(iter.index).toString().concat(' '+' Blogs')}"></span>
                 </div>
-                <script>
-                    var formulario = document.getElementById('formulario');
-                    var text = document.getElementById('text');
-
-                    formulario.onsubmit = function(e){
-                        location = "/user/filtrarBlogsCategorias?category=" + encodeURIComponent(text.value);
-                        return false;
-                    }</script>
-                <input type="submit" class="btn btn-info" value="Buscar" />
-            </form>
-        </div>
-    </div>
-    <div class="row">
-        <div th:each="blog : ${blogs}" class="col-lg-6 col-sm-6 portfolio-item">
-            <b th:text="${blog.getTitle()}"></b>
-        </div>
-    </div>
-    <div class="row">
-        <div th:each="categorie : ${categories}" class="col-lg-3 col-sm-6 card portfolio-item" style="width: 18rem;">
-            <div class="card-body">
-                <h5 th:text="${categorie.getName()}" class="card-title"></h5>
             </div>
         </div>
+    </div>
 </div>
+<br />
+<br />
+<br />
 <div th:replace="masterpage/footer :: footer" />
 </body>
 </html>

@@ -26,7 +26,7 @@ import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/grade")
+@RequestMapping("/admin/grade")
 public class GradeController {
 
     // Services ---------------------------------------------------------------
@@ -57,7 +57,7 @@ public class GradeController {
         grades = gradeService.findAll();
 
         result = new ModelAndView("grade/list");
-        result.addObject("requestURI", "grade/list");
+        result.addObject("requestURI", "admin/grade/list");
         result.addObject("grades", grades);
 
         return result;
@@ -75,7 +75,7 @@ public class GradeController {
         grades = d.getGrades();
 
         result = new ModelAndView("grade/list");
-        result.addObject("requestURI", "grade/byDepartment?departmentId="+departmentId+"&areaId=" +areaId);
+        result.addObject("requestURI", "admin/grade/byDepartment?departmentId="+departmentId+"&areaId=" +areaId);
         result.addObject("grades", grades);
         result.addObject("departmentId", departmentId);
         result.addObject("areaId", areaId);
@@ -102,10 +102,10 @@ public class GradeController {
             result.addObject("departments", departments);
             result.addObject("departmentId", departmentId);
             result.addObject("areaId", areaId);
-            result.addObject("requestURI", "./grade/create?departmentId=" + departmentId + "&areaId=" + areaId);
+            result.addObject("requestURI", "./admin/grade/create?departmentId=" + departmentId + "&areaId=" + areaId);
 
         } catch (Throwable oops) {
-            result = new ModelAndView("redirect:/grade/list");
+            result = new ModelAndView("redirect:/admin/grade/list");
         }
         return result;
     }
@@ -135,12 +135,14 @@ public class GradeController {
                 Area area = areaService.findOne(gradeForm.getAreaId().toString());
                 List<Department> departments = area.getDepartaments();
                 for(Department d: departments){
-                    d.setGrades(grades);
+                    if(d.equals(department)){
+                        d.setGrades(grades);
+                    }
                 }
                 area.setDepartaments(departments);
                 areaService.save(area);
 
-                result = new ModelAndView("redirect:/grade/byDepartment?departmentId=" + gradeForm.getDepartmentId()+"&areaId=" +gradeForm.getAreaId());
+                result = new ModelAndView("redirect:/admin/grade/byDepartment?departmentId=" + gradeForm.getDepartmentId()+"&areaId=" +gradeForm.getAreaId());
 
             } catch (Throwable oops) {
                 result = createModelAndView(gradeForm, "No se puede crear correctamente el grado");
@@ -161,15 +163,17 @@ public class GradeController {
 
         Grade res = gradeService.findOne(gradeId.toString());
 
-        Department d = departmentService.findDepartmentByGradesContaining(res);
-        List<Grade> grades = d.getGrades();
-        grades.remove(res);
-        d.setGrades(grades);
-        departmentService.save(d);
+        List<Department> departments = departmentService.findAllByGradesContains(res);
+        for(Department d: departments) {
+            List<Grade> grades = d.getGrades();
+            grades.remove(res);
+            d.setGrades(grades);
+            departmentService.save(d);
+        }
 
         gradeService.remove(res);
 
-        result = new ModelAndView("redirect:/grade/list");
+        result = new ModelAndView("redirect:/admin/grade/list");
         return result;
     }
 
@@ -194,7 +198,5 @@ public class GradeController {
         result.addObject("departments", departments);
         return result;
     }
-
-
 }
 

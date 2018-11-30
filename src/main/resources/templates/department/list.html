@@ -1,23 +1,115 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Bienvenido/a</title>
+    <title>Bienvenido/a Administrador</title>
+    <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="/css/cards.css" rel="stylesheet">
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <link href="/css/datatable.css" rel="stylesheet">
+    <link href="/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
-<div th:replace="masterpage/headerAdmin :: nav"></div>
-<div class="container">
-    <h5>Facultades</h5>
-    <div class="row">
-        <div th:each="department : ${departments}" class="col-12 portfolio-item">
-            <a th:href="@{/grade/byDepartment(departmentId=${department.getId()}, areaId=${areaId})}"><span th:text="${department.getDepartment()}" /></a>
-            <a th:href="@{/department/delete(departmentId=${department.getId()})}"><i class="far fa-trash-alt"></i></a>
-        </div>
-    </div>
-    <a th:href="@{/department/create(areaId=${areaId})}">Añadir departamento</a>
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
-<div th:replace="masterpage/footer :: footer"></div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div id="wrapper">
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboardAdmin">
+                <i style="margin-top: 20px" class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/usersView">
+                <i class="fas fa-user"></i>
+                <span>Usuarios</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/estadisticas">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Estadísticas</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/verTags">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Etiquetas</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/admin/area/list">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Áreas/Centros/Grados</span></a>
+        </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    Áreas, centros y grados de la US</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <button type="submit" class="btn btn-primary"><a style="color: white" th:href="@{/admin/department/create(areaId=${areaId})}">Crea un nuevo centro</a></button></br></br>
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Nombre</th>
+                                <th>Eliminar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="department : ${departments}">
+                                <td><a style="color:black" th:href="@{/admin/grade/byDepartment(departmentId=${department.getId()}, areaId=${areaId})}" th:text="${department.getDepartment()}"></a></td>
+                                <td><a onclick="return confirm('¿Está seguro que desea eliminar el centro?')" th:href="@{/admin/department/delete(departmentId=${department.getId()})}">Eliminar</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Universidad de Sevilla</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/js/jquery.easing.min.js"></script>
+
+<!-- Page level plugin JavaScript-->
+<script src="/js/jquery.dataTables.js"></script>
+<script src="/js/dataTables.bootstrap4.js"></script>
+
+<script src="/js/sb-admin.js"></script>
+
 </body>
 </html>

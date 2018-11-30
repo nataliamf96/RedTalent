@@ -56,4 +56,9 @@ public class AreaService {
         return areaRepository.findAreaByDepartamentsContaining(department);
     }
 
+    public List<Area> findAllByDepartamentsContaining(Department department){
+        Assert.notNull(department, "El departamento no puede ser nulo");
+        return areaRepository.findAllByDepartamentsContains(department);
+    }
+
 }

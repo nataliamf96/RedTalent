@@ -340,7 +340,7 @@ public class DbSeeder implements CommandLineRunner{
 
         //Grades ----------------------------------------
         Grade grade1 = new Grade(
-                "Doble Grado en Adminstración y Dirección de Empresas y en Derecho");
+                "Doble Grado en Administración y Dirección de Empresas y en Derecho");
 
         Grade grade2 = new Grade(
                 "Doble Grado en Derecho y Economía");

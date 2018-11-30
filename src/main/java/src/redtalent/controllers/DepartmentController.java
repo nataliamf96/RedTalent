@@ -15,10 +15,7 @@ import src.redtalent.domain.Department;
 import src.redtalent.domain.Grade;
 import src.redtalent.forms.AreaForm;
 import src.redtalent.forms.DepartmentForm;
-import src.redtalent.services.AdministratorService;
-import src.redtalent.services.AreaService;
-import src.redtalent.services.DepartmentService;
-import src.redtalent.services.GradeService;
+import src.redtalent.services.*;
 
 import javax.validation.Valid;
 import java.util.ArrayList;
@@ -27,7 +24,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Controller
-@RequestMapping("/department")
+@RequestMapping("/admin/department")
 public class DepartmentController {
 
     // Services ---------------------------------------------------------------
@@ -42,6 +39,9 @@ public class DepartmentController {
 
     @Autowired
     private AdministratorService adminService;
+
+    @Autowired
+    private UtilidadesService utilidadesService;
 
 
     // Constructors -----------------------------------------------------------
@@ -61,8 +61,9 @@ public class DepartmentController {
         departments = departmentService.findAll();
 
         result = new ModelAndView("department/list");
-        result.addObject("requestURI", "department/list");
+        result.addObject("requestURI", "admin/department/list");
         result.addObject("departments", departments);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -79,9 +80,10 @@ public class DepartmentController {
         departments = a.getDepartaments();
 
         result = new ModelAndView("department/list");
-        result.addObject("requestURI", "department/byArea?areaId="+areaId);
+        result.addObject("requestURI", "admin/department/byArea?areaId="+areaId);
         result.addObject("departments", departments);
         result.addObject("areaId", areaId);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -102,7 +104,7 @@ public class DepartmentController {
             result.addObject("departmentForm", departmentForm);
             result.addObject("areas", areas);
             result.addObject("areaId", areaId);
-            result.addObject("requestURI", "./department/create?areaId="+areaId);
+            result.addObject("requestURI", "./admin/department/create?areaId="+areaId);
 
         } catch (Throwable oops) {
             result = new ModelAndView("redirect:/department/list");
@@ -134,7 +136,7 @@ public class DepartmentController {
 
                 areaService.save(area);
 
-                result = new ModelAndView("redirect:/department/byArea?areaId=" + departmentForm.getAreaId());
+                result = new ModelAndView("redirect:/admin/department/byArea?areaId=" + departmentForm.getAreaId());
 
             } catch (Throwable oops) {
                 result = createModelAndView(departmentForm, "No se puede crear correctamente el departamento");
@@ -154,11 +156,13 @@ public class DepartmentController {
 
         Department res = departmentService.findOne(departmentId.toString());
 
-        Area a = areaService.findAreaByDepartamentsContaining(res);
-        List<Department> departments = a.getDepartaments();
-        departments.remove(res);
-        a.setDepartaments(departments);
-        areaService.save(a);
+        List<Area> areas = areaService.findAllByDepartamentsContaining(res);
+        for(Area a: areas) {
+            List<Department> departments = a.getDepartaments();
+            departments.remove(res);
+            a.setDepartaments(departments);
+            areaService.save(a);
+        }
 
         for(Grade g: res.getGrades()){
             gradeService.remove(g);
@@ -166,7 +170,7 @@ public class DepartmentController {
 
         departmentService.remove(res);
 
-        result = new ModelAndView("redirect:/department/list");
+        result = new ModelAndView("redirect:/admin/area/list");
         return result;
     }
 

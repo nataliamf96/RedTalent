@@ -22,13 +22,14 @@
 </div>
 <div style="margin-top: -25px" class="container py-4">
     <h1 class="my-4">Filtrado
-        <small>Perfiles por Facultad</small>
+        <small>Perfiles por centros</small>
     </h1>
     <div class="row">
         <div class="col-12">
             <form id="formulario">
                 <div class="form-group">
                     <select id="text" name="text" class="form-control" style="max-width: 350px">
+                        <option value="0">Seleccione un centro</option>
                         <option th:each="department : ${departments}" th:value="${department.getId()}" th:text="${department.getDepartment()}"></option>
                     </select>
                 </div>

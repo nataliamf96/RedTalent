@@ -10,4 +10,5 @@ import java.util.List;
 public interface AreaRepository extends MongoRepository<Area, String> {
 
     Area findAreaByDepartamentsContaining(Department department);
+    List<Area> findAllByDepartamentsContains(Department department);
 }

@@ -14,17 +14,14 @@ import src.redtalent.domain.Area;
 import src.redtalent.domain.Department;
 import src.redtalent.domain.Grade;
 import src.redtalent.forms.AreaForm;
-import src.redtalent.services.AdministratorService;
-import src.redtalent.services.AreaService;
-import src.redtalent.services.DepartmentService;
-import src.redtalent.services.GradeService;
+import src.redtalent.services.*;
 
 import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 
 @Controller
-@RequestMapping("/area")
+@RequestMapping("/admin/area")
 public class AreaController {
 
     // Services ---------------------------------------------------------------
@@ -36,6 +33,9 @@ public class AreaController {
 
     @Autowired
     private GradeService gradeService;
+
+    @Autowired
+    private UtilidadesService utilidadesService;
 
 
     // Constructors -----------------------------------------------------------
@@ -55,8 +55,9 @@ public class AreaController {
         areas = areaService.findAll();
 
         result = new ModelAndView("area/list");
-        result.addObject("requestURI", "area/list");
+        result.addObject("requestURI", "admin/area/list");
         result.addObject("areas", areas);
+        result.addObject("auth",utilidadesService.actorConectado());
 
         return result;
     }
@@ -73,10 +74,10 @@ public class AreaController {
 
             result = new ModelAndView("area/create");
             result.addObject("areaForm", areaForm);
-            result.addObject("requestURI", "./area/create");
+            result.addObject("requestURI", "./admin/area/create");
 
         } catch (Throwable oops) {
-            result = new ModelAndView("redirect:/area/list");
+            result = new ModelAndView("redirect:/admin/area/list");
         }
         return result;
     }
@@ -96,7 +97,7 @@ public class AreaController {
                 area.setArea(areaForm.getArea());
                 Area saved = this.areaService.save(area);
 
-                result = new ModelAndView("redirect:/area/list");
+                result = new ModelAndView("redirect:/admin/area/list");
 
             } catch (Throwable oops) {
                 result = createModelAndView(areaForm, "No se puede crear correctamente el área");
@@ -126,7 +127,7 @@ public class AreaController {
 
         areaService.remove(res);
 
-        result = new ModelAndView("redirect:/area/list");
+        result = new ModelAndView("redirect:/admin/area/list");
         return result;
     }
 

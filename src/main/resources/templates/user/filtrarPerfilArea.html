@@ -29,6 +29,7 @@
             <form id="formulario">
                 <div class="form-group">
                     <select id="text" name="text" class="form-control" style="max-width: 350px">
+                        <option value="0">Seleccione un área</option>
                         <option th:each="area : ${areas}" th:value="${area.getId()}" th:text="${area.getArea()}"></option>
                     </select>
                 </div>

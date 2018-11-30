@@ -102,13 +102,25 @@ public class ProjectController {
         User user = utilidadesService.userConectado(authentication.getName());
         Boolean yaEresDelEquipo = utilidadesService.estaEnElEquipo(user,team);
 
+        List<User> usuariosTeam = utilidadesService.usuariosDelEquipo(team);
+
+        Boolean valora = true;
+        for(Evaluation e:project.getEvaluations()){
+            if(user.getEvaluations().contains(e)){
+                valora = false;
+            }
+        }
+
         result.addObject("tieneSolicitudEnviada",utilidadesService.tieneSolicitudEnviada(user,team));
         result.addObject("yaEresDelEquipo",yaEresDelEquipo);
-        result.addObject("user",userService.findUserByProjectsContains(project));
+        result.addObject("user",user);
         result.addObject("project",project);
         result.addObject("team",team);
+        result.addObject("usuariosTeam",usuariosTeam);
+        result.addObject("users",userService.findAll());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("comments",project.getComments());
+        result.addObject("valora", valora);
 
         return result;
     }

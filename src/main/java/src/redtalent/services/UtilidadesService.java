@@ -43,8 +43,11 @@ public class UtilidadesService {
 
     public List<User> usuariosDelEquipo(Team team){
         List<User> result = new ArrayList<User>();
-        result.add(userService.findUserByTeamsConstains(team));
-        team.getApplications().stream().filter(x->x.getStatus().equals("ACEPTADO")).forEach(x->result.add(userService.findUserByApplicationsContains(x)));
+        if(team!=null){
+            result.add(userService.findUserByTeamsConstains(team));
+            team.getApplications().stream().filter(x->x.getStatus().equals("ACEPTADO")).forEach(x->result.add(userService.findUserByApplicationsContains(x)));
+        }
+
         return result;
     }
 
@@ -169,18 +172,21 @@ public class UtilidadesService {
     public Boolean estaEnElEquipo(User user, Team team){
         Boolean result = false;
 
-        if(user.getTeams().contains(team)){
-            result = true;
-        }else{
-            for(Application application:user.getApplications()){
-                if(team.getApplications().contains(application)){
-                    if(application.getStatus().equals("ACEPTADO")){
-                        result = true;
-                        break;
+        if(team!=null){
+            if(user.getTeams().contains(team)){
+                result = true;
+            }else{
+                for(Application application:user.getApplications()){
+                    if(team.getApplications().contains(application)){
+                        if(application.getStatus().equals("ACEPTADO")){
+                            result = true;
+                            break;
+                        }
                     }
                 }
             }
         }
+
         return result;
     }
 

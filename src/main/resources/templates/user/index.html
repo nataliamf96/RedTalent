@@ -40,7 +40,7 @@
             <br />
             <br />
             <div style="margin-top: 10px" class="row">
-                <div th:each="project : ${projects}" class="col-12" style="margin-bottom: 16px">
+                <div th:each="project : ${projects}" th:if="${!project.getCerrado()}" class="col-12" style="margin-bottom: 16px">
                     <div class="card h-100">
                         <div>
                             <span th:each="user : ${users}" th:if="${user.getProjects().contains(project)}">
@@ -50,15 +50,15 @@
                                     </div>
                                     <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-11">
                                         <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
-                                        <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span th:if="${user.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                                        <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
                                     </div>
                                 </div>
                             </span>
                         </div>
-                        <a th:href="@{/project/project(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                        <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                                <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                             </h4>
                             <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
                             <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>

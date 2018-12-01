@@ -101,7 +101,7 @@ public class EvaluationController {
                 userCreated.setEvaluations(evaluations1);
                 userService.saveUser(userCreated);
 
-                result = new ModelAndView("redirect:/user/userData?userId=" + evaluationForm.getUserId());
+                result = new ModelAndView("redirect:/user/dataUser?userId=" + evaluationForm.getUserId());
 
             } catch (Throwable oops) {
                 result = createModelAndView(evaluationForm, "No se puede crear correctamente la evaluacion");

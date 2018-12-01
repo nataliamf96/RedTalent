@@ -27,44 +27,38 @@
 <div id="wrapper">
     <ul class="sidebar navbar-nav">
         <li class="nav-item">
-            <a class="nav-link" href="/admin/dashboardAdmin">
+            <a class="nav-link" href="/directivo/dashboardDirectivo">
                 <i style="margin-top: 20px" class="fas fa-fw fa-tachometer-alt"></i>
                 <span>Dashboard</span>
             </a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/usersView">
-                <i class="fas fa-user"></i>
-                <span>Usuarios</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link" href="/admin/estadisticas">
+            <a class="nav-link" href="/directivo/estadisticas">
                 <i class="fas fa-fw fa-chart-area"></i>
                 <span>Estadísticas</span></a>
         </li>
         <li class="nav-item active">
-            <a class="nav-link" href="/admin/projects">
+            <a class="nav-link" href="/directivo/projects">
                 <i class="fas fa-project-diagram"></i>
                 <span>Proyectos</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/verTags">
+            <a class="nav-link" href="/directivo/verTags">
                 <i class="fas fa-tags"></i>
                 <span>Etiquetas</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/category/list">
+            <a class="nav-link" href="/directivo/category/list">
                 <i class="fas fa-fw fa-table"></i>
                 <span>Categorías</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/area/list">
+            <a class="nav-link" href="/directivo/area/list">
                 <i class="fas fa-graduation-cap"></i>
                 <span>Áreas/Centros/Grados</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/blog/list">
+            <a class="nav-link" href="/directivo/blog/list">
                 <i class="fab fa-blogger"></i></i>
                 <span>Blog</span></a>
         </li>
@@ -74,13 +68,13 @@
                 <span>Comentarios</span>
             </a>
             <div style="background-color: #212529; border:none" class="dropdown-menu" aria-labelledby="pagesDropdown">
-                <a style="color: gray" class="dropdown-item" href="/admin/comment/list">Comentarios a usuarios</a>
-                <a style="color: gray" class="dropdown-item" href="/admin/comment/project/list">Comentarios a proyectos</a>
-                <a style="color: gray" class="dropdown-item" href="/admin/comment/team/list">Comentarios a equipos</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/comment/list">Comentarios a usuarios</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/comment/project/list">Comentarios a proyectos</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/comment/team/list">Comentarios a equipos</a>
             </div>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/recomendation/list">
+            <a class="nav-link" href="/directivo/recomendation/list">
                 <i class="fas fa-star"></i>
                 <span>Recomendaciones</span></a>
         </li>
@@ -92,28 +86,22 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Foro</div>
+                    Comentarios del foro</div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                             <thead>
                             <tr>
                                 <th>Título</th>
-                                <th>Imagen</th>
-                                <th>Descripción</th>
-                                <th>Categoría</th>
-                                <th>Comentarios</th>
-                                <th>Eliminar</th>
+                                <th>Mensaje</th>
+                                <th>Respuestas</th>
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="forum : ${forums}">
-                                <td th:text="${forum.getTitle()}"></td>
-                                <td><img style="width: 45px" th:src="${forum.getImage()}"></td>
-                                <td th:text="${forum.getBody()}"></td>
-                                <td th:text="${forum.getCategory().getName()}"></td>
-                                <td><a th:href="@{/admin/forum/listComment(forumId=${forum.getId()}, projectId=${projectId})}">Consulte los comentarios</a></td>
-                                <td><a onclick="return confirm('¿Esta seguro que desea eliminar el foro?')" th:href="@{/admin/forum/delete(forumId=${forum.getId()})}">Eliminar</a></td>
+                            <tr th:each="comment : ${comments}">
+                                <td th:text="${comment.getTitle()}"></td>
+                                <td th:text="${comment.getText()}"></td>
+                                <td><a th:href="@{/directivo/forum/listReply(forumId=${forumId}, projectId=${projectId}, commentId=${comment.getId()})}">Consulte las respuestas</a></td>
                             </tr>
                             </tbody>
                         </table>

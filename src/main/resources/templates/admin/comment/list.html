@@ -69,16 +69,14 @@
                 <span>Blog</span></a>
         </li>
         <li class="nav-item dropdown active">
-            <div aria-labelledby="navbarDropdown">
-                <a class="nav-link dropdown-toggle" href="#" aria-haspopup="true" aria-expanded="false" id="navbarDropdown" role="button" data-toggle="dropdown">
-                    <i class="fas fa-comments"></i>
-                    <span>Comentarios</span></a>
-                <a class="dropdown-item" href="/admin/comment/list">
-                    <span style="color: gray">Comentarios a usuarios</span></a>
-                <a class="dropdown-item" href="/admin/comment/project/list">
-                    <span style="color: gray">Comentarios a proyectos</span></a>
-                <a class="dropdown-item" href="/admin/comment/team/list">
-                    <span style="color: gray">Comentarios a equipos</span></a>
+            <a style="background-color: #212529" class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-comments"></i>
+                <span>Comentarios</span>
+            </a>
+            <div style="background-color: #212529; border:none" class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <a style="color: gray" class="dropdown-item" href="/admin/comment/list">Comentarios a usuarios</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/comment/project/list">Comentarios a proyectos</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/comment/team/list">Comentarios a equipos</a>
             </div>
         </li>
         <li class="nav-item">

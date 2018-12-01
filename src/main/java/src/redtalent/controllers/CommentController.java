@@ -171,7 +171,7 @@ public class CommentController {
                 userCreated.setComments(comments1);
                 userService.saveUser(userCreated);
 
-                result = new ModelAndView("redirect:/comment/list?userId=" +commentForm.getUserId());
+                result = new ModelAndView("redirect:/user/dataUser?userId=" + commentForm.getUserId());
 
             } catch (Throwable oops) {
                 result = createCommentModelAndView(commentForm, "No se puede crear correctamente los comentarios");
@@ -381,7 +381,7 @@ public class CommentController {
             commentService.remove(res);
         }
 
-        result = new ModelAndView("redirect:/comment/list?userId=" +user.getId());
+        result = new ModelAndView("redirect:/user/dataUser?userId=" +user.getId());
         return result;
     }
 
@@ -526,7 +526,7 @@ public class CommentController {
 
     protected ModelAndView createCommentPModelAndView(CommentForm commentForm) {
         ModelAndView result;
-        result = createCommentModelAndView(commentForm, null);
+        result = createCommentPModelAndView(commentForm, null);
         return result;
     }
 
@@ -548,7 +548,7 @@ public class CommentController {
 
     protected ModelAndView createCommentTModelAndView(CommentForm commentForm) {
         ModelAndView result;
-        result = createCommentModelAndView(commentForm, null);
+        result = createCommentTModelAndView(commentForm, null);
         return result;
     }
 

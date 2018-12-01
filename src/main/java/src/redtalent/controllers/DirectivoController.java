@@ -302,6 +302,16 @@ public class DirectivoController {
         return result;
     }
 
+    @RequestMapping(value = "/projects", method = RequestMethod.GET)
+    public ModelAndView proyectos() {
+        ModelAndView result;
+        result = new ModelAndView("directivo/projects");
+
+        result.addObject("projects",projectService.findAll());
+        result.addObject("auth", utilidadesService.actorConectado());
+        return result;
+    }
+
     @RequestMapping(value = "/estadisticas")
     public ModelAndView estadisticas() {
         ModelAndView result;

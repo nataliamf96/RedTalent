@@ -265,7 +265,7 @@ public class CommentController {
                 }
                 userService.saveUser(userProject);
 
-                result = new ModelAndView("redirect:/comment/project/list?projectId=" +commentForm.getProjectId());
+                result = new ModelAndView("redirect:/project/projectData?projectId=" +commentForm.getProjectId());
 
             } catch (Throwable oops) {
                 result = createCommentPModelAndView(commentForm, "No se puede crear correctamente los comentarios");
@@ -340,7 +340,7 @@ public class CommentController {
                 userTeam.setTeams(teams);
                 userService.saveUser(userTeam);
 
-                result = new ModelAndView("redirect:/comment/team/list?teamId=" +commentForm.getTeamId());
+                result = new ModelAndView("redirect:/team/teamData?teamId=" +commentForm.getTeamId());
 
             } catch (Throwable oops) {
                 result = createCommentTModelAndView(commentForm, "No se puede crear correctamente los comentarios");
@@ -448,7 +448,7 @@ public class CommentController {
             commentService.remove(res);
         }
 
-        result = new ModelAndView("redirect:/comment/project/list?projectId=" +project.getId());
+        result = new ModelAndView("redirect:/project/projectData?projectId=" +project.getId());
         return result;
     }
 
@@ -496,7 +496,7 @@ public class CommentController {
             commentService.remove(res);
         }
 
-        result = new ModelAndView("redirect:/comment/team/list?teamId=" +team.getId());
+        result = new ModelAndView("redirect:/team/teamData?teamId=" +team.getId());
         return result;
     }
 

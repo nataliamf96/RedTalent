@@ -101,7 +101,7 @@ public class EvaluationController {
                 userCreated.setEvaluations(evaluations1);
                 userService.saveUser(userCreated);
 
-                result = new ModelAndView("redirect:/comment/list?userId=" + evaluationForm.getUserId());
+                result = new ModelAndView("redirect:/user/userData?userId=" + evaluationForm.getUserId());
 
             } catch (Throwable oops) {
                 result = createModelAndView(evaluationForm, "No se puede crear correctamente la evaluacion");
@@ -193,7 +193,7 @@ public class EvaluationController {
                 }
                 userService.saveUser(userProject);
 
-                result = new ModelAndView("redirect:/comment/project/list?projectId=" + evaluationForm.getProjectId());
+                result = new ModelAndView("redirect:/project/projectData?projectId=" + evaluationForm.getProjectId());
 
             } catch (Throwable oops) {
                 result = createProjectModelAndView(evaluationForm, "No se puede crear correctamente la evaluacion");
@@ -267,7 +267,7 @@ public class EvaluationController {
                 }
                 userService.saveUser(userTeam);
 
-                result = new ModelAndView("redirect:/comment/team/list?teamId=" + evaluationForm.getTeamId());
+                result = new ModelAndView("redirect:/team/teamData?teamId=" + evaluationForm.getTeamId());
 
             } catch (Throwable oops) {
                 result = createTeamModelAndView(evaluationForm, "No se puede crear correctamente la evaluacion");

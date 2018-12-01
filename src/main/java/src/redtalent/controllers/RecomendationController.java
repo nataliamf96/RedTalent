@@ -135,7 +135,7 @@ public class RecomendationController {
                 userCreated.setRecomendations(recomendations1);
                 userService.saveUser(userCreated);
 
-                result = new ModelAndView("redirect:/recomendation/realizedList?userId=" +recomendationForm.getUserId());
+                result = new ModelAndView("redirect:/user/dataUser?userId=" +recomendationForm.getUserId());
 
             } catch (Throwable oops) {
                 result = createModelAndView(recomendationForm, "No se puede crear correctamente la recomendacion");
@@ -172,7 +172,7 @@ public class RecomendationController {
             recomendationService.remove(res);
         }
 
-        result = new ModelAndView("redirect:/recomendation/realizedList?userId=" +user.getId());
+        result = new ModelAndView("redirect:/user/dataUser?userId=" +user.getId());
         return result;
     }
 

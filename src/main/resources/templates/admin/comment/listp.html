@@ -44,11 +44,6 @@
                 <span>Estadísticas</span></a>
         </li>
         <li class="nav-item">
-            <a class="nav-link" href="/admin/estadisticas">
-                <i class="fas fa-fw fa-chart-area"></i>
-                <span>Estadísticas</span></a>
-        </li>
-        <li class="nav-item active">
             <a class="nav-link" href="/admin/projects">
                 <i class="fas fa-project-diagram"></i>
                 <span>Proyectos</span></a>
@@ -73,7 +68,7 @@
                 <i class="fab fa-blogger"></i></i>
                 <span>Blog</span></a>
         </li>
-        <li class="nav-item dropdown">
+        <li class="nav-item dropdown active">
             <div aria-labelledby="navbarDropdown">
                 <a class="nav-link dropdown-toggle" href="#" aria-haspopup="true" aria-expanded="false" id="navbarDropdown" role="button" data-toggle="dropdown">
                     <i class="fas fa-comments"></i>
@@ -99,7 +94,7 @@
             <div class="card mb-3">
                 <div class="card-header">
                     <i class="fas fa-table"></i>
-                    Respuestas a comentarios del foro</div>
+                    Comentarios</div>
                 <div class="card-body">
                     <div class="table-responsive">
                         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
@@ -111,10 +106,10 @@
                             </tr>
                             </thead>
                             <tbody>
-                            <tr th:each="reply : ${replies}">
-                                <td th:text="${reply.getTitle()}"></td>
-                                <td th:text="${reply.getText()}"></td>
-                                <td><a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:href="@{/admin/forum/deleteReply(replyId=${reply.getId()})}">Eliminar</a></td>
+                            <tr th:each="comment : ${comments}">
+                                <td th:text="${comment.getTitle()}"></td>
+                                <td th:text="${comment.getText()}"></td>
+                                <td><a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:href="@{/admin/comment/project/delete(commentId=${comment.getId()})}">Eliminar</a></td>
                             </tr>
                             </tbody>
                         </table>

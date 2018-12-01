@@ -79,6 +79,7 @@ public class ForumAdminController {
         result.addObject("projectId", projectId);
         result.addObject("categories", categories);
         result.addObject("userCreated", userCreated);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -105,6 +106,7 @@ public class ForumAdminController {
         result.addObject("forumId", forumId);
         result.addObject("projectId", projectId);
         result.addObject("userCreated", userCreated);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -131,6 +133,7 @@ public class ForumAdminController {
         result.addObject("forumId", forumId);
         result.addObject("projectId", projectId);
         result.addObject("userCreated", userCreated);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }

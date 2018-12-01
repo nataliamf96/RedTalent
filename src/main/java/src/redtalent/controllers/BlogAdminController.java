@@ -71,6 +71,7 @@ public class BlogAdminController {
         result.addObject("blogs", blogs);
         result.addObject("categories", categories);
         result.addObject("userCreated", userCreated);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -94,6 +95,7 @@ public class BlogAdminController {
         result.addObject("comments", comments);
         result.addObject("blogId", blogId);
         result.addObject("userCreated", userCreated);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }
@@ -118,6 +120,7 @@ public class BlogAdminController {
         result.addObject("commentId", commentId);
         result.addObject("blogId", blogId);
         result.addObject("userCreated", userCreated);
+        result.addObject("auth", utilidadesService.actorConectado());
 
         return result;
     }

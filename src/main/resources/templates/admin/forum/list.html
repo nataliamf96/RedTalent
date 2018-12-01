@@ -1,36 +1,155 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Foro</title>
+    <title>Bienvenido/a Administrador</title>
+    <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <link href="/css/datatable.css" rel="stylesheet">
+    <link href="/css/all.min.css" rel="stylesheet">
+
 </head>
 <body>
-<div th:replace="masterpage/headerAdmin :: nav"></div>
-<div class="container">
-    <br />
-    <br />
-    <h3>Blog</h3>
-    <div style="margin-top: 20px" class="row">
-        <div th:each="forum : ${forums}" class="col-12 portfolio-item">
-            <h5>Título</h5>
-            <a style="color:black" th:href="@{/admin/forum/listComment(forumId=${forum.getId()}, projectId=${projectId})}"><span th:text="${forum.getTitle()}"></span></a>
-            <h5>Descripción</h5>
-            <span th:text="${forum.getBody()}"></span>
-            <h5>Imagen</h5>
-            <span th:text="${forum.getImage()}"></span>
-            <h5>Categoría</h5>
-            <span th:text="${forum.getCategory().getName()}"></span>
-            <a th:href="@{/admin/forum/delete(forumId=${forum.getId()})}"><i class="far fa-trash-alt"></i></a>
-        </div>
-    </div>
+<div th:if="${auth.equals('USER')}">
+    <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
-<br />
-<br />
-<br />
-<br />
-<div th:replace="masterpage/footer :: footer"></div>
+<div th:if="${auth.equals('ADMIN')}">
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
+</div>
+<div th:if="${auth.equals('DIRECTIVO')}">
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
+</div>
+<div th:if="${auth.equals('')}">
+    <div th:replace="masterpage/header :: nav"></div>
+</div>
+<div id="wrapper">
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/dashboardAdmin">
+                <i style="margin-top: 20px" class="fas fa-fw fa-tachometer-alt"></i>
+                <span>Dashboard</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/usersView">
+                <i class="fas fa-user"></i>
+                <span>Usuarios</span>
+            </a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/estadisticas">
+                <i class="fas fa-fw fa-chart-area"></i>
+                <span>Estadísticas</span></a>
+        </li>
+        <li class="nav-item active">
+            <a class="nav-link" href="/admin/projects">
+                <i class="fas fa-project-diagram"></i>
+                <span>Proyectos</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/verTags">
+                <i class="fas fa-tags"></i>
+                <span>Etiquetas</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/category/list">
+                <i class="fas fa-fw fa-table"></i>
+                <span>Categorías</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/area/list">
+                <i class="fas fa-graduation-cap"></i>
+                <span>Áreas/Centros/Grados</span></a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/blog/list">
+                <i class="fab fa-blogger"></i></i>
+                <span>Blog</span></a>
+        </li>
+        <li class="nav-item dropdown">
+            <div aria-labelledby="navbarDropdown">
+                <a class="nav-link dropdown-toggle" href="#" aria-haspopup="true" aria-expanded="false" id="navbarDropdown" role="button" data-toggle="dropdown">
+                    <i class="fas fa-comments"></i>
+                    <span>Comentarios</span></a>
+                <a class="dropdown-item" href="/admin/comment/list">
+                    <span style="color: gray">Comentarios a usuarios</span></a>
+                <a class="dropdown-item" href="/admin/comment/project/list">
+                    <span style="color: gray">Comentarios a proyectos</span></a>
+                <a class="dropdown-item" href="/admin/comment/team/list">
+                    <span style="color: gray">Comentarios a equipos</span></a>
+            </div>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" href="/admin/recomendation/list">
+                <i class="fas fa-star"></i>
+                <span>Recomendaciones</span></a>
+        </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+            <div class="card mb-3">
+                <div class="card-header">
+                    <i class="fas fa-table"></i>
+                    Foro</div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                            <thead>
+                            <tr>
+                                <th>Título</th>
+                                <th>Imagen</th>
+                                <th>Descripción</th>
+                                <th>Categoría</th>
+                                <th>Comentarios</th>
+                                <th>Eliminar</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            <tr th:each="forum : ${forums}">
+                                <td th:text="${forum.getTitle()}"></td>
+                                <td><img style="width: 45px" th:src="${forum.getImage()}"></td>
+                                <td th:text="${forum.getBody()}"></td>
+                                <td th:text="${forum.getCategory().getName()}"></td>
+                                <td><a th:href="@{/admin/forum/listComment(forumId=${forum.getId()}, projectId=${projectId})}">Consulte los comentarios</a></td>
+                                <td><a onclick="return confirm('¿Esta seguro que desea eliminar el foro?')" th:href="@{/admin/forum/delete(forumId=${forum.getId()})}">Eliminar</a></td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Universidad de Sevilla</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
+</div>
+<!-- Bootstrap core JavaScript-->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/js/jquery.easing.min.js"></script>
+
+<!-- Page level plugin JavaScript-->
+<script src="/js/jquery.dataTables.js"></script>
+<script src="/js/dataTables.bootstrap4.js"></script>
+
+<script src="/js/sb-admin.js"></script>
+
 </body>
 </html>

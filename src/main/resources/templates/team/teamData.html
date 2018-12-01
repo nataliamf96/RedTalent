@@ -133,7 +133,7 @@
                                   <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
                                   <div class="row">
                                       <div class="col-6" style="text-align: left;font-size: 0.6em">
-                                          <a th:if="${userP.getComments().contains(comment)}" th:href="@{/comment/team/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                                          <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${userP.getComments().contains(comment)}" th:href="@{/comment/team/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
                                       </div>
                                       <div class="col-6" style="text-align: right;font-size: 0.6em">
                                           <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>

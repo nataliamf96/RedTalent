@@ -206,7 +206,7 @@ public class UserController {
                 }
             }
 
-            result = new ModelAndView("user/userData");
+            result = new ModelAndView("user/dataUser");
             result.addObject("auth",utilidadesService.actorConectado());
             result.addObject("user",user);
             result.addObject("valora",valora);

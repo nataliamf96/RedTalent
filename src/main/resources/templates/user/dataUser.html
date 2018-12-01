@@ -79,7 +79,6 @@
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
 </div>
-
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 portfolio-item">
@@ -243,21 +242,20 @@
 <div id="tablaComentarios" style="display: none" class="container">
     <h2>Comentarios</h2>
     <div th:if="${user.getCommentsReceived().size() == 0}" class="row">
-        <div class="col-12">
-            <a th:href="@{/comment/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
+        <div th:if="${user != userConectado}" class="col-12">
+            <a th:href="@{/comment/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
             <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
         </div>
     </div>
     <div style="margin-top: +20px" th:if="${user.getCommentsReceived().size() != 0}" class="row">
-        <div class="col-12">
+        <div th:if="${user != userConectado}" class="col-12">
             <div class="row">
                 <div style="margin-bottom: 5px" class="col-12">
-                    <a th:href="@{/comment/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
+                    <a th:href="@{/comment/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
                     <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
                 </div>
             </div>
         </div>
-        <div class="col-12">
             <div th:each="comment : ${user.getCommentsReceived()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
                 <div class="card h-100">
                         <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
@@ -276,7 +274,7 @@
                         <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
                         <div class="row">
                             <div class="col-6" style="text-align: left;font-size: 0.6em">
-                                <a th:if="${user.getComments().contains(comment)}" th:href="@{/comment/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                                <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${userConectado.getComments().contains(comment)}" th:href="@{/comment/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
                             </div>
                             <div class="col-6" style="text-align: right;font-size: 0.6em">
                                 <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
@@ -286,12 +284,27 @@
                 </div>
             </div>
         </div>
-    </div>
 </div>
 <div id="tablaRecomendaciones" style="display: none" class="container">
     <h2>Recomendaciones</h2>
     <div th:if="${user.getRecomendationsReceived().size() == 0}" class="row">
-        <p style="margin-left: 16px;font-family: Calibri">No tiene recomendaciones recibidas</p>
+        <div th:if="${user != userConectado}" class="col-12">
+            <a th:href="@{/recomendation/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realiza una recomendación</button></a>
+            <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
+        </div>
+        <div th:if="${user != userConectado}" class="col-12">
+            <p>No existen recomendaciones</p>
+        </div>
+    </div>
+    <div th:if="${user.getRecomendationsReceived().size() != 0}" class="row">
+        <div th:if="${user != userConectado}" class="col-12">
+            <div class="row">
+                <div style="margin-bottom: 5px" class="col-12">
+                    <a th:href="@{/recomendation/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realizar recomendación</button></a>
+                    <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
+                </div>
+            </div>
+        </div>
     </div>
     <div style="margin-top: +20px" th:if="${user.getRecomendationsReceived().size() != 0}" class="row">
         <div th:each="comment : ${user.getRecomendationsReceived()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
@@ -311,7 +324,7 @@
                     <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
                     <div class="row">
                         <div class="col-6" style="text-align: left;font-size: 0.6em">
-                            <a th:if="${user.getRecomendations().contains(comment)}" th:href="@{/comment/delete(recomendationId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                            <a onclick="return confirm('¿Esta seguro que desea eliminar la recomendación?')" th:if="${userConectado.getRecomendations().contains(comment)}" th:href="@{/recomendation/delete(recomendationId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
                         </div>
                         <div class="col-6" style="text-align: right;font-size: 0.6em">
                             <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
@@ -351,7 +364,6 @@
         document.getElementById("tablaRecomendaciones").style = "display: block";
     }
 </script>
-<h1>rgtrytyujyhtgrfedw</h1>
 <div th:replace="masterpage/footer :: footer" />
 </body>
 </html>

@@ -1150,7 +1150,7 @@ public class DbSeeder implements CommandLineRunner{
         Team team1 = new Team(
                 "Los Comadrejas",
                 "Equipo cualificado para los proyectos de ámbito informático",
-                true,
+                false,
                 Arrays.asList(ap1),
                 Arrays.asList(evaluationTeam1, evaluationTeam2),
                 comenTeams1,
@@ -1160,7 +1160,7 @@ public class DbSeeder implements CommandLineRunner{
         Team team2 = new Team(
                 "SuperTeam",
                 "Necesitamos gente aplicada. ¡Nos encanta conocer gente nueva!",
-                true,
+                false,
                 Arrays.asList(ap2),
                 Arrays.asList(evaluationTeam3, evaluationTeam4),
                 comenTeams2,
@@ -1170,7 +1170,7 @@ public class DbSeeder implements CommandLineRunner{
         Team team3 = new Team(
                 "Los Winners",
                 "Queremos ganar el concurso de idea. Necesitamos gente competente.",
-                true,
+                false,
                 Arrays.asList(ap3),
                 Arrays.asList(evaluationTeam5),
                 comenTeams3,

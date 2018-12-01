@@ -220,7 +220,7 @@
         </div>
         <div class="col-6">
             <div th:if="${teamsParticipo.size() == 0}" class="row">
-                <p style="margin-left: 16px;font-family: Calibri">No tiene equipos creados</p>
+                <p style="margin-left: 16px;font-family: Calibri">No participa en ningún equipo</p>
             </div>
             <div style="margin-top: +20px" th:if="${teamsParticipo.size() != 0}" class="row">
                 <div th:each="team : ${teamsParticipo}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
@@ -244,7 +244,7 @@
     <div th:if="${user.getCommentsReceived().size() == 0}" class="row">
         <div th:if="${user != userConectado}" class="col-12">
             <a th:href="@{/comment/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
-            <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
+            <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
         </div>
     </div>
     <div style="margin-top: +20px" th:if="${user.getCommentsReceived().size() != 0}" class="row">
@@ -252,7 +252,7 @@
             <div class="row">
                 <div style="margin-bottom: 5px" class="col-12">
                     <a th:href="@{/comment/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
-                    <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
+                    <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
                 </div>
             </div>
         </div>
@@ -290,7 +290,7 @@
     <div th:if="${user.getRecomendationsReceived().size() == 0}" class="row">
         <div th:if="${user != userConectado}" class="col-12">
             <a th:href="@{/recomendation/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realiza una recomendación</button></a>
-            <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
+            <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
         </div>
         <div th:if="${user != userConectado}" class="col-12">
             <p>No existen recomendaciones</p>
@@ -301,7 +301,7 @@
             <div class="row">
                 <div style="margin-bottom: 5px" class="col-12">
                     <a th:href="@{/recomendation/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realizar recomendación</button></a>
-                    <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${userConectado.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
+                    <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
                 </div>
             </div>
         </div>

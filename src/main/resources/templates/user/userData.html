@@ -205,7 +205,7 @@
                 <p style="margin-left: 16px;font-family: Calibri">No tienes equipos creados</p>
             </div>
             <div style="margin-top: +20px" th:if="${teamsCreados.size() != 0}" class="row">
-                <div th:each="team : ${teamsCreados}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
+                <div th:each="team : ${teamsCreados}" th:if="${!team.isClosed()}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
                         <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img class="card-img-top" th:src="${team.getImage()}"></a>
                         <div class="card-body">
@@ -221,10 +221,10 @@
         </div>
         <div class="col-6">
             <div th:if="${teamsParticipo.size() == 0}" class="row">
-                <p style="margin-left: 16px;font-family: Calibri">No tienes equipos creados</p>
+                <p style="margin-left: 16px;font-family: Calibri">No participas en ningún equipo</p>
             </div>
             <div style="margin-top: +20px" th:if="${teamsParticipo.size() != 0}" class="row">
-                <div th:each="team : ${teamsParticipo}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
+                <div th:each="team : ${teamsParticipo}" th:if="${!team.isClosed()}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
                         <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img class="card-img-top" th:src="${team.getImage()}"></a>
                         <div class="card-body">

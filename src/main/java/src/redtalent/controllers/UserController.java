@@ -79,7 +79,8 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = utilidadesService.userConectado(authentication.getName());
         result = new ModelAndView("user/index");
-        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
+
+        result.addObject("projects",projectService.findAll());
         result.addObject("auth",utilidadesService.actorConectado());
         result.addObject("user",utilidadesService.userConectado(authentication.getName()));
         result.addObject("users",userService.findAll());
@@ -143,7 +144,7 @@ public class UserController {
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         User user = userService.findByEmail(authentication.getName());
         Set<Project> projectsParticipo = new HashSet<Project>();
-        Set<Project> projectsCreados = user.getProjects();
+        Set<Project> projectsCreados = new HashSet<Project>();
         Set<Team> teamsParticipo = new HashSet<Team>();
         Set<Team> teamsCreados = user.getTeams();
         projectsParticipo.addAll(utilidadesService.todosLosProyectosEnLosQueEstoyAceptado(user));
@@ -155,9 +156,9 @@ public class UserController {
             }
         }
 
-        for(Project p:projectsCreados){
-            if(p.getCerrado() == true){
-                projectsCreados.remove(p);
+        for(Project p:user.getProjects()){
+            if(p.getCerrado() != true){
+                projectsCreados.add(p);
             }
         }
 

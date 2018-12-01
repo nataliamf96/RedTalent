@@ -69,7 +69,7 @@ public class ProjectController {
 
         result = new ModelAndView("project/projects");
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
+        result.addObject("projects",projectService.findAll());
         return result;
     }
 
@@ -304,6 +304,18 @@ public class ProjectController {
             Assert.isTrue(user.getProjects().contains(projectService.findOne(projectId)),"El usuario creador no es el conectado.");
 
             Project project = projectService.findOne(projectId);
+
+            Team team = teamService.teamByProjectId(project);
+            team.setClosed(true);
+            Team teamSave = teamService.save(team);
+
+            User userCambiar = userService.findUserByTeamsConstains(team);
+            Set<Team> teamsCambiar = userCambiar.getTeams();
+            teamsCambiar.remove(team);
+            teamsCambiar.add(teamSave);
+            userCambiar.setTeams(teamsCambiar);
+            userService.saveUser(userCambiar);
+
             project.setCerrado(true);
 
             List<Alert> listaAlertas = project.getAlerts();

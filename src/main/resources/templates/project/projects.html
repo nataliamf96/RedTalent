@@ -25,7 +25,7 @@
         <small>Red Talent</small>
     </h1>
     <div class="row">
-        <div th:each="project : ${projects}" class="col-lg-3 col-sm-6 portfolio-item">
+        <div th:each="project : ${projects}" th:if="${!project.getCerrado() && !project.getPrivado()}" class="col-lg-3 col-sm-6 portfolio-item">
             <div class="card h-100">
                 <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                 <div class="card-body">

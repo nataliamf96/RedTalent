@@ -21,7 +21,7 @@
                 <div class='card-block' style="margin-top: 47px">
                     <img alt='' class='card-img-profile' style="width: 90px; height: 90px; border-width: 2px; border-color: white" th:src="${user.getImage()}">
                     <h6 style="margin-top: -23px" class='card-title'>
-                        <span th:text="${user.getFullname()}" /> <br />
+                        <a style="color: black" th:href="@{/user/dataUser(userId=${user.getId()})}"><span th:text="${user.getFullname()}" /></a> <br />
                         <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
                     </h6>
                     <div th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
@@ -40,7 +40,7 @@
             <br />
             <br />
             <div style="margin-top: 10px" class="row">
-                <div th:each="project : ${projects}" th:if="${!project.getCerrado()}" class="col-12" style="margin-bottom: 16px">
+                <div th:each="project : ${projects}" th:if="${!project.getCerrado() && !project.getPrivado()}" class="col-12" style="margin-bottom: 16px">
                     <div class="card h-100">
                         <div>
                             <span th:each="user : ${users}" th:if="${user.getProjects().contains(project)}">

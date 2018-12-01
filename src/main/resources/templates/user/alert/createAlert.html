@@ -18,19 +18,20 @@
             <div class="form-group">
                 <label for="project">Proyecto</label>:
                 <select style="max-width: 350px" id="project" name="project" class="form-control">
-                    <option th:each="project : ${projects}" th:value="${project.getId()}" th:text="${project.getName()}"></option>
+                    <option th:each="project : ${projects}" th:if="${!project.getEstado()}" th:value="${project.getId()}" th:text="${project.getName()}"></option>
                 </select>
                 <li th:each="err : ${#fields.errors('project')}" th:text="${err}" />
             </div>
             <div class="form-group">
                 <label for="text">Notificación al Equipo</label>:
-                <input type="text" class="form-control" id="text" name="text" style="max-width: 350px"/>
+                <textarea class="form-control" id="text" rows="5" name="text" style="max-width: 350px"></textarea>
                 <li th:each="err : ${#fields.errors('text')}" th:text="${err}" />
             </div>
             <b style="color: red" th:text="${message}" />
             <input type="submit" class="btn btn-info" name="crearAlerta" value="Crear Notificación" />
         </form>
     </div>
+    <br />
     <br />
     <br />
 </div>

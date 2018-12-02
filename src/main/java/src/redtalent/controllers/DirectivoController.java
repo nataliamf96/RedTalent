@@ -81,10 +81,14 @@ public class DirectivoController {
     @RequestMapping(value = "/index")
     public ModelAndView index() {
         ModelAndView result;
-
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         result = new ModelAndView("directivo/index");
-        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
+
+        result.addObject("projects",projectService.findAll());
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("user",utilidadesService.directivoConectado(authentication.getName()));
+        result.addObject("users",userService.findAll());
+        result.addObject("usuariosMejorValorados",userService.usuariosOrdenadosPorEvaluacion());
         return result;
     }
 

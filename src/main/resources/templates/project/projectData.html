@@ -112,6 +112,8 @@
                 <div th:if="${project.getAlerts().size() == 0}" class="row">
                     <p style="margin-left: 16px;font-family: Calibri">No tiene notificaciones el proyecto</p>
                 </div>
+        </div>
+        <div class="col-12">
             <div class="row">
                 <div th:each="alerta : ${project.getAlerts()}" class="col-12 portfolio-item">
                     <div th:if="${alerta.getText().substring(0,9).equals('[code:as]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-success" role="alert">
@@ -183,38 +185,46 @@
 <div id="tablaForos" style="display: none" class="container">
     <div class="row">
         <div style="margin-bottom: 2px" class="col-12">
-            <h3>Foros</h3>
+            <h3 th:if="${project.getForums().size() == 0}">Foros &nbsp;&nbsp; <a th:href="@{/forum/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Crea el primer tema</button></a></h3>
+            <h3 th:if="${project.getForums().size() != 0}">Foros &nbsp;&nbsp; <a th:href="@{/forum/create(projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Crea un tema</button></a></h3>
             <hr />
-            <div class="row">
-                <div th:each="forum : ${project.getForums()}" class="col-12">
+            <div style="min-height: 250px" th:if="${project.getForums().size() == 0}" class="row">
+                <div class="col-12">
+                    <p>No existen temas en el foro</p>
+                </div>
+            </div>
+            <div style="min-height: 250px" th:if="${project.getForums().size() != 0}" class="row">
+                <div class="col-12">
                     <div class="row">
-                        <div class="col-lg-8">
-                            <h4 th:text="${forum.getTitle()}"></h4>
-                            <h6 th:each="uu : ${users}" th:if="${uu.getForums().contains(forum)}">
-                                Creado por <span th:text="${uu.getFullname()}"></span> el <span th:text="${#dates.format(forum.getMoment(), 'dd-MM-yyyy')}"></span>
-                                    &nbsp;&nbsp;<a onclick="return confirm('¿Esta seguro que desea eliminar el tema del foro?')" th:if="${user.getForums().contains(forum)}" th:href="@{/forum/delete(forumId=${forum.getId()})}"><i class="fas fa-trash"></i></a>
-                            </h6>
-                            <p th:text="${forum.getBody()}"></p>
-                        </div>
-                        <div style="text-align: center" class="col-lg-4">
-                            <img alt='' class='card-img-profile' style="max-width: 300px" th:src="${forum.getImage()}">
-                        </div>
-                    </div>
-                    <div th:if="${forum.getComments().size() == 0}" class="row">
-                        <div class="col-12">
-                            <a th:href="@{/forum/createComment(forumId=${forum.getId()},projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
-                        </div>
-                    </div>
-                    <div style="margin-top: +20px" th:if="${forum.getComments().size() != 0}" class="row">
-                        <div class="col-12">
+                        <div th:each="forum : ${project.getForums()}" class="col-12">
                             <div class="row">
-                                <div style="margin-bottom: 5px" class="col-12">
-                                    <a th:href="@{/forum/createComment(forumId=${forum.getId()},projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
+                                <div class="col-lg-8">
+                                    <h4 th:text="${forum.getTitle()}"></h4>
+                                    <h6 th:each="uu : ${users}" th:if="${uu.getForums().contains(forum)}">
+                                        Creado por <span th:text="${uu.getFullname()}"></span> el <span th:text="${#dates.format(forum.getMoment(), 'dd-MM-yyyy')}"></span>
+                                        &nbsp;&nbsp;<a onclick="return confirm('¿Esta seguro que desea eliminar el tema del foro?')" th:if="${user.getForums().contains(forum)}" th:href="@{/forum/delete(forumId=${forum.getId()})}"><i class="fas fa-trash"></i></a>
+                                    </h6>
+                                    <p th:text="${forum.getBody()}"></p>
+                                </div>
+                                <div style="text-align: center" class="col-lg-4">
+                                    <img alt='' class='card-img-profile' style="max-width: 300px" th:src="${forum.getImage()}">
                                 </div>
                             </div>
-                        </div>
-                        <div th:each="comment : ${forum.getComments()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
-                            <div class="card h-100">
+                            <div th:if="${forum.getComments().size() == 0}" class="row">
+                                <div class="col-12">
+                                    <a th:href="@{/forum/createComment(forumId=${forum.getId()},projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
+                                </div>
+                            </div>
+                            <div style="margin-top: +20px" th:if="${forum.getComments().size() != 0}" class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div style="margin-bottom: 5px" class="col-12">
+                                            <a th:href="@{/forum/createComment(forumId=${forum.getId()},projectId=${project.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:each="comment : ${forum.getComments()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
+                                    <div class="card h-100">
                                 <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
                                     <div class="row">
                                         <div class="col-2">
@@ -226,33 +236,33 @@
                                         </div>
                                     </div>
                                 </span>
-                                <div class="card-body">
-                                    <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
-                                    <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
-                                    <div class="row">
-                                        <div class="col-6" style="text-align: left;font-size: 0.6em">
-                                            <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${user.getComments().contains(comment)}" th:href="@{/forum/deleteComment(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                                        <div class="card-body">
+                                            <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
+                                            <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
+                                            <div class="row">
+                                                <div class="col-6" style="text-align: left;font-size: 0.6em">
+                                                    <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${user.getComments().contains(comment)}" th:href="@{/forum/deleteComment(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                                                </div>
+                                                <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                                    <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="col-6" style="text-align: right;font-size: 0.6em">
-                                            <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                                        <div th:if="${comment.getReplies().size() == 0}" class="row">
+                                            <div class="col-12">
+                                                <a th:href="@{/forum/createReply(forumId=${forum.getId()},projectId=${project.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
+                                            </div>
                                         </div>
-                                    </div>
-                                </div>
-                                <div th:if="${comment.getReplies().size() == 0}" class="row">
-                                    <div class="col-12">
-                                        <a th:href="@{/forum/createReply(forumId=${forum.getId()},projectId=${project.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
-                                    </div>
-                                </div>
-                                <div th:if="${comment.getReplies().size() != 0}" class="row">
-                                    <div class="col-12">
-                                        <a th:href="@{/forum/createReply(forumId=${forum.getId()},projectId=${project.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-12">
-                                            <div th:each="reply : ${comment.getReplies()}" class="row">
-                                                <div class="col-1"></div>
-                                                <div class="col-10">
-                                                    <div class="card h-100">
+                                        <div th:if="${comment.getReplies().size() != 0}" class="row">
+                                            <div class="col-12">
+                                                <a th:href="@{/forum/createReply(forumId=${forum.getId()},projectId=${project.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div th:each="reply : ${comment.getReplies()}" class="row">
+                                                        <div class="col-1"></div>
+                                                        <div class="col-10">
+                                                            <div class="card h-100">
                                                 <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
                                                     <div class="row">
                                                         <div class="col-2">
@@ -264,28 +274,30 @@
                                                         </div>
                                                     </div>
                                                 </span>
-                                                        <div class="card-body">
-                                                            <b style="font-family: Calibri" th:text="${reply.getTitle()}"></b>
-                                                            <p style="font-family: Calibri" th:text="${reply.getText()}"></p>
-                                                            <div class="row">
-                                                                <div class="col-6" style="text-align: left;font-size: 0.6em">
-                                                                    <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${user.getComments().contains(comment)}" th:href="@{/forum/deleteReply(replyId=${reply.getId()})}"><i class="fas fa-trash"></i></a>
-                                                                </div>
-                                                                <div class="col-6" style="text-align: right;font-size: 0.6em">
-                                                                    <span th:text="${#dates.format(reply.getMoment(), 'dd-MM-yyyy')}"></span>
+                                                                <div class="card-body">
+                                                                    <b style="font-family: Calibri" th:text="${reply.getTitle()}"></b>
+                                                                    <p style="font-family: Calibri" th:text="${reply.getText()}"></p>
+                                                                    <div class="row">
+                                                                        <div class="col-6" style="text-align: left;font-size: 0.6em">
+                                                                            <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${user.getComments().contains(comment)}" th:href="@{/forum/deleteReply(replyId=${reply.getId()})}"><i class="fas fa-trash"></i></a>
+                                                                        </div>
+                                                                        <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                                                            <span th:text="${#dates.format(reply.getMoment(), 'dd-MM-yyyy')}"></span>
+                                                                        </div>
+                                                                    </div>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
+                                                </div>
                                             </div>
-                                        </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
+                            <hr style="border: 2px whitesmoke solid" />
                         </div>
                     </div>
-                    <hr style="border: 2px whitesmoke solid" />
                 </div>
             </div>
         </div>

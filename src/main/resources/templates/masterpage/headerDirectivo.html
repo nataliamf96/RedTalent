@@ -9,12 +9,7 @@
         <div class="collapse navbar-collapse" id="navbarResponsive">
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item active">
-                    <a class="nav-link" href="/directivo/index">Home
-                        <span class="sr-only">(current)</span>
-                    </a>
-                </li>
-                <li class="nav-item active">
-                    <a class="nav-link" href="/directivo/updateDirectivo">Actualizar Perfil
+                    <a class="nav-link" href="/directivo/index">Inicio
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
@@ -23,23 +18,14 @@
                         <span class="sr-only">(current)</span>
                     </a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        Filtros
+                <li class="nav-item active">
+                    <a class="nav-link" href="/directivo/filtrarProyectosCategorias">Filtros
+                        <span class="sr-only">(current)</span>
                     </a>
-                    <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                        <a class="dropdown-item" href="/directivo/filtrarPerfilesPorEtiquetas">Perfiles Por Etiquetas</a>
-                        <a class="dropdown-item" href="/directivo/filtrarProyectosCategorias">Proyectos Por Categorias</a>
-                        <a class="dropdown-item" href="/directivo/filtrarBlogsCategorias">Blogs Por Categorias</a>
-                        <a class="dropdown-item" href="/directivo/filtrarForumsCategorias">Foros Por Categorias</a>
-                        <a class="dropdown-item" href="/directivo/filtrarPerfilArea">Perfiles por Area</a>
-                        <a class="dropdown-item" href="/directivo/filtrarPerfilDepartamento">Perfiles por Facultades</a>
-                        <a class="dropdown-item" href="/directivo/filtrarPerfilGrado">Perfiles por Grado</a>
-                    </div>
                 </li>
                 <li class="nav-item active">
                     <form th:action="@{/logout}" method="post">
-                        <input class="btn btn-warning" type="submit" value="Cerrar Sesión"/>
+                        <input class="btn btn-primary" type="submit" value="Cerrar sesión"/>
                     </form>
                 </li>
             </ul>

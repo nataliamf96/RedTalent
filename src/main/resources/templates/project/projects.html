@@ -12,10 +12,10 @@
     <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
 <div th:if="${auth.equals('ADMIN')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
 </div>
 <div th:if="${auth.equals('DIRECTIVO')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
 </div>
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
@@ -24,6 +24,9 @@
     <h1 class="my-4">Proyectos
         <small>Red Talent</small>
     </h1>
+    <a href="/project/createProject"><button type="button" class="btn btn-primary">Crea un proyecto</button></a>
+    </br>
+    </br>
     <div class="row">
         <div th:each="project : ${projects}" th:if="${!project.getCerrado() && !project.getPrivado()}" class="col-lg-3 col-sm-6 portfolio-item">
             <div class="card h-100">

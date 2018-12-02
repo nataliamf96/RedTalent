@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Datos de Usuario</title>
+    <title>Datos del Usuario</title>
     <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
@@ -66,20 +66,7 @@
         }
     </style>
 </head>
-<body class="bg-light">
-<div th:if="${auth.equals('USER')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
-</div>
-<div th:if="${auth.equals('ADMIN')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
-</div>
-<div th:if="${auth.equals('DIRECTIVO')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
-</div>
-<div th:if="${auth.equals('')}">
-    <div th:replace="masterpage/header :: nav"></div>
-</div>
-
+<div th:replace="masterpage/headerAdmin :: nav"></div>
 <div class="container-fluid">
     <div class="row">
         <div class="col-12 portfolio-item">
@@ -94,21 +81,17 @@
                         <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
                     </h6>
                     <h6 th:if="${user.getCurriculum().getRealized()==true}" style="margin-top: -23px" class='card-title'>
-                        <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span></a><br />
+                        <span style="font-size: 0.8em" th:text="${user.getCurriculum().getGrade().getName()}"></span><br />
                         <a style="color: black" th:href="${user.getCurriculum().getUrlLinkedin()}"><i class="fab fa-linkedin" style="color: #3b5999; font-size: 1.5em"></i></a>
                     </h6>
                     <div th:if="${user.getTags().size() != 0}" style="margin-top: -30px;text-align: left;margin-left: 25px; margin-right: 25px" class='card-title'>
                         <span th:each="tag : ${user.getTags()}" style="font-size: 0.9em; font-family: Calibri">
-                            <a th:href="@{/user/filtrarPerfilesPorEtiquetas(tag=${tag.getName()})}"><span th:text="${tag.getName()}" class="badge badge-pill badge-info"></span></a>
+                            <a th:href="@{/admin/filtrarPerfilesPorEtiquetas(tag=${tag.getName()})}"><span th:text="${tag.getName()}" class="badge badge-pill badge-info"></span></a>
                         </span>
                     </div>
                     <div th:if="${user.getCurriculum().getRealized()==true}" style="border-top: grey solid 1px;margin-top: -23px;text-align: left;margin-left: 25px; margin-right: 25px" class='card-title'>
                         <span style="font-size: 0.9em; font-family: Calibri" th:text="${user.getCurriculum().getDescription()}" />
                     </div>
-                    <a style="text-decoration: none" th:if="${user.getCurriculum().getRealized()==false}" href="/user/curriculum/createCurriculum"><i class="fas fa-passport"></i>&nbsp;&nbsp;Añade tu curriculum</a>
-                    <a style="text-decoration: none" th:if="${user.getCurriculum().getRealized()==true}" href="/user/curriculum/updateCurriculum"><i class="fas fa-passport"></i>&nbsp;&nbsp;Actualice su curriculum&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                    <a style="text-decoration: none" href="/user/cambiarContraseña"><i class="fas fa-user-circle"></i>&nbsp;&nbsp;Modificar contraseña&nbsp;&nbsp;&nbsp;&nbsp;</a>
-                    <a style="text-decoration: none" href="/user/updateUser"><i class="fas fa-address-book"></i>&nbsp;&nbsp;Modificar mis datos</a>
                 </div>
             </div>
         </div>
@@ -116,17 +99,17 @@
 </div>
 <div class="container">
     <div class="row">
-            <table class="table table-bordered table-active">
-                <thead>
-                    <tr style="text-align: center; color: black">
-                        <th onclick="verTablaProyecto()" scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos</th>
-                        <th onclick="verTablaEquipo()" scope="col"> <i class="fas fa-users"></i>&nbsp;&nbsp;Equipos</th>
-                        <th onclick="verTablaComentario()" scope="col"><i class="fas fa-comment"></i>&nbsp;&nbsp;Comentarios</th>
-                        <th onclick="verTablaRecomendacion()" scope="col"><i class="fas fa-comment-dots"></i>&nbsp;&nbsp;Recomendaciones</th>
-                    </tr>
-                </thead>
-            </table>
-        </div>
+        <table class="table table-bordered table-active">
+            <thead>
+            <tr style="text-align: center; color: black">
+                <th onclick="verTablaProyecto()" scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos</th>
+                <th onclick="verTablaEquipo()" scope="col"> <i class="fas fa-users"></i>&nbsp;&nbsp;Equipos</th>
+                <th onclick="verTablaComentario()" scope="col"><i class="fas fa-comment"></i>&nbsp;&nbsp;Comentarios</th>
+                <th onclick="verTablaRecomendacion()" scope="col"><i class="fas fa-comment-dots"></i>&nbsp;&nbsp;Recomendaciones</th>
+            </tr>
+            </thead>
+        </table>
+    </div>
     <div class="row">
         <div class="col-12">
             <hr />
@@ -140,7 +123,7 @@
             <thead>
             <tr style="text-align: center; color: black">
                 <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos Creados</th>
-                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos Participo</th>
+                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Proyectos Participa</th>
             </tr>
             </thead>
         </table>
@@ -153,10 +136,10 @@
             <div th:if="${projectsCreados.size() != 0}" class="row">
                 <div th:each="project : ${projectsCreados}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
-                        <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                        <img class="card-img-top" th:src="${project.getImage()}">
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                                <span th:text="${project.getName()}"></span>
                             </h4>
                             <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
                             <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
@@ -172,10 +155,10 @@
             <div th:if="${projectsParticipo.size() != 0}" class="row">
                 <div th:each="project : ${projectsParticipo}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
-                        <a th:href="@{/project/projectData(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                        <img class="card-img-top" th:src="${project.getImage()}">
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a th:href="@{/project/projectData(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                                <span th:text="${project.getName()}"></span>
                             </h4>
                             <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
                             <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
@@ -185,7 +168,7 @@
             </div>
         </div>
     </div>
-    </div>
+</div>
 </div>
 <div id="tablaEquipos" style="display: none" class="container">
     <h2>Equipos</h2>
@@ -194,7 +177,7 @@
             <thead>
             <tr style="text-align: center; color: black">
                 <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Equipos Creados</th>
-                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Equipos Participo</th>
+                <th scope="col"><i class="fas fa-project-diagram"></i>&nbsp;&nbsp;Equipos Participa</th>
             </tr>
             </thead>
         </table>
@@ -202,15 +185,15 @@
     <div class="row">
         <div class="col-6">
             <div th:if="${teamsCreados.size() == 0}" class="row">
-                <p style="margin-left: 16px;font-family: Calibri">No tienes equipos creados</p>
+                <p style="margin-left: 16px;font-family: Calibri">No tiene equipos creados</p>
             </div>
             <div style="margin-top: +20px" th:if="${teamsCreados.size() != 0}" class="row">
-                <div th:each="team : ${teamsCreados}" th:if="${!team.isClosed()}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
+                <div th:each="team : ${teamsCreados}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
-                        <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img class="card-img-top" th:src="${team.getImage()}"></a>
+                        <img class="card-img-top" th:src="${team.getImage()}">
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a th:href="@{/team/teamData(teamId=${team.getId()})}" th:text="${team.getName()}"></a>
+                                <span th:text="${team.getName()}"></span>
                             </h4>
                             <p class="card-text" th:if="${team.getDescription().length() < 150}" th:text="${team.getDescription()}"></p>
                             <p class="card-text" th:if="${team.getDescription().length() >= 150}" th:text="${team.getDescription().substring(0,120).concat('...')}"></p>
@@ -221,15 +204,15 @@
         </div>
         <div class="col-6">
             <div th:if="${teamsParticipo.size() == 0}" class="row">
-                <p style="margin-left: 16px;font-family: Calibri">No participas en ningún equipo</p>
+                <p style="margin-left: 16px;font-family: Calibri">No participa en ningún equipo</p>
             </div>
             <div style="margin-top: +20px" th:if="${teamsParticipo.size() != 0}" class="row">
-                <div th:each="team : ${teamsParticipo}" th:if="${!team.isClosed()}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
+                <div th:each="team : ${teamsParticipo}" class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
                     <div class="card h-100">
-                        <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img class="card-img-top" th:src="${team.getImage()}"></a>
+                        <img class="card-img-top" th:src="${team.getImage()}">
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a th:href="@{/team/teamData(teamId=${team.getId()})}" th:text="${team.getName()}"></a>
+                                <span th:text="${team.getName()}"></span>
                             </h4>
                             <p class="card-text" th:if="${team.getDescription().length() < 150}" th:text="${team.getDescription()}"></p>
                             <p class="card-text" th:if="${team.getDescription().length() >= 150}" th:text="${team.getDescription().substring(0,120).concat('...')}"></p>
@@ -243,42 +226,46 @@
 <div id="tablaComentarios" style="display: none" class="container">
     <h2>Comentarios</h2>
     <div th:if="${user.getCommentsReceived().size() == 0}" class="row">
-        <p style="margin-left: 16px;font-family: Calibri">No tiene comentarios recibidos</p>
+        <div class="col-12">
+            <p>No existen comentarios</p>
+        </div>
     </div>
     <div style="margin-top: +20px" th:if="${user.getCommentsReceived().size() != 0}" class="row">
-        <div th:each="comment : ${user.getCommentsReceived()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
-            <div class="card h-100">
-                    <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
+            <div th:each="comment : ${user.getCommentsReceived()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
+                <div class="card h-100">
+                        <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
+                            <div class="row">
+                                <div class="col-2">
+                                    <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                </div>
+                                <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                    <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                    <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
+                                </div>
+                            </div>
+                        </span>
+                    <div class="card-body">
+                        <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
+                        <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
                         <div class="row">
-                            <div class="col-2">
-                                <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                            <div class="col-6" style="text-align: left;font-size: 0.6em">
+                                <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:href="@{/admin/comment/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
                             </div>
-                            <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
-                                <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
-                                <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                            <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
                             </div>
-                        </div>
-                    </span>
-                <div class="card-body">
-                    <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
-                    <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
-                    <div class="row">
-                        <div class="col-6" style="text-align: left;font-size: 0.6em">
-                            <a th:if="${user.getComments().contains(comment)}" th:href="@{/comment/delete(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
-                        </div>
-                        <div class="col-6" style="text-align: right;font-size: 0.6em">
-                            <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
 </div>
 <div id="tablaRecomendaciones" style="display: none" class="container">
     <h2>Recomendaciones</h2>
-    <div th:if="${user.getRecomendationsReceived().size() == 0}" class="row">
-        <p style="margin-left: 16px;font-family: Calibri">No tiene recomendaciones recibidos</p>
+    <div style="margin-top: +20px" th:if="${user.getRecomendationsReceived().size() == 0}" class="row">
+        <div class="col-12">
+            <p>No existen recomendaciones</p>
+        </div>
     </div>
     <div style="margin-top: +20px" th:if="${user.getRecomendationsReceived().size() != 0}" class="row">
         <div th:each="comment : ${user.getRecomendationsReceived()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
@@ -286,11 +273,11 @@
                     <span th:each="u : ${users}" th:if="${u.getRecomendations().contains(comment)}">
                         <div class="row">
                             <div class="col-2">
-                                <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
                             </div>
                             <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
-                                <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
-                                <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                                <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
                             </div>
                         </div>
                     </span>
@@ -298,7 +285,7 @@
                     <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
                     <div class="row">
                         <div class="col-6" style="text-align: left;font-size: 0.6em">
-                            <a th:if="${user.getRecomendations().contains(comment)}" th:href="@{/comment/delete(recomendationId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                            <a onclick="return confirm('¿Esta seguro que desea eliminar la recomendación?')" th:href="@{/admin/recomendation/delete(recomendationId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
                         </div>
                         <div class="col-6" style="text-align: right;font-size: 0.6em">
                             <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
@@ -313,8 +300,7 @@
     <hr style="border: 2px whitesmoke solid" />
     <div class="row">
         <div style="margin-bottom: 2px" class="col-12">
-            <h3 th:if="${user.getBlogs().size() == 0}">Mis temas para el blog &nbsp;&nbsp; <a href="/blog/create"><button type="button" class="btn btn-primary">Crea el primer tema</button></a></h3>
-            <h3 th:if="${user.getBlogs().size() != 0}">Mis temas para el blog  &nbsp;&nbsp; <a href="/blog/create"><button type="button" class="btn btn-primary">Crea un tema</button></a></h3>
+            <h3>Temas para el blog</h3>
             <hr />
             <div style="min-height: 250px" th:if="${user.getBlogs().size() == 0}" class="row">
                 <div class="col-12">
@@ -330,7 +316,7 @@
                                     <h4 th:text="${blog.getTitle()}"></h4>
                                     <h6 th:each="uu : ${users}" th:if="${uu.getBlogs().contains(blog)}">
                                         Creado por <span th:text="${uu.getFullname()}"></span> el <span th:text="${#dates.format(blog.getMoment(), 'dd-MM-yyyy')}"></span>
-                                        &nbsp;&nbsp;<a onclick="return confirm('¿Esta seguro que desea eliminar el tema del blog?')" th:if="${user.getBlogs().contains(blog)}" th:href="@{/blog/delete(bogId=${blog.getId()})}"><i class="fas fa-trash"></i></a>
+                                        &nbsp;&nbsp;<a onclick="return confirm('¿Esta seguro que desea eliminar el tema del blog?')" th:href="@{/admin/blog/delete(bogId=${blog.getId()})}"><i class="fas fa-trash"></i></a>
                                     </h6>
                                     <p th:text="${blog.getBody()}"></p>
                                 </div>
@@ -338,28 +324,16 @@
                                     <img alt='' class='card-img-profile' style="max-width: 300px" th:src="${blog.getImage()}">
                                 </div>
                             </div>
-                            <div th:if="${blog.getComments().size() == 0}" class="row">
-                                <div class="col-12">
-                                    <a th:href="@{/blog/createComment(blogId=${blog.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
-                                </div>
-                            </div>
                             <div style="margin-top: +20px" th:if="${blog.getComments().size() != 0}" class="row">
-                                <div class="col-12">
-                                    <div class="row">
-                                        <div style="margin-bottom: 5px" class="col-12">
-                                            <a th:href="@{/blog/createComment(blogId=${blog.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div th:each="comment : ${blog.getComments()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
                                     <div class="card h-100">
                                 <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
                                     <div class="row">
                                         <div class="col-2">
-                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
                                         </div>
                                         <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
-                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
                                             <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
                                         </div>
                                     </div>
@@ -369,22 +343,14 @@
                                             <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
                                             <div class="row">
                                                 <div class="col-6" style="text-align: left;font-size: 0.6em">
-                                                    <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${user.getComments().contains(comment)}" th:href="@{/blog/deleteComment(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                                                    <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:href="@{/admin/blog/deleteComment(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
                                                 </div>
                                                 <div class="col-6" style="text-align: right;font-size: 0.6em">
                                                     <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div th:if="${comment.getReplies().size() == 0}" class="row">
-                                            <div class="col-12">
-                                                <a th:href="@{/blog/createReply(blogId=${blog.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
-                                            </div>
-                                        </div>
                                         <div th:if="${comment.getReplies().size() != 0}" class="row">
-                                            <div class="col-12">
-                                                <a th:href="@{/blog/createReply(blogId=${blog.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
-                                            </div>
                                             <div class="row">
                                                 <div class="col-12">
                                                     <div th:each="reply : ${comment.getReplies()}" class="row">
@@ -394,10 +360,10 @@
                                                 <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
                                                     <div class="row">
                                                         <div class="col-2">
-                                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
                                                         </div>
                                                         <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
-                                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
                                                             <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
                                                         </div>
                                                     </div>
@@ -407,7 +373,7 @@
                                                                     <p style="font-family: Calibri" th:text="${reply.getText()}"></p>
                                                                     <div class="row">
                                                                         <div class="col-6" style="text-align: left;font-size: 0.6em">
-                                                                            <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${user.getComments().contains(comment)}" th:href="@{/blog/deleteReply(replyId=${reply.getId()})}"><i class="fas fa-trash"></i></a>
+                                                                            <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:href="@{/admin/blog/deleteReply(replyId=${reply.getId()})}"><i class="fas fa-trash"></i></a>
                                                                         </div>
                                                                         <div class="col-6" style="text-align: right;font-size: 0.6em">
                                                                             <span th:text="${#dates.format(reply.getMoment(), 'dd-MM-yyyy')}"></span>

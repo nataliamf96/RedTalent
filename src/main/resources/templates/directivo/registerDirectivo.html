@@ -9,11 +9,17 @@
         function previewFile() {
             var preview = document.getElementById("imagenPreview");
             var imageSend = document.getElementById("image");
-            alert(imageSend.size);
             var tam = imageSend.size;
             document.getElementById("imagenPreview").style = "display:block; max-width: 200px";
             var file    = document.querySelector('input[type=file]').files[0];
             var reader  = new FileReader();
+            if (file.size > 500000) // 2 mb for bytes.
+            {
+                alert("La imagen supera los 500Kb! Suba otra imagen de perfil.");
+                document.getElementById('botonEnviar').style.display = 'none';
+            }else{
+                document.getElementById('botonEnviar').style.display = 'block';
+            }
 
             reader.addEventListener("load", function () {
                 preview.src = reader.result;
@@ -72,7 +78,7 @@
             <b style="color: red" th:text="${message}" />
             <br />
             <br />
-            <input type="submit" class="btn btn-info" name="saveDirectivo" value="Registrarse" />
+            <input id="botonEnviar" type="submit" class="btn btn-info" name="saveDirectivo" value="Registrarse" />
         </form>
     </div>
     <br />

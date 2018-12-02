@@ -61,13 +61,65 @@ public class AdministratorController {
     @RequestMapping(value = "/index")
     public ModelAndView index() {
         ModelAndView result;
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-
         result = new ModelAndView("admin/index");
+
+        result.addObject("projects",projectService.findAll());
         result.addObject("auth",utilidadesService.actorConectado());
-        result.addObject("projects",projectService.findAllByPrivadoFalseAndEstadoFalse());
-        result.addObject("admin",utilidadesService.adminConectado(authentication.getName()));
+        result.addObject("user",utilidadesService.adminConectado(authentication.getName()));
+        result.addObject("users",userService.findAll());
+        result.addObject("usuariosMejorValorados",userService.usuariosOrdenadosPorEvaluacion());
+        return result;
+    }
+
+    @RequestMapping(value = "/dataUser")
+    public ModelAndView dataUser(@RequestParam String userId) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/dataUser");
+        try{
+            User user = userService.findOne(userId.toString());
+            Administrator userConectado = administratorService.findByEmail(authentication.getName());
+            Set<Project> projectsParticipo = new HashSet<Project>();
+            Set<Project> projectsCreados = user.getProjects();
+            Set<Team> teamsParticipo = new HashSet<Team>();
+            Set<Team> teamsCreados = user.getTeams();
+            projectsParticipo.addAll(utilidadesService.todosLosProyectosEnLosQueEstoyAceptado(user));
+            teamsParticipo.addAll(utilidadesService.todosLosEquiposEnLosQueEstoyAceptado(user));
+
+            Boolean valora = false;
+
+            for(Project p:projectsParticipo){
+                if(p.getCerrado() == true || p.getEstado() == true){
+                    projectsParticipo.remove(p);
+                }
+            }
+
+            for(Project p:projectsCreados){
+                if(p.getCerrado() == true || p.getEstado() == true){
+                    projectsCreados.remove(p);
+                }
+            }
+
+            result = new ModelAndView("admin/dataUser");
+            result.addObject("auth",utilidadesService.actorConectado());
+            result.addObject("user",user);
+            result.addObject("valora",valora);
+            result.addObject("userConectado",userConectado);
+            result.addObject("users",userService.findAll());
+            result.addObject("projectsParticipo", projectsParticipo);
+            result.addObject("projectsCreados", projectsCreados);
+            result.addObject("teamsParticipo", teamsParticipo);
+            result.addObject("teamsCreados", teamsCreados);
+        }catch(Throwable oops){
+            if(utilidadesService.actorConectado().equals("USER")){
+                result = new ModelAndView("redirect:/user/index");
+            }else if(utilidadesService.actorConectado().equals("ADMIN")){
+                result = new ModelAndView("redirect:/admin/index");
+            }else if(utilidadesService.actorConectado().equals("ADMIN")){
+                result = new ModelAndView("redirect:/directivo/index");
+            }
+        }
         return result;
     }
 

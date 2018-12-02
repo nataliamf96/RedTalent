@@ -115,7 +115,8 @@
         </div>
         <div class="col-12">
             <div class="row">
-                <div th:each="alerta : ${project.getAlerts()}" class="col-12 portfolio-item">
+                <br />
+                <div th:each="alerta : ${project.getAlerts()}" class="col-12">
                     <div th:if="${alerta.getText().substring(0,9).equals('[code:as]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-success" role="alert">
                     </div>
                     <div th:if="${alerta.getText().substring(0,9).equals('[code:cp]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-danger" role="alert">

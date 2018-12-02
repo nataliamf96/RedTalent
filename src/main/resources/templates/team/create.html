@@ -42,7 +42,7 @@
         ¡Ponle nombre a tu equipo!
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/team/create(projectId=${projectId})}" th:object="${teamForm}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/team/create(projectId=${projectId})}" th:object="${teamForm}" method="post">
             <div class="form-group">
                 <label for="name">Nombre</label>:
                 <input type="text" class="form-control" id="name" name="name" style="max-width: 350px" th:field="*{name}"/>

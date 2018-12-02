@@ -341,6 +341,129 @@
         </div>
     </div>
 </div>
+<div class="container">
+    <hr style="border: 2px whitesmoke solid" />
+    <div class="row">
+        <div style="margin-bottom: 2px" class="col-12">
+            <h3 th:if="${user.getBlogs().size() == 0 && (user == userConectado)}">Blog &nbsp;&nbsp; <a href="/blog/create"><button type="button" class="btn btn-primary">Crea el primer tema</button></a></h3>
+            <h3 th:if="${user.getBlogs().size() != 0 && (user == userConectado)}">Blog &nbsp;&nbsp; <a href="/blog/create"><button type="button" class="btn btn-primary">Crea un tema</button></a></h3>
+            <h3 th:if="${user != userConectado}">Blog</h3>
+            <hr />
+            <div style="min-height: 250px" th:if="${user.getBlogs().size() == 0}" class="row">
+                <div class="col-12">
+                    <p>No existen temas en el blog</p>
+                </div>
+            </div>
+            <div style="min-height: 250px" th:if="${user.getBlogs().size() != 0}" class="row">
+                <div class="col-12">
+                    <div class="row">
+                        <div th:each="blog : ${user.getBlogs()}" class="col-12">
+                            <div class="row">
+                                <div class="col-lg-8">
+                                    <h4 th:text="${blog.getTitle()}"></h4>
+                                    <h6 th:each="uu : ${users}" th:if="${uu.getBlogs().contains(blog)}">
+                                        Creado por <span th:text="${uu.getFullname()}"></span> el <span th:text="${#dates.format(blog.getMoment(), 'dd-MM-yyyy')}"></span>
+                                        &nbsp;&nbsp;<a onclick="return confirm('¿Esta seguro que desea eliminar el tema del blog?')" th:if="${userConectado.getBlogs().contains(blog)}" th:href="@{/blog/delete(bogId=${blog.getId()})}"><i class="fas fa-trash"></i></a>
+                                    </h6>
+                                    <p th:text="${blog.getBody()}"></p>
+                                </div>
+                                <div style="text-align: center" class="col-lg-4">
+                                    <img alt='' class='card-img-profile' style="max-width: 300px" th:src="${blog.getImage()}">
+                                </div>
+                            </div>
+                            <div th:if="${blog.getComments().size() == 0}" class="row">
+                                <div class="col-12">
+                                    <a th:href="@{/blog/createComment(blogId=${blog.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
+                                </div>
+                            </div>
+                            <div style="margin-top: +20px" th:if="${blog.getComments().size() != 0}" class="row">
+                                <div class="col-12">
+                                    <div class="row">
+                                        <div style="margin-bottom: 5px" class="col-12">
+                                            <a th:href="@{/blog/createComment(blogId=${blog.getId()})}"><button type="button" class="btn btn-primary">Comentar</button></a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div th:each="comment : ${blog.getComments()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
+                                    <div class="card h-100">
+                                <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                        </div>
+                                        <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                            <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
+                                        </div>
+                                    </div>
+                                </span>
+                                        <div class="card-body">
+                                            <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
+                                            <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
+                                            <div class="row">
+                                                <div class="col-6" style="text-align: left;font-size: 0.6em">
+                                                    <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${userConectado.getComments().contains(comment)}" th:href="@{/blog/deleteComment(commentId=${comment.getId()})}"><i class="fas fa-trash"></i></a>
+                                                </div>
+                                                <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                                    <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div th:if="${comment.getReplies().size() == 0}" class="row">
+                                            <div class="col-12">
+                                                <a th:href="@{/blog/createReply(blogId=${blog.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
+                                            </div>
+                                        </div>
+                                        <div th:if="${comment.getReplies().size() != 0}" class="row">
+                                            <div class="col-12">
+                                                <a th:href="@{/blog/createReply(blogId=${blog.getId()},commentId=${comment.getId()})}"><button type="button" class="btn btn-primary" style="font-size: 0.6em">Contestar comentario</button></a>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-12">
+                                                    <div th:each="reply : ${comment.getReplies()}" class="row">
+                                                        <div class="col-1"></div>
+                                                        <div class="col-10">
+                                                            <div class="card h-100">
+                                                <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
+                                                    <div class="row">
+                                                        <div class="col-2">
+                                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                                        </div>
+                                                        <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                                            <a th:href="@{/user/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                                            <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                                <div class="card-body">
+                                                                    <b style="font-family: Calibri" th:text="${reply.getTitle()}"></b>
+                                                                    <p style="font-family: Calibri" th:text="${reply.getText()}"></p>
+                                                                    <div class="row">
+                                                                        <div class="col-6" style="text-align: left;font-size: 0.6em">
+                                                                            <a onclick="return confirm('¿Esta seguro que desea eliminar el comentario?')" th:if="${userConectado.getComments().contains(comment)}" th:href="@{/blog/deleteReply(replyId=${reply.getId()})}"><i class="fas fa-trash"></i></a>
+                                                                        </div>
+                                                                        <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                                                            <span th:text="${#dates.format(reply.getMoment(), 'dd-MM-yyyy')}"></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr style="border: 2px whitesmoke solid" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <script>
     function verTablaEquipo() {
         document.getElementById("tablaEquipos").style = "display: block";

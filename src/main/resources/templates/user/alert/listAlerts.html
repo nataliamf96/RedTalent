@@ -36,7 +36,7 @@
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
 </div>
-<div style="margin-top: -25px" class="container py-4">
+<div style="margin-top: -25px; min-height: 520px" class="container py-4">
     <h1 class="my-4">Notificaciones
     </h1>
     <div th:if="${user.getProjects().size()!=0}" class="row">
@@ -45,7 +45,8 @@
         </div>
     </div>
     <div class="row">
-        <div th:each="alerta : ${alertas}" class="col-12 portfolio-item">
+        <br />
+        <div th:each="alerta : ${alertas}" class="col-12">
             <div th:if="${alerta.getText().substring(0,9).equals('[code:as]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-success" role="alert">
             </div>
             <div th:if="${alerta.getText().substring(0,9).equals('[code:cp]')}" th:text="${alerta.getText().substring(9)}" class="alert alert-danger" role="alert">

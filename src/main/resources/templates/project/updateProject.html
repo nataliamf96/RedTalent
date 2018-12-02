@@ -42,7 +42,7 @@
         Formulario de Proyecto
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/project/updateProject(projectId=${projectId})}" th:object="${projectForm}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/project/updateProject(projectId=${projectId})}" th:object="${projectForm}" method="post">
             <h3>Datos del Proyecto</h3>
             <div class="form-group">
                 <label for="name">Nombre</label>:

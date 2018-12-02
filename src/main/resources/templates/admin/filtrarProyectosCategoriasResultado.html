@@ -33,15 +33,15 @@
             </a>
             <div style="background-color: #212529; border:none" class="dropdown-menu" aria-labelledby="pagesDropdown">
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-table"></i>Según su categoría</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarProyectosCategorias">Proyectos</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarForumsCategorias">Foros</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarBlogsCategorias">Blogs</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarProyectosCategorias">Proyectos</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarForumsCategorias">Foros</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarBlogsCategorias">Blogs</a>
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-graduation-cap"></i>Según su área/centro/grado</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilArea">Perfiles de un área</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilDepartamento">Perfiles de un centro</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilGrado">Perfiles de un grado</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilArea">Perfiles de un área</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilDepartamento">Perfiles de un centro</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilGrado">Perfiles de un grado</a>
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-tags"></i>Según su etiqueta</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
             </div>
         </li>
     </ul>
@@ -51,51 +51,55 @@
         <div class="container-fluid">
             <div style="margin-top: -25px" class="container py-4">
                 <h1 class="my-4">
-                    <small>Blogs según su categoría</small>
+                    <small>Proyectos según su categoría</small>
                 </h1>
                 <div class="row">
                     <div class="col-12">
-                        <div th:if="${blogs.size()!=0}" class="row">
+                        <div th:if="${projects.size()!=0}" class="row">
                             <div class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
+                                <br />
+                                <br />
                                 <div style="margin-top: 10px" class="row">
-                                    <div th:each="blog : ${blogs}" class="col-12" style="margin-bottom: 16px">
+                                    <div th:each="project : ${projects}" class="col-12" style="margin-bottom: 16px">
                                         <div class="card h-100">
                                             <div>
-                                <span th:each="user : ${users}" th:if="${user.getBlogs().contains(blog)}">
-                                    <div class="row">
-                                        <div class="col-2">
-                                            <a th:href="@{/user/dataUser(userId=${user.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}"></a>
-                                        </div>
-                                        <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
-                                            <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
-                                            <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
-                                        </div>
+                            <span th:each="user : ${users}" th:if="${user.getProjects().contains(project)}">
+                                <div class="row">
+                                    <div class="col-2">
+                                        <a th:href="@{/user/dataUser(userId=${user.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}"></a>
                                     </div>
-                                </span>
+                                    <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                        <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
+                                        <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/admin/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                                    </div>
+                                </div>
+                            </span>
                                             </div>
-                                            <a th:href="@{/blog/blog(blogId=${blog.getId()})}"><img class="card-img-top" th:src="${blog.getImage()}"></a>
+                                            <a th:href="@{/project/project(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
                                             <div class="card-body">
                                                 <h4 class="card-title">
-                                                    <a th:href="@{/blog/blog(blogId=${blog.getId()})}" th:text="${blog.getTitle()}"></a>
+                                                    <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
                                                 </h4>
-                                                <p class="card-text" th:if="${blog.getBody().length() < 150}" th:text="${blog.getBody()}"></p>
-                                                <p class="card-text" th:if="${blog.getBody().length() >= 150}" th:text="${blog.getBody().substring(0,120).concat('...')}"></p>
+                                                <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                                                <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                                                <h5>Perfiles Requeridos</h5>
+                                                <p class="card-text" th:if="${project.getRequiredProfiles().length() < 150}" th:text="${project.getRequiredProfiles()}"></p>
+                                                <p class="card-text" th:if="${project.getRequiredProfiles().length() >= 150}" th:text="${project.getRequiredProfiles().substring(0,120).concat('...')}"></p>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div style="min-height: 370px" th:if="${blogs.size()==0}" class="row">
+                        <div style="min-height: 370px" th:if="${projects.size()==0}" class="row">
                             <div class="col-12">
-                                Actualmente no existen blogs con dicha categoría
+                                Actualmente no existen proyectos con dicha categoría
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- /.container-fluid -->
 
         <!-- Sticky Footer -->

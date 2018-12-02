@@ -33,15 +33,15 @@
             </a>
             <div style="background-color: #212529; border:none" class="dropdown-menu" aria-labelledby="pagesDropdown">
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-table"></i>Según su categoría</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarProyectosCategorias">Proyectos</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarForumsCategorias">Foros</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarBlogsCategorias">Blogs</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarProyectosCategorias">Proyectos</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarForumsCategorias">Foros</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarBlogsCategorias">Blogs</a>
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-graduation-cap"></i>Según su área/centro/grado</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilArea">Perfiles de un área</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilDepartamento">Perfiles de un centro</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilGrado">Perfiles de un grado</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilArea">Perfiles de un área</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilDepartamento">Perfiles de un centro</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilGrado">Perfiles de un grado</a>
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-tags"></i>Según su etiqueta</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
             </div>
         </li>
     </ul>
@@ -67,7 +67,7 @@
                                 var text = document.getElementById('text');
 
                                 formulario.onsubmit = function(e){
-                                    location = "/user/filtrarPerfilGrado?grade=" + encodeURIComponent(text.value);
+                                    location = "/admin/filtrarPerfilGrado?grade=" + encodeURIComponent(text.value);
                                     return false;
                                 }</script>
                             <input type="submit" class="btn btn-info" value="Buscar" />
@@ -85,7 +85,7 @@
                             </div>
                             <div class="col-9">
                                 <a th:if="${u.getCurriculum().getRealized()==true}" th:href="@{/user/dataUser(userId=${u.getId()})}"><b style="color:#6c757d;font-family: Calibri"><span th:text="${u.getFullname()}" /></b></a> <br />
-                                <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span  style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -5px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                                <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/admin/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span  style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -5px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
                             </div>
                         </div>
                     </div>

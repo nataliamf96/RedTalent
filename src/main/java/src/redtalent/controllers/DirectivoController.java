@@ -216,7 +216,7 @@ public class DirectivoController {
         result = new ModelAndView("directivo/filtrarPerfilDepartamento");
         result.addObject("departments",departmentService.findAll());
 
-        if(departamento.isEmpty()){
+        if(departamento.isEmpty() || departamento.equals("0")){
             result.addObject("users",userService.findAll());
         }else{
             Department a = departmentService.findOne(departamento);
@@ -234,7 +234,7 @@ public class DirectivoController {
         result = new ModelAndView("directivo/filtrarPerfilGrado");
         result.addObject("grades",gradeService.findAll());
 
-        if(grade.isEmpty()){
+        if(grade.isEmpty() || grade.equals("0")){
             result.addObject("users",userService.findAll());
         }else{
             Grade g = gradeService.findOne(grade);
@@ -252,7 +252,7 @@ public class DirectivoController {
         result = new ModelAndView("directivo/filtrarPerfilArea");
         result.addObject("areas",areaService.findAll());
 
-        if(area.isEmpty()){
+        if(area.isEmpty() || area.equals("0")){
             result.addObject("users",userService.findAll());
         }else{
             Area a = areaService.findOne(area);

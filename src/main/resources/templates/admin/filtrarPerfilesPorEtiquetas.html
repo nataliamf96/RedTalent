@@ -33,15 +33,15 @@
             </a>
             <div style="background-color: #212529; border:none" class="dropdown-menu" aria-labelledby="pagesDropdown">
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-table"></i>Según su categoría</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarProyectosCategorias">Proyectos</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarForumsCategorias">Foros</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarBlogsCategorias">Blogs</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarProyectosCategorias">Proyectos</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarForumsCategorias">Foros</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarBlogsCategorias">Blogs</a>
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-graduation-cap"></i>Según su área/centro/grado</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilArea">Perfiles de un área</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilDepartamento">Perfiles de un centro</a>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilGrado">Perfiles de un grado</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilArea">Perfiles de un área</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilDepartamento">Perfiles de un centro</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilGrado">Perfiles de un grado</a>
                 <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-tags"></i>Según su etiqueta</h6>
-                <a style="color: gray" class="dropdown-item" href="/user/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
+                <a style="color: gray" class="dropdown-item" href="/admin/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
             </div>
         </li>
     </ul>
@@ -51,23 +51,21 @@
         <div class="container-fluid">
             <div style="margin-top: -25px" class="container py-4">
                 <h1 class="my-4">
-                    <small>Perfiles según su grado</small>
+                    <small>Perfiles según sus etiquetas</small>
                 </h1>
                 <div class="row">
                     <div class="col-12">
                         <form id="formulario">
                             <div class="form-group">
-                                <select id="text" name="text" class="form-control" style="max-width: 350px">
-                                    <option value="0">Seleccione un grado</option>
-                                    <option th:each="grade : ${grades}" th:value="${grade.getId()}" th:text="${grade.getName()}"></option>
-                                </select>
+                                <label>Etiquetas</label>:
+                                <input type="text" class="form-control" id="text" name="text" style="max-width: 350px"/>
                             </div>
                             <script>
                                 var formulario = document.getElementById('formulario');
                                 var text = document.getElementById('text');
 
                                 formulario.onsubmit = function(e){
-                                    location = "/user/filtrarPerfilGrado?grade=" + encodeURIComponent(text.value);
+                                    location = "/admin/filtrarPerfilesPorEtiquetas?tag=" + encodeURIComponent(text.value);
                                     return false;
                                 }</script>
                             <input type="submit" class="btn btn-info" value="Buscar" />
@@ -79,13 +77,18 @@
                 <br />
                 <div class="row">
                     <div th:each="u : ${users}" class="col-lg-3 col-md-6 col-sm-12 portfolio-item">
-                        <div style="background-color: whitesmoke" class="row py-3">
+                        <div class="row py-3">
                             <div class="col-3">
                                 <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 40px; height: 40px;border-radius: 50%; border-width: 2px; border-color: white; margin-top: 7px" th:src="${u.getImage()}"></a>
                             </div>
                             <div class="col-9">
                                 <a th:if="${u.getCurriculum().getRealized()==true}" th:href="@{/user/dataUser(userId=${u.getId()})}"><b style="color:#6c757d;font-family: Calibri"><span th:text="${u.getFullname()}" /></b></a> <br />
-                                <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span  style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -5px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                                <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/admin/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span  style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -5px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                            </div>
+                            <div th:if="${u.getTags().size() != 0}" style="text-align: left;margin-left: 10px; margin-right: 10px" class='card-title'>
+                        <span th:each="tag : ${u.getTags()}" style="font-size: 0.8em; font-family: Calibri">
+                            <a th:href="@{/admin/filtrarPerfilesPorEtiquetas(tag=${tag.getName()})}"><span th:text="${tag.getName()}" class="badge badge-pill badge-info"></span></a>
+                        </span>
                             </div>
                         </div>
                     </div>

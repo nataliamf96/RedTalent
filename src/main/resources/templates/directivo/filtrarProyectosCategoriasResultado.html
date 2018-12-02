@@ -1,13 +1,17 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Home</title>
+    <title>Bienvenido/a</title>
     <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <link href="/css/datatable.css" rel="stylesheet">
+    <link href="/css/all.min.css" rel="stylesheet">
+
 </head>
-<body class="bg-light">
+<body>
 <div th:if="${auth.equals('USER')}">
     <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
@@ -20,20 +24,45 @@
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
 </div>
-<div style="margin-top: -25px" class="container py-4">
-    <h1 class="my-4">Filtrado
-        <small>Proyectos por Categoría</small>
-    </h1>
-    <div class="row">
-        <div class="col-12">
-            <div th:if="${projects.size()!=0}" class="row">
-                <div class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
-                    <br />
-                    <br />
-                    <div style="margin-top: 10px" class="row">
-                        <div th:each="project : ${projects}" class="col-12" style="margin-bottom: 16px">
-                            <div class="card h-100">
-                                <div>
+<div id="wrapper">
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item dropdown active">
+            <a style="background-color: #212529" class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search"></i>
+                <span>Filtros</span>
+            </a>
+            <div style="background-color: #212529; border:none" class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-table"></i>Según su categoría</h6>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarProyectosCategorias">Proyectos</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarForumsCategorias">Foros</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarBlogsCategorias">Blogs</a>
+                <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-graduation-cap"></i>Según su área/centro/grado</h6>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilArea">Perfiles de un área</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilDepartamento">Perfiles de un centro</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilGrado">Perfiles de un grado</a>
+                <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-tags"></i>Según su etiqueta</h6>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
+            </div>
+        </li>
+    </ul>
+
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+            <div style="margin-top: -25px" class="container py-4">
+                <h1 class="my-4">
+                    <small>Proyectos según su categoría</small>
+                </h1>
+                <div class="row">
+                    <div class="col-12">
+                        <div th:if="${projects.size()!=0}" class="row">
+                            <div class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
+                                <br />
+                                <br />
+                                <div style="margin-top: 10px" class="row">
+                                    <div th:each="project : ${projects}" class="col-12" style="margin-bottom: 16px">
+                                        <div class="card h-100">
+                                            <div>
                             <span th:each="user : ${users}" th:if="${user.getProjects().contains(project)}">
                                 <div class="row">
                                     <div class="col-2">
@@ -41,35 +70,63 @@
                                     </div>
                                     <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
                                         <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
-                                        <a style="color: grey" th:href="@{/user/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span th:if="${user.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                                        <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/directivo/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
                                     </div>
                                 </div>
                             </span>
+                                            </div>
+                                            <a th:href="@{/project/project(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
+                                            <div class="card-body">
+                                                <h4 class="card-title">
+                                                    <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
+                                                </h4>
+                                                <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                                                <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                                                <h5>Perfiles Requeridos</h5>
+                                                <p class="card-text" th:if="${project.getRequiredProfiles().length() < 150}" th:text="${project.getRequiredProfiles()}"></p>
+                                                <p class="card-text" th:if="${project.getRequiredProfiles().length() >= 150}" th:text="${project.getRequiredProfiles().substring(0,120).concat('...')}"></p>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <a th:href="@{/project/project(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
-                                <div class="card-body">
-                                    <h4 class="card-title">
-                                        <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
-                                    </h4>
-                                    <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
-                                    <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
-                                    <h5>Perfiles Requeridos</h5>
-                                    <p class="card-text" th:if="${project.getRequiredProfiles().length() < 150}" th:text="${project.getRequiredProfiles()}"></p>
-                                    <p class="card-text" th:if="${project.getRequiredProfiles().length() >= 150}" th:text="${project.getRequiredProfiles().substring(0,120).concat('...')}"></p>
-                                </div>
+                            </div>
+                        </div>
+                        <div style="min-height: 370px" th:if="${projects.size()==0}" class="row">
+                            <div class="col-12">
+                                Actualmente no existen proyectos con dicha categoría
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            <div style="min-height: 370px" th:if="${projects.size()==0}" class="row">
-                <div class="col-12">
-                    No existen Proyectos
+        </div>
+        <!-- /.container-fluid -->
+
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Universidad de Sevilla</span>
                 </div>
             </div>
-        </div>
+        </footer>
+
     </div>
+    <!-- /.content-wrapper -->
+
 </div>
-<div th:replace="masterpage/footer :: footer" />
+<!-- Bootstrap core JavaScript-->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/js/jquery.easing.min.js"></script>
+
+<!-- Page level plugin JavaScript-->
+<script src="/js/jquery.dataTables.js"></script>
+<script src="/js/dataTables.bootstrap4.js"></script>
+
+<script src="/js/sb-admin.js"></script>
+
 </body>
 </html>

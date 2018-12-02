@@ -16,6 +16,7 @@ import src.redtalent.repositories.AccountRepository;
 import src.redtalent.services.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -42,6 +43,16 @@ public class AdministratorController {
     private TagService tagService;
     @Autowired
     private AlertService alertService;
+    @Autowired
+    private  AreaService areaService;
+    @Autowired
+    private DepartmentService departmentService;
+    @Autowired
+    private GradeService gradeService;
+    @Autowired
+    private BlogService blogService;
+    @Autowired
+    private ForumService forumService;
 
     public AdministratorController(){
         super();
@@ -263,6 +274,195 @@ public class AdministratorController {
                 result = updateEditModelAndViewAdmin(updateAdminForm, "ERROR AL ACTUALIZAR EL DIRECTIVO");
             }
 
+        return result;
+    }
+
+    //FILTROS --------------------------------------------
+
+    @RequestMapping(value = "/filtrarBlogsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarBlogsCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/filtrarBlogsCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(blogService.findBlogsByCategory_Name(c.getName()).size());
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarBlogsCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarBlogsCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/filtrarBlogsCategoriasResultado");
+        if(category.isEmpty()){
+            result.addObject("blogs",blogService.findAll());
+        }else{
+            result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
+        }
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("admin/filtrarProyectosCategoriasResultado");
+
+        if(category.isEmpty()){
+            result.addObject("projects",projectService.findAll());
+        }else{
+            result.addObject("projects",projectService.findProjectsByCategorie_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/filtrarForumsCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(forumService.findForumsByCategory_Name(c.getName()).size());
+        }
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarForumsCategoriasResultado", method = RequestMethod.GET)
+    public ModelAndView filtrarForumsCategoriasResultado(@RequestParam(value = "category", defaultValue = "") String category) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("admin/filtrarForumsCategoriasResultado");
+
+        if(category.isEmpty()){
+            result.addObject("forums",forumService.findAll());
+        }else{
+            result.addObject("forums",forumService.findForumsByCategory_Name(category));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("users",userService.findAll());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarProyectosCategorias", method = RequestMethod.GET)
+    public ModelAndView filtrarProyectosCategorias() {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        result = new ModelAndView("admin/filtrarProyectosCategorias");
+        List<Category> categories = new ArrayList<Category>();
+        List<Integer> cTam = new ArrayList<Integer>();
+        for(Category c:categoryService.findAll()){
+            categories.add(c);
+            cTam.add(projectService.findProjectsByCategorie_Name(c.getName()).size());
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("categories",categories);
+        result.addObject("cTam",cTam);
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilDepartamento", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilDepartamento(@RequestParam(value = "departamento", defaultValue = "") String departamento) {
+        ModelAndView result;
+
+        result = new ModelAndView("admin/filtrarPerfilDepartamento");
+        result.addObject("departments",departmentService.findAll());
+
+        if(departamento.isEmpty() || departamento.equals("0")){
+            result.addObject("users",userService.findAll());
+        }else{
+            Department a = departmentService.findOne(departamento);
+            result.addObject("users",utilidadesService.usuariosPorDepartamento(a));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilGrado", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilGrado(@RequestParam(value = "grade", defaultValue = "") String grade) {
+        ModelAndView result;
+
+        result = new ModelAndView("admin/filtrarPerfilGrado");
+        result.addObject("grades",gradeService.findAll());
+
+        if(grade.isEmpty() || grade.equals("0")){
+            result.addObject("users",userService.findAll());
+        }else{
+            Grade g = gradeService.findOne(grade);
+            result.addObject("users",userService.findUsersByCurriculum_Grade(g));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilArea", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilArea(@RequestParam(value = "area", defaultValue = "") String area) {
+        ModelAndView result;
+
+        result = new ModelAndView("admin/filtrarPerfilArea");
+        result.addObject("areas",areaService.findAll());
+
+        if(area.isEmpty() || area.equals("0")){
+            result.addObject("users",userService.findAll());
+        }else{
+            Area a = areaService.findOne(area);
+            result.addObject("users",utilidadesService.usuariosPorArea(a));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
+        return result;
+    }
+
+    @RequestMapping(value = "/filtrarPerfilesPorEtiquetas", method = RequestMethod.GET)
+    public ModelAndView filtrarPerfilesPorEtiquetas(@RequestParam(value = "tag", defaultValue = "") String tag) {
+        ModelAndView result;
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+
+        result = new ModelAndView("admin/filtrarPerfilesPorEtiquetas");
+
+        /* Etiquetas */
+        Set<Tag> tagsUser = new HashSet<Tag>();
+        for(String nombreTag : tag.replace(" ","").split(",")){
+            for(Tag t:tagService.findAll()){
+                if(t.getName().toUpperCase().equals(nombreTag.toUpperCase())){
+                    tagsUser.add(t);
+                }
+            }
+        }
+
+        if(tag.isEmpty()){
+            result.addObject("users",userService.findAll());
+        }else if(tagsUser.size() == 0){
+            result.addObject("users",new HashSet<User>());
+        }else{
+            result.addObject("users",userService.findAllByTagsContains(tagsUser));
+        }
+
+        result.addObject("auth",utilidadesService.actorConectado());
         return result;
     }
 

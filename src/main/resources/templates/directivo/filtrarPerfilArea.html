@@ -1,77 +1,124 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
 <head>
-    <title>Filtrar Perfiles Por Area</title>
+    <title>Bienvenido/a</title>
     <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
     <link href="/css/cards.css" rel="stylesheet">
+    <link href="/css/sb-admin.css" rel="stylesheet">
+    <link href="/css/datatable.css" rel="stylesheet">
+    <link href="/css/all.min.css" rel="stylesheet">
+
 </head>
-<body class="bg-light">
+<body>
 <div th:if="${auth.equals('USER')}">
     <div th:replace="masterpage/headerUser :: nav"></div>
 </div>
 <div th:if="${auth.equals('ADMIN')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerAdmin :: nav"></div>
 </div>
 <div th:if="${auth.equals('DIRECTIVO')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
+    <div th:replace="masterpage/headerDirectivo :: nav"></div>
 </div>
 <div th:if="${auth.equals('')}">
     <div th:replace="masterpage/header :: nav"></div>
 </div>
-<div style="margin-top: -25px" class="container py-4">
-    <h1 class="my-4">Filtrado
-        <small>Perfiles por Area</small>
-    </h1>
-    <div class="row">
-        <div class="col-12">
-            <form id="formulario">
-                <div class="form-group">
-                    <select id="text" name="text" class="form-control" style="max-width: 350px">
-                        <option th:each="area : ${areas}" th:value="${area.getId()}" th:text="${area.getArea()}"></option>
-                    </select>
-                </div>
-                <script>
-                    var formulario = document.getElementById('formulario');
-                    var text = document.getElementById('text');
+<div id="wrapper">
+    <ul class="sidebar navbar-nav">
+        <li class="nav-item dropdown active">
+            <a style="background-color: #212529" class="nav-link dropdown-toggle" href="#" id="pagesDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                <i class="fas fa-search"></i>
+                <span>Filtros</span>
+            </a>
+            <div style="background-color: #212529; border:none" class="dropdown-menu" aria-labelledby="pagesDropdown">
+                <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-table"></i>Según su categoría</h6>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarProyectosCategorias">Proyectos</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarForumsCategorias">Foros</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarBlogsCategorias">Blogs</a>
+                <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-fw fa-graduation-cap"></i>Según su área/centro/grado</h6>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilArea">Perfiles de un área</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilDepartamento">Perfiles de un centro</a>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilGrado">Perfiles de un grado</a>
+                <h6 style="margin-left: -25px" class="dropdown-header"><i class="fas fa-tags"></i>Según su etiqueta</h6>
+                <a style="color: gray" class="dropdown-item" href="/directivo/filtrarPerfilesPorEtiquetas">Perfiles encontrados</a>
+            </div>
+        </li>
+    </ul>
 
-                    formulario.onsubmit = function(e){
-                        location = "/directivo/filtrarPerfilArea?area=" + encodeURIComponent(text.value);
-                        return false;
-                    }</script>
-                <input type="submit" class="btn btn-info" value="Buscar" />
-            </form>
-        </div>
-    </div>
-    <br />
-    <br />
-    <br />
-    <div class="row">
-        <div th:each="user : ${users}" class="col-lg-3 col-sm-6 portfolio-item">
-            <div style="margin-top: -12px" class='card card-profile text-center'>
-                <img alt='' class='card-img-top' th:src="@{/images/color-img.jpg}">
-                <div class='card-block'>
-                    <img alt='' class='card-img-profile' th:src="${user.getImage()}">
-                    <h4 style="margin-top: -23px" class='card-title'>
-                        <i th:text="${user.getFullname()}" />
-                        <small th:text="${user.getAccount().getEmail()}"></small>
-                    </h4>
-                    <div class='card-links'>
-                        <a class='fa fa-dribbble' href='#'></a>
-                        <a class='fa fa-twitter' href='#'></a>
-                        <a class='fa fa-facebook' href='#'></a>
+    <div id="content-wrapper">
+
+        <div class="container-fluid">
+            <div style="margin-top: -25px" class="container py-4">
+                <h1 class="my-4">
+                    <small>Perfiles según su área</small>
+                </h1>
+                <div class="row">
+                    <div class="col-12">
+                        <form id="formulario">
+                            <div class="form-group">
+                                <select id="text" name="text" class="form-control" style="max-width: 350px">
+                                    <option value="0">Seleccione un área</option>
+                                    <option th:each="area : ${areas}" th:value="${area.getId()}" th:text="${area.getArea()}"></option>
+                                </select>
+                            </div>
+                            <script>
+                                var formulario = document.getElementById('formulario');
+                                var text = document.getElementById('text');
+
+                                formulario.onsubmit = function(e){
+                                    location = "/user/filtrarPerfilArea?area=" + encodeURIComponent(text.value);
+                                    return false;
+                                }</script>
+                            <input type="submit" class="btn btn-info" value="Buscar" />
+                        </form>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+                <div class="row">
+                    <div th:each="u : ${users}" class="col-lg-3 col-md-6 col-sm-12 portfolio-item">
+                        <div style="background-color: whitesmoke" class="row py-3">
+                            <div class="col-3">
+                                <a th:href="@{/user/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 40px; height: 40px;border-radius: 50%; border-width: 2px; border-color: white; margin-top: 7px" th:src="${u.getImage()}"></a>
+                            </div>
+                            <div class="col-9">
+                                <a th:if="${u.getCurriculum().getRealized()==true}" th:href="@{/user/dataUser(userId=${u.getId()})}"><b style="color:#6c757d;font-family: Calibri"><span th:text="${u.getFullname()}" /></b></a> <br />
+                                <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/directivo/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span  style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -5px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+        <!-- /.container-fluid -->
 
-    <br />
-    <br />
-    <br />
-    <br />
+        <!-- Sticky Footer -->
+        <footer class="sticky-footer">
+            <div class="container my-auto">
+                <div class="copyright text-center my-auto">
+                    <span>Copyright © Universidad de Sevilla</span>
+                </div>
+            </div>
+        </footer>
+
+    </div>
+    <!-- /.content-wrapper -->
+
 </div>
-<div th:replace="masterpage/footer :: footer" />
+<!-- Bootstrap core JavaScript-->
+<script src="/js/jquery.min.js"></script>
+<script src="/js/bootstrap.bundle.min.js"></script>
+
+<!-- Core plugin JavaScript-->
+<script src="/js/jquery.easing.min.js"></script>
+
+<!-- Page level plugin JavaScript-->
+<script src="/js/jquery.dataTables.js"></script>
+<script src="/js/dataTables.bootstrap4.js"></script>
+
+<script src="/js/sb-admin.js"></script>
+
 </body>
 </html>

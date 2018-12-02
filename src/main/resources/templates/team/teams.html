@@ -41,7 +41,7 @@
         <small>Red Talent</small>
     </h1>
     <div class="row">
-        <div th:each="team : ${teams}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
+        <div th:each="team : ${teams}" th:if="${!team.isClosed()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
             <div class="card h-100">
                 <a th:href="@{/team/teamData(teamId=${team.getId()})}"><img class="card-img-top" th:src="${team.getImage()}"></a>
                 <div class="card-body">
@@ -55,6 +55,8 @@
         </div>
     </div>
 </div>
+<br />
+<br />
 <div th:replace="masterpage/footer :: footer" />
 </body>
 </html>

@@ -58,7 +58,10 @@
         </div>
     </div>
     <div th:if="${team.getProjects().size() != 0}" class="row">
-        <div th:each="project : ${team.getProjects()}" class="col-lg-4 col-sm-6 portfolio-item">
+        <div th:each="project : ${team.getProjects()}" th:if="${project.getPrivado()}" class="col-lg-4 col-sm-6 portfolio-item">
+            <h5>Proyecto privado</h5>
+        </div>
+        <div th:each="project : ${team.getProjects()}" th:if="${!project.getPrivado()}" class="col-lg-4 col-sm-6 portfolio-item">
             <h3 class="my-4">
                 <i th:text="${project.getName()}"></i>
             </h3>

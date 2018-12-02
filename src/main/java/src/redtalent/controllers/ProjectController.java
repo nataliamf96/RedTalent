@@ -309,7 +309,7 @@ public class ProjectController {
             team.setClosed(true);
             Team teamSave = teamService.save(team);
 
-            User userCambiar = userService.findUserByTeamsConstains(team);
+            User userCambiar = user;
             Set<Team> teamsCambiar = userCambiar.getTeams();
             teamsCambiar.remove(team);
             teamsCambiar.add(teamSave);

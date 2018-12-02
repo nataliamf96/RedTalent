@@ -58,7 +58,6 @@ public class Project extends DomainEntity{
         this.privado = privado;
     }
 
-    @javax.validation.constraints.NotBlank
     public String getImage() {
         return image;
     }

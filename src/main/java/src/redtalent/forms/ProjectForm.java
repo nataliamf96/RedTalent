@@ -32,7 +32,6 @@ public class ProjectForm {
         this.id = id;
     }
 
-   @NotBlank
     public String getImage() {
         return image;
     }

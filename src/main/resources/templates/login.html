@@ -13,14 +13,14 @@
 <br />
 <br />
 <br />
-<div class="container">
+<div style="min-height: 350px" class="container">
     <div class="row">
         <div  class="col-lg-6 col-sm-6 portfolio-item">
             <h3 class="my-4">
                 Login
             </h3>
             <form class="form-signin" th:action="@{/login}" method="post">
-                <h1 class="h3 mb-3 font-weight-normal">Porfavor, Inicie sesión</h1>
+                <h1 class="h3 mb-3 font-weight-normal">Por favor, Inicie sesión</h1>
                 <div style="color: red" th:if="${param.error}">
                     Correo Electrónico o Contraseña Inválidos
                 </div>
@@ -39,7 +39,7 @@
             </form>
         </div>
         <div style="text-align: center" class="col-lg-6 col-sm-6 portfolio-item">
-            <img class="card-img-top img-fluid" style="max-width: 400px" th:src="@{/images/logous.png}">
+
         </div>
     </div>
 </div>

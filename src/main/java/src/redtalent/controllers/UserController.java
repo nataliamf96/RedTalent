@@ -327,6 +327,7 @@ public class UserController {
             result.addObject("blogs",blogService.findBlogsByCategory_Name(category));
         }
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("user",utilidadesService.userConectado(authentication.getName()));
         result.addObject("users",userService.findAll());
         return result;
     }
@@ -380,6 +381,7 @@ public class UserController {
         }
 
         result.addObject("auth",utilidadesService.actorConectado());
+        result.addObject("user",utilidadesService.userConectado(authentication.getName()));
         result.addObject("users",userService.findAll());
         return result;
     }

@@ -47,55 +47,107 @@
     </ul>
 
     <div id="content-wrapper">
+        <div class="container">
+            <div class="row">
+                <div style="margin-bottom: 2px" class="col-12">
+                    <h3>Foros</h3>
+                    <hr />
+                    <div style="min-height: 250px" th:if="${forums.size() == 0}" class="row">
+                        <div class="col-12">
+                            <p>No existen temas en el foro</p>
+                        </div>
+                    </div>
+                    <div style="min-height: 250px" th:if="${forums.size() != 0}" class="row">
+                        <div class="col-12">
+                            <div class="row">
+                                <div th:each="forum : ${forums}" class="col-12">
+                                    <div class="row">
+                                        <div class="col-lg-8">
+                                            <h4 th:text="${forum.getTitle()}"></h4>
+                                            <h6 th:each="uu : ${users}" th:if="${uu.getForums().contains(forum)}">
+                                                Creado por <span th:text="${uu.getFullname()}"></span> el <span th:text="${#dates.format(forum.getMoment(), 'dd-MM-yyyy')}"></span>
+                                            </h6>
+                                            <p th:text="${forum.getBody()}"></p>
+                                        </div>
+                                        <div style="text-align: center" class="col-lg-4">
+                                            <img alt='' class='card-img-profile' style="max-width: 300px" th:src="${forum.getImage()}">
+                                        </div>
+                                    </div>
+                                    <div th:if="${forum.getComments().size() == 0}" class="row">
+                                    </div>
+                                    <div style="margin-top: +20px" th:if="${forum.getComments().size() != 0}" class="row">
+                                        <div th:each="comment : ${forum.getComments()}" class="col-lg-4 col-md-6 col-sm-12 portfolio-item" style="margin-bottom: 16px">
+                                            <div class="card h-100">
+                                <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
+                                    <div class="row">
+                                        <div class="col-2">
+                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                        </div>
+                                        <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                            <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
+                                        </div>
+                                    </div>
+                                </span>
+                                                <div class="card-body">
+                                                    <b style="font-family: Calibri" th:text="${comment.getTitle()}"></b>
+                                                    <p style="font-family: Calibri" th:text="${comment.getText()}"></p>
+                                                    <div class="row">
+                                                        <div class="col-6" style="text-align: left;font-size: 0.6em">
 
-        <div class="container-fluid">
-            <div style="margin-top: -25px" class="container py-4">
-                <h1 class="my-4">
-                    <small>Foros según su categoría</small>
-                </h1>
-                <div class="row">
-                    <div class="col-12">
-                        <div th:if="${forums.size()!=0}" class="row">
-                            <div class="col-lg-4 col-md-6 col-sm-12 portfolio-item">
-                                <div style="margin-top: 10px" class="row">
-                                    <div th:each="forum : ${forums}" class="col-12" style="margin-bottom: 16px">
-                                        <div class="card h-100">
-                                            <div>
-                            <span th:each="user : ${users}" th:if="${user.getForums().contains(forum)}">
-                                <div class="row">
-                                    <div class="col-2">
-                                        <a th:href="@{/user/dataUser(userId=${user.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}"></a>
-                                    </div>
-                                    <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
-                                        <a style="color: grey" th:href="@{/user/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
-                                        <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/admin/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
-                                    </div>
-                                </div>
-                            </span>
-                                            </div>
-                                            <a th:href="@{/forum/forum(forum=${forum.getId()})}"><img class="card-img-top" th:src="${forum.getImage()}"></a>
-                                            <div class="card-body">
-                                                <h4 class="card-title">
-                                                    <a th:href="@{/forum/forum(forumId=${forum.getId()})}" th:text="${forum.getTitle()}"></a>
-                                                </h4>
-                                                <p class="card-text" th:if="${forum.getBody().length() < 150}" th:text="${forum.getBody()}"></p>
-                                                <p class="card-text" th:if="${forum.getBody().length() >= 150}" th:text="${forum.getBody().substring(0,120).concat('...')}"></p>
+                                                        </div>
+                                                        <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                                            <span th:text="${#dates.format(comment.getMoment(), 'dd-MM-yyyy')}"></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div th:if="${comment.getReplies().size() != 0}" class="row">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div th:each="reply : ${comment.getReplies()}" class="row">
+                                                                <div class="col-1"></div>
+                                                                <div class="col-10">
+                                                                    <div class="card h-100">
+                                                <span th:each="u : ${users}" th:if="${u.getComments().contains(comment)}">
+                                                    <div class="row">
+                                                        <div class="col-2">
+                                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 14px 6px 6px 16px" th:src="${u.getImage()}"></a>
+                                                        </div>
+                                                        <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-10">
+                                                            <a th:href="@{/admin/dataUser(userId=${u.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 4px" th:text="${u.getFullname()}"></span></b></a>
+                                                            <span th:if="${u.getCurriculum().getRealized()==true}" style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 4px; margin-right: 4px" th:text="${u.getCurriculum().getGrade().getName()}"></span>
+                                                        </div>
+                                                    </div>
+                                                </span>
+                                                                        <div class="card-body">
+                                                                            <b style="font-family: Calibri" th:text="${reply.getTitle()}"></b>
+                                                                            <p style="font-family: Calibri" th:text="${reply.getText()}"></p>
+                                                                            <div class="row">
+                                                                                <div class="col-6" style="text-align: left;font-size: 0.6em">
+
+                                                                                </div>
+                                                                                <div class="col-6" style="text-align: right;font-size: 0.6em">
+                                                                                    <span th:text="${#dates.format(reply.getMoment(), 'dd-MM-yyyy')}"></span>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                    <hr style="border: 2px whitesmoke solid" />
                                 </div>
-                            </div>
-                        </div>
-                        <div style="min-height: 370px" th:if="${forums.size()==0}" class="row">
-                            <div class="col-12">
-                                Actualmente no existen foros con dicha categoría
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-
         <!-- /.container-fluid -->
 
         <!-- Sticky Footer -->

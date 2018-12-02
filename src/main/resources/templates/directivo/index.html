@@ -1,72 +1,85 @@
 <!DOCTYPE html>
-<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Bienvenido/a</title>
+    <title>Inicio</title>
     <link rel="icon" href="/images/us.ico">
     <link href="/css/bootstrap.min.css" rel="stylesheet">
     <link href="/css/3-col-portfolio.css" rel="stylesheet">
+    <link href="/css/cards.css" rel="stylesheet">
+    <link href="/css/all.css" rel="stylesheet">
 </head>
 <body class="bg-light">
-<div th:if="${auth.equals('USER')}">
-    <div th:replace="masterpage/headerUser :: nav"></div>
-</div>
-<div th:if="${auth.equals('ADMIN')}">
-    <div th:replace="masterpage/headerAdmin :: nav"></div>
-</div>
-<div th:if="${auth.equals('DIRECTIVO')}">
-    <div th:replace="masterpage/headerDirectivo :: nav"></div>
-</div>
-<div th:if="${auth.equals('')}">
-    <div th:replace="masterpage/header :: nav"></div>
-</div>
-<div class="container py-4">
-    <h4 class="text-center">Hola <span sec:authentication="name" /></h4>
-    <h1 class="my-4">RedTalent
-        <small>Haz realidad tus ideas</small>
-    </h1>
+<div th:replace="masterpage/headerDirectivo :: nav"></div>
+<div style="margin-top: -25px" class="container py-4">
     <div class="row">
-        <div th:each="project : ${projects}" class="col-lg-4 col-sm-6 portfolio-item">
-            <div class="card h-100">
-                <a th:href="@{/project/project(projectId=${project.getId()})}"><img class="card-img-top" th:src="${project.getImage()}"></a>
-                <div class="card-body">
-                    <h4 class="card-title">
-                        <a th:href="@{/project/project(projectId=${project.getId()})}" th:text="${project.getName()}"></a>
-                    </h4>
-                    <p class="card-text" th:text="${project.getDescription()}"></p>
+        <div class="col-lg-3 col-md-6 col-sm-12 portfolio-item">
+            <br />
+            <br />
+            <br />
+            <div style="margin-top: -12px" class='card card-profile text-center shadow-sm bg-white rounded'>
+                <img alt='' class='card-img-top' style="max-height: 80px" th:src="@{/images/color-img.jpg}">
+                <div class='card-block' style="margin-top: 47px">
+                    <img alt='' class='card-img-profile' style="width: 90px; height: 90px; border-width: 2px; border-color: white" th:src="${user.getImage()}">
+                    <h6 style="margin-top: -23px" class='card-title'>
+                        <a style="color: black" th:href="@{/directivo/dataUser(userId=${user.getId()})}"><span th:text="${user.getFullname()}" /></a> <br />
+                        <span style="font-size: 0.8em" th:text="${user.getAccount().getEmail()}"></span><br />
+                    </h6>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-6 col-md-6 col-sm-12 portfolio-item">
+            <br />
+            <br />
+            <div style="margin-top: 10px" class="row">
+                <div th:each="project : ${projects}" th:if="${!project.getCerrado() && !project.getPrivado()}" class="col-12" style="margin-bottom: 16px">
+                    <div class="card h-100">
+                        <div>
+                            <span th:each="user : ${users}" th:if="${user.getProjects().contains(project)}">
+                                <div class="row">
+                                    <div class="col-1">
+                                        <a th:href="@{/directivo/dataUser(userId=${user.getId()})}"><img alt='' class='card-img-profile' style="width: 35px; height: 35px;border-radius: 50%; border-width: 2px; border-color: white; margin: 6px 6px 6px 16px" th:src="${user.getImage()}"></a>
+                                    </div>
+                                    <div style="color: rgba(0,0,0,.6); font-family: Calibri" class="col-11">
+                                        <a style="color: grey" th:href="@{/directivo/dataUser(userId=${user.getId()})}"><b><span style="display: block;margin-top: 5px;margin-left: 15px" th:text="${user.getFullname()}"></span></b></a>
+                                        <a th:if="${user.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/directivo/filtrarPerfilGrado(grade=${user.getCurriculum().getGrade().getId()})}"><span style="font-size: 0.8em; display: flex; margin-top: -5px;margin-left: 15px" th:text="${user.getCurriculum().getGrade().getName()}"></span></a>
+                                    </div>
+                                </div>
+                            </span>
+                        </div>
+                        <img class="card-img-top" th:src="${project.getImage()}">
+                        <div class="card-body">
+                            <h4 class="card-title">
+                                <span th:text="${project.getName()}"></span>
+                            </h4>
+                            <p class="card-text" th:if="${project.getDescription().length() < 150}" th:text="${project.getDescription()}"></p>
+                            <p class="card-text" th:if="${project.getDescription().length() >= 150}" th:text="${project.getDescription().substring(0,120).concat('...')}"></p>
+                            <h5>Perfiles Requeridos</h5>
+                            <p class="card-text" th:if="${project.getRequiredProfiles().length() < 150}" th:text="${project.getRequiredProfiles()}"></p>
+                            <p class="card-text" th:if="${project.getRequiredProfiles().length() >= 150}" th:text="${project.getRequiredProfiles().substring(0,120).concat('...')}"></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-3 col-md-6 col-sm-12 portfolio-item">
+            <br />
+            <br />
+            <h6 style="margin-top: 7px">Perfiles mejor valorados</h6>
+            <div style="margin-top: 13px" class="row">
+                <div th:each="u : ${usuariosMejorValorados}" class="col-12">
+                    <div style="background-color: whitesmoke" class="row py-3">
+                        <div class="col-3">
+                            <a th:href="@{/directivo/dataUser(userId=${u.getId()})}"><img alt='' class='card-img-profile' style="width: 40px; height: 40px;border-radius: 50%; border-width: 2px; border-color: white; margin-top: 7px" th:src="${u.getImage()}"></a>
+                        </div>
+                        <div class="col-9">
+                            <a th:if="${u.getCurriculum().getRealized()==true}" th:href="@{/directivo/dataUser(userId=${u.getId()})}"><b style="color:#6c757d;font-family: Calibri"><span th:text="${u.getFullname()}" /></b></a> <br />
+                            <a th:if="${u.getCurriculum().getRealized()==true}" style="color: grey" th:href="@{/directivo/filtrarPerfilGrado(grade=${u.getCurriculum().getGrade().getId()})}"><span  style="font-family: Calibri;font-size: 0.6em;display: flex; margin-top: -5px" th:text="${u.getCurriculum().getGrade().getName()}"></span></a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
-    <!-- /.row -->
-
-    <!-- Pagination -->
-    <ul class="pagination justify-content-center">
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Previous">
-                <span aria-hidden="true">&laquo;</span>
-                <span class="sr-only">Previous</span>
-            </a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">1</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">2</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#">3</a>
-        </li>
-        <li class="page-item">
-            <a class="page-link" href="#" aria-label="Next">
-                <span aria-hidden="true">&raquo;</span>
-                <span class="sr-only">Next</span>
-            </a>
-        </li>
-    </ul>
-    <br />
-    <br />
-    <br />
-    <br />
 </div>
 <div th:replace="masterpage/footer :: footer" />
 </body>

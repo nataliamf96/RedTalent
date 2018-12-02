@@ -13,6 +13,14 @@
             var file    = document.querySelector('input[type=file]').files[0];
             var reader  = new FileReader();
 
+            if (file.size > 500000) // 2 mb for bytes.
+            {
+                alert("La imagen supera los 500Kb! Suba otra imagen de perfil.");
+                document.getElementById('botonEnviar').style.display = 'none';
+            }else{
+                document.getElementById('botonEnviar').style.display = 'block';
+            }
+
             reader.addEventListener("load", function () {
                 preview.src = reader.result;
                 imageSend.value = reader.result;
@@ -73,7 +81,7 @@
             <b style="color: red" th:text="${message}" />
             <br />
             <br />
-            <input type="submit" class="btn btn-info" name="saveProject" value="Crear" />
+            <input id="botonEnviar" type="submit" class="btn btn-info" name="saveProject" value="Crear" />
         </form>
     </div>
     <br />

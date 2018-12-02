@@ -8,10 +8,17 @@
         function previewFile() {
             var preview = document.getElementById("imagenPreview");
             var imageSend = document.getElementById("image");
-            var tam = imageSend.size;
             document.getElementById("imagenPreview").style = "display:block; max-width: 200px";
             var file    = document.querySelector('input[type=file]').files[0];
             var reader  = new FileReader();
+
+            if (file.size > 500000) // 500Kb for bytes.
+            {
+                alert("La imagen supera los 500Kb! Suba otra imagen de perfil.");
+                document.getElementById('botonEnviar').style.display = 'none';
+            }else{
+                document.getElementById('botonEnviar').style.display = 'block';
+            }
 
             reader.addEventListener("load", function () {
                 preview.src = reader.result;
@@ -33,7 +40,7 @@
         Crea un nuevo tema para el foro
     </h3>
     <div class="container-fluid">
-        <form th:action="@{/forum/create(projectId=${projectId})}" th:object="${forumForm}" method="post" enctype="multipart/form-data">
+        <form th:action="@{/forum/create(projectId=${projectId})}" th:object="${forumForm}" method="post">
             <div class="form-group">
                 <label for="title">Título</label>:
                 <input type="text" class="form-control" id="title" name="title" style="max-width: 350px" th:field="*{title}"/>
@@ -56,7 +63,7 @@
                     <option th:each="category : ${categories}" th:value="${category.getId()}" th:text="${category.getName()}"></option>
                 </select>
             </div>
-            <input type="submit" class="btn btn-info" name="save" value="Crear" />
+            <input id="botonEnviar" type="submit" class="btn btn-info" name="save" value="Crear" />
         </form>
     </div>
     <br />

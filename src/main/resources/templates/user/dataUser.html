@@ -242,6 +242,9 @@
 <div id="tablaComentarios" style="display: none" class="container">
     <h2>Comentarios</h2>
     <div th:if="${user.getCommentsReceived().size() == 0}" class="row">
+        <div th:if="${user == userConectado}" class="col-12">
+            <p>No existen comentarios</p>
+        </div>
         <div th:if="${user != userConectado}" class="col-12">
             <a th:href="@{/comment/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realiza el primer comentario</button></a>
             <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
@@ -288,6 +291,9 @@
 <div id="tablaRecomendaciones" style="display: none" class="container">
     <h2>Recomendaciones</h2>
     <div th:if="${user.getRecomendationsReceived().size() == 0}" class="row">
+        <div th:if="${user == userConectado}" class="col-12">
+            <p>No existen recomendaciones</p>
+        </div>
         <div th:if="${user != userConectado}" class="col-12">
             <a th:href="@{/recomendation/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Realiza una recomendación</button></a>
             <a th:if="${valora}" th:href="@{/evaluation/user/create(userId=${user.getId()})}"><button type="button" class="btn btn-primary">Valorar</button></a>
